@@ -4,9 +4,11 @@ import { ConnectedRouter } from 'connected-react-router';
 import ReduxToastr from 'react-redux-toastr';
 
 import { history } from './store';
-import Home from './components/screens/Home';
-import Calendar from './components/screens/Calendar';
-import NotFound from './components/screens/NotFound';
+import Home from './screens/Home';
+import Calendar from './screens/Calendar';
+import NotFound from './screens/NotFound';
+
+import "tailwindcss/dist/base.css";
 
 import './App.css';
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -18,7 +20,7 @@ function App() {
         <ReduxToastr timeOut={4000} transitionIn="fadeIn" transitionOut="fadeOut" />
         <ConnectedRouter history={history}>
           <Switch>
-            <Route exact path="/" component={Calendar} />
+            <Route exact path="/" component={Home} />
             <Route component={NotFound} />
           </Switch>
         </ConnectedRouter>
