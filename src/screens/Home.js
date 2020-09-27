@@ -4,15 +4,16 @@ import styled from "styled-components";
 
 import Reveal from "../components/animations/Reveal";
 
-import DesignIllustration from "../images/design-illustration-2.svg";
+import TeamIllustration from "../images/team-illustration-2.svg";
 
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col lg:flex-row lg:items-center max-w-screen-xl mx-auto py-20 md:py-24`;
 const LeftColumn = tw.div`relative lg:w-5/12 text-center max-w-lg mx-auto lg:max-w-none lg:text-left`;
-const RightColumn = tw.div`relative mt-12 lg:mt-0 flex-1 flex flex-col justify-center lg:self-end`;
+const RightColumn = tw.div`relative mt-12 lg:mt-0 flex-1 flex flex-col justify-center lg:self-end ml-20`;
 const Heading = tw.h1`font-bold text-3xl md:text-3xl lg:text-4xl xl:text-5xl text-gray-900 leading-tight`;
 const Paragraph = tw.p`my-5 lg:my-8 text-base xl:text-lg`;
-const IllustrationContainer = tw.div`flex justify-center lg:justify-end items-center`;
+const Column = tw.div`w-full max-w-md mx-auto md:max-w-none md:mx-0`;
+const ImageColumn = tw(Column)`md:w-10/12 flex-shrink-0 h-full md:h-auto`;
 const BlueHighlight = tw.span`text-blue-500`;
 
 const Actions = styled.div`
@@ -31,7 +32,7 @@ function Home() {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading>Find a time that works for<BlueHighlight> everyone.</BlueHighlight></Heading>
+            <Heading>Find a time that works for<BlueHighlight> everybody.</BlueHighlight></Heading>
             <Paragraph><BlueHighlight>Fora</BlueHighlight> is a social calendar to plan group events.</Paragraph>
             <Actions>
               <input type="text" placeholder="Enter a calendar id to join" />
@@ -39,9 +40,9 @@ function Home() {
             </Actions>
           </LeftColumn>
           <RightColumn>
-            <IllustrationContainer>
-              <img tw="min-w-0 w-full max-w-lg xl:max-w-3xl" src={DesignIllustration} alt="Design Illustration" />
-            </IllustrationContainer>
+            <ImageColumn>
+              <img tw="min-w-0 w-full max-w-lg xl:max-w-3xl" src={TeamIllustration} alt="Design Illustration" />
+            </ImageColumn>
           </RightColumn>
         </TwoColumn>
       </Container>
