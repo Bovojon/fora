@@ -16,7 +16,7 @@ import './App.css';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
 
-const StyledDiv = tw.div`min-h-screen text-gray-800 p-8 overflow-hidden`;
+const StyledDiv = tw.div`min-h-screen text-gray-800 p-4 overflow-hidden`;
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route exact path="/calendar" component={Calendar} />
             {/* <Route component={NotFound} /> */}
           </Switch>
         </ConnectedRouter>
