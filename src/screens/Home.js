@@ -31,14 +31,11 @@ function Home() {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading>Beautiful React Templates <BlueHighlight>for you.</BlueHighlight></Heading>
-            <Paragraph>
-              Our templates are easy to setup, understand and customize. Fully modular components with a variety of
-              pages and components.
-            </Paragraph>
+            <Heading>Find a time that works for<BlueHighlight> everyone.</BlueHighlight></Heading>
+            <Paragraph><BlueHighlight>Fora</BlueHighlight> is a social calendar to plan group events.</Paragraph>
             <Actions>
-              <input type="text" placeholder="Your E-mail Address" />
-              <button>Get Started</button>
+              <input type="text" placeholder="Enter a calendar id to join" />
+              <button>Join</button>
             </Actions>
           </LeftColumn>
           <RightColumn>
