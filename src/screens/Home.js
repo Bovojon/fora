@@ -2,7 +2,7 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 
-import Reveal from "../components/shared/Reveal";
+import Reveal from "../components/animations/Reveal";
 // import Navbar from "Navbar";
 
 import DesignIllustration from "../images/design-illustration-2.svg";
