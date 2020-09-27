@@ -3,7 +3,6 @@ import tw from "twin.macro";
 import styled from "styled-components";
 
 import Reveal from "../components/animations/Reveal";
-// import Navbar from "Navbar";
 
 import DesignIllustration from "../images/design-illustration-2.svg";
 
@@ -29,7 +28,6 @@ const Actions = styled.div`
 function Home() {
   return (
     <Reveal>
-      {/* <Header roundedHeaderButton={true} /> */}
       <Container>
         <TwoColumn>
           <LeftColumn>
