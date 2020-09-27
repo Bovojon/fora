@@ -2,8 +2,10 @@ import React from 'react';
 import { Switch, Route } from "react-router-dom";
 import { ConnectedRouter } from 'connected-react-router';
 import ReduxToastr from 'react-redux-toastr';
+import tw from "twin.macro";
 
 import { history } from './store';
+import Navbar from "./components/nav/Navbar";
 import Home from './screens/Home';
 import Calendar from './screens/Calendar';
 import NotFound from './screens/NotFound';
@@ -14,17 +16,20 @@ import './App.css';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
 
+const StyledDiv = tw.div`min-h-screen text-gray-800 p-8 overflow-hidden`;
+
 function App() {
   return (
-      <div className="App">
+      <StyledDiv className="App">
         <ReduxToastr timeOut={4000} transitionIn="fadeIn" transitionOut="fadeOut" />
         <ConnectedRouter history={history}>
+          <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route component={NotFound} />
+            {/* <Route component={NotFound} /> */}
           </Switch>
         </ConnectedRouter>
-      </div>
+      </StyledDiv>
   )
 }
 
