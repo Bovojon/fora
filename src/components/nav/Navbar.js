@@ -50,7 +50,7 @@ const MainNavbar = () => {
         <Nav className="ml-auto" navbar>
           <NavLinks key={1}>
             <NavLink href="/#">About</NavLink>
-            <PrimaryLink css="rounded-full" href="/#">Create a Calendar</PrimaryLink>
+            <PrimaryLink css="rounded-full" href="/calendar">Plan a time</PrimaryLink>
           </NavLinks>
         </Nav>
       </Collapse>

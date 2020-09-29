@@ -27,7 +27,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/calendar" component={Calendar} />
-            {/* <Route component={NotFound} /> */}
+            <Route component={NotFound} />
           </Switch>
         </ConnectedRouter>
       </StyledDiv>
