@@ -32,7 +32,7 @@ function Home() {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading>Find a time that works for<BlueHighlight> everybody.</BlueHighlight></Heading>
+            <Heading>Find a time that works for<BlueHighlight> everyone.</BlueHighlight></Heading>
             <Paragraph><BlueHighlight>Fora</BlueHighlight> is a social calendar to plan group events.</Paragraph>
             <Actions>
               <input type="text" placeholder="Enter a calendar id to join" />

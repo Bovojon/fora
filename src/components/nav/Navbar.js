@@ -49,8 +49,8 @@ const MainNavbar = () => {
       <Collapse navbar>
         <Nav className="ml-auto" navbar>
           <NavLinks key={1}>
-            <NavLink href="/#">About</NavLink>
-            <PrimaryLink css="rounded-full" href="/calendar">Plan a time</PrimaryLink>
+            <NavLink href="/#">About us</NavLink>
+            <PrimaryLink css="rounded-full" href="/calendar">Find a time</PrimaryLink>
           </NavLinks>
         </Nav>
       </Collapse>
