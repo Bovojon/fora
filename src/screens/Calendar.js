@@ -6,8 +6,6 @@ import { Card, CardTitle, CardText } from 'reactstrap';
 import { 
 	Calendar as BigCalendar, 
 	momentLocalizer,
-	Views,
-	Navigate
 } from "react-big-calendar";
 
 import { addTime } from '../actions/time';
