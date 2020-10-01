@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { connect } from 'react-redux';
 import moment from "moment";
 import { Grid, Box } from '@material-ui/core';
-import { Card, CardTitle, CardText } from 'reactstrap';
+import { Card, CardTitle } from 'reactstrap';
 import { 
 	Calendar as BigCalendar, 
 	momentLocalizer,
+	Views,
 } from "react-big-calendar";
 
 import { addTime } from '../actions/time';
@@ -13,14 +14,13 @@ import { addTime } from '../actions/time';
 const localizer = momentLocalizer(moment);
 
 function Calendar({ times, addTime }) {
-	const [selectedTimes, setSelectedTimes] = useState(times);
 
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
 		start = new Date(start);
 		end = new Date(end);
 		const newTime = { start, end }
-		setSelectedTimes([...selectedTimes, newTime]);
+		addTime(newTime)
 	}
 
 	return (
@@ -29,7 +29,7 @@ function Calendar({ times, addTime }) {
 				<Grid item xs={8}>
 					<BigCalendar
 						localizer={localizer}
-						events={selectedTimes}
+						events={times}
 						startAccessor="start"
 						endAccessor="end"
 						selectable
@@ -41,7 +41,7 @@ function Calendar({ times, addTime }) {
 					/>
 				</Grid>
 				<Grid item xs={3}>
-					{selectedTimes.map(time => {
+					{times.map(time => {
 						return (
 						<Card key={time.start} body outline color="primary">
 							<CardTitle>{String(time.start)}</CardTitle>
@@ -60,10 +60,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addTime: (time) => {
-			console.log(time)
-			dispatch(addTime(time))
-		}
+		addTime: (time) => { dispatch(addTime(time)) }
 	}
 }
 

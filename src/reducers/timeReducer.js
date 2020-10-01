@@ -1,9 +1,9 @@
 import { ADD_TIME } from '../actions/constants';
 
-const timeReducer = (state=[], action) => {
-    switch(action.type) {
+const timeReducer = (state=[], { type, payload }) => {
+    switch(type) {
         case ADD_TIME:
-            return state.concat(action.payload);
+            return [...state, payload];
         default:
             return state;
     }
