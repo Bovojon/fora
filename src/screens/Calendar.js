@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from 'react-redux';
 import moment from "moment";
 import { Grid, Box } from '@material-ui/core';
@@ -43,7 +43,7 @@ function Calendar({ times, addTime }) {
 				<Grid item xs={3}>
 					{times.map(time => {
 						return (
-						<Card key={time.start} body outline color="primary">
+						<Card key={time.id} body outline color="primary">
 							<CardTitle>{String(time.start)}</CardTitle>
 						</Card>
 						)
