@@ -11,7 +11,7 @@ const timeReducer = (state=[], { type, payload }) => {
       }
       return [...state, newTime];
     case DELETE_TIME:
-      return state.filter(time => time.id !== payload.id)
+      return state.filter(time => time.id !== payload)
     default:
       return state;
   }

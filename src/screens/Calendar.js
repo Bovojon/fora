@@ -1,19 +1,37 @@
 import React from "react";
 import { connect } from 'react-redux';
 import moment from "moment";
+import styled from 'styled-components'
+import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { Grid, Box } from '@material-ui/core';
-import { Card, CardTitle } from 'reactstrap';
+import { Clear as ClearIcon } from '@material-ui/icons';
 import { 
-	Calendar as BigCalendar, 
-	momentLocalizer,
-	Views,
-} from "react-big-calendar";
+	Card as rCard,
+	CardText,
+	CardTitle as rCardTitle,
+	CardBody as rCardBody
+} from 'reactstrap';
 
-import { addTime } from '../actions/time';
+import { addTime, deleteTime } from '../actions/time';
 
 const localizer = momentLocalizer(moment);
 
-function Calendar({ times, addTime }) {
+const Card = styled(rCard)`
+	padding: 0.7rem;
+	margin-bottom: 5px;
+`;
+
+const CardBody = styled(rCardBody)`
+	padding: 0
+`;
+
+const CardTitle = styled(rCardTitle)`
+	margin-left: 4px;
+	margin-bottom: 4px;
+	cursor: pointer;
+`
+
+function Calendar({ times, addTime, deleteTime }) {
 
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
@@ -21,6 +39,10 @@ function Calendar({ times, addTime }) {
 		end = new Date(end);
 		const newTime = { start, end }
 		addTime(newTime)
+	}
+
+	const handleDelete = (id) => {
+		deleteTime(id)
 	}
 
 	return (
@@ -44,7 +66,10 @@ function Calendar({ times, addTime }) {
 					{times.map(time => {
 						return (
 						<Card key={time.id} body outline color="primary">
-							<CardTitle>{String(time.start)}</CardTitle>
+							<CardBody>
+								<CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
+								<CardText>{String(time.start)}</CardText>
+							</CardBody>
 						</Card>
 						)
 					})}
@@ -60,7 +85,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addTime: (time) => { dispatch(addTime(time)) }
+		addTime: (time) => { dispatch(addTime(time)) },
+		deleteTime: (id) => { dispatch(deleteTime(id)) }
 	}
 }
 
