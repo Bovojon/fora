@@ -9,7 +9,8 @@ import {
 	Card as rCard,
 	CardText,
 	CardTitle as rCardTitle,
-	CardBody as rCardBody
+	CardBody as rCardBody,
+	Row
 } from 'reactstrap';
 
 import { addTime, deleteTime } from '../actions/time';
@@ -68,7 +69,14 @@ function Calendar({ times, addTime, deleteTime }) {
 						<Card key={time.id} body outline color="primary">
 							<CardBody>
 								<CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
-								<CardText>{String(time.start)}</CardText>
+								<CardText>
+									<Row>
+										{moment(time.start).format('ddd, MMM Do')}
+									</Row>
+									<Row>
+										{moment(time.start).format('hh:mm a') + " – " + moment(time.end).format('hh:mm a')} 
+									</Row>
+								</CardText>
 							</CardBody>
 						</Card>
 						)
