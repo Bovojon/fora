@@ -39,8 +39,11 @@ const Paper = styled(MuiPaper)`
 `
 
 const ShortPaper = styled(MuiPaper)`
-	padding: 14px;
-	height: 10vh;
+	padding: 20px;
+	height: 15vh;
+	display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const Box = styled(MuiBox)`
@@ -82,10 +85,8 @@ function Calendar({ times, addTime, deleteTime }) {
 					{
 						times.length === 0 ? 
 						<ShortPaper>
-							<MuiBox justifyContent="center" alignItems="center" display="flex">
-								<MuiBox p={2} style={{ fontSize: '18px' }}>
-									Pick the times that work for you.
-								</MuiBox>
+							<MuiBox m={2} style={{ fontSize: '18px', textAlign: 'center' }}>
+								Select times that work for you.
 							</MuiBox>
 						</ShortPaper>
 						:
