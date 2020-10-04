@@ -67,7 +67,7 @@ function Calendar({ times, addTime, deleteTime }) {
 	return (
 		<Box alignItems="center">
 			<Grid container spacing={3} direction="row" alignItems="center" justify="center">
-				<Grid item xs={8}>
+				<Grid item md={8} xs={12}>
 					<BigCalendar
 						localizer={localizer}
 						events={times}
@@ -81,7 +81,7 @@ function Calendar({ times, addTime, deleteTime }) {
 						onSelectSlot={handleSelectSlot}
 					/>
 				</Grid>
-				<Grid item xs={3}>
+				<Grid item md={3} xs={12}>
 					{
 						times.length === 0 ? 
 						<ShortPaper>
