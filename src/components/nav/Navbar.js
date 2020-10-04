@@ -38,9 +38,9 @@ const NavLink = tw.a`
   pb-1 border-b-2 border-transparent hover:border-blue-500 hocus:text-blue-500 no-underline
 `;
 
-const PrimaryLink = tw(NavLink)`
-  lg:mx-0 px-4 py-3 rounded bg-blue-500 text-gray-100 ml-3 hocus:bg-blue-700 hocus:text-gray-200 
-  focus:shadow-outline border-b-0
+const PrimaryLink = tw.a`
+  lg:mx-0 px-4 py-3 rounded bg-blue-500 text-gray-100 ml-3 hover:bg-blue-700 hover:text-gray-200 
+  hover:shadow-outline border-b-0 font-semibold lg:text-sm
 `;
 
 const MainNavbar = ({ navigateTo }) => {
