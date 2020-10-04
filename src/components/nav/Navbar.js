@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import tw from "twin.macro";
@@ -6,6 +6,7 @@ import styled from "styled-components";
 import {
   Navbar as BootNavbar,
   NavbarBrand as BootNavbarBrand,
+  NavbarToggler,
   Collapse,
   Nav,
 } from 'reactstrap';
@@ -36,13 +37,14 @@ const NavLink = tw.a`
 `;
 
 const PrimaryLink = tw(NavLink)`
-  lg:mx-0
-  px-4 py-3 rounded bg-blue-500 text-gray-100
-  hocus:bg-blue-700 hocus:text-gray-200 focus:shadow-outline
-  border-b-0
+  lg:mx-0 px-4 py-3 rounded bg-blue-500 text-gray-100 ml-3 hocus:bg-blue-700 hocus:text-gray-200 
+  focus:shadow-outline border-b-0
 `;
 
 const MainNavbar = ({ navigateTo }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen(!isOpen);
 
   const handleBrandClick = (e) => {
     e.preventDefault();
@@ -55,11 +57,12 @@ const MainNavbar = ({ navigateTo }) => {
   }
 
   return (
-    <Navbar expand="md">
+    <Navbar expand="md" light>
       <NavbarBrand onClick={handleBrandClick} href="#">Fora</NavbarBrand>
-      <Collapse navbar>
+      <NavbarToggler onClick={toggle} />
+      <Collapse isOpen={isOpen} navbar>
         <Nav className="ml-auto" navbar>
-          <NavLinks key={1}>
+          <NavLinks>
             <NavLink href="#">About us</NavLink>
             <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="#">Find a time</PrimaryLink>
           </NavLinks>
