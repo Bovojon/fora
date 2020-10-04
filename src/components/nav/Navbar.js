@@ -1,6 +1,6 @@
 import React from 'react';
-// import { connect } from 'react-redux';
-// import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import tw from "twin.macro";
 import styled from "styled-components";
 import {
@@ -42,15 +42,26 @@ const PrimaryLink = tw(NavLink)`
   border-b-0
 `;
 
-const MainNavbar = () => {
+const MainNavbar = ({ navigateTo }) => {
+
+  const handleBrandClick = (e) => {
+    e.preventDefault();
+    navigateTo("/");
+  }
+
+  const handleFindTimeClick = (e) => {
+    e.preventDefault();
+    navigateTo("/calendar");
+  }
+
   return (
     <Navbar expand="md">
-      <NavbarBrand>Fora</NavbarBrand>
+      <NavbarBrand onClick={handleBrandClick} href="#">Fora</NavbarBrand>
       <Collapse navbar>
         <Nav className="ml-auto" navbar>
           <NavLinks key={1}>
-            <NavLink href="/#">About us</NavLink>
-            <PrimaryLink css="rounded-full" href="/calendar">Find a time</PrimaryLink>
+            <NavLink href="#">About us</NavLink>
+            <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="#">Find a time</PrimaryLink>
           </NavLinks>
         </Nav>
       </Collapse>
@@ -58,4 +69,10 @@ const MainNavbar = () => {
   );
 }
 
-export default MainNavbar;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    navigateTo: (route) => { dispatch(push(route)) }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(MainNavbar);
