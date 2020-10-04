@@ -17,11 +17,13 @@ const Navbar = styled(BootNavbar)`
 `
 
 const NavbarBrand = styled(BootNavbarBrand)`
-  ${tw`flex items-center font-black border-b-0 text-2xl! ml-0!`};
+  ${tw`flex items-center font-black border-b-0 text-2xl! ml-0! text-4xl`};
   
   a {
     ${tw`no-underline`}
-  }
+  };
+
+  color: #4299e1 !important;
 `
 
 const NavLinks = styled.div`
