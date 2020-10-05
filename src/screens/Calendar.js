@@ -60,7 +60,7 @@ const ShortPaper = styled(MuiPaper)`
 `
 
 const Box = styled(MuiBox)`
-	margin-top: 50px;
+	margin-top: 25px;
 `
 
 const ToolbarBox = styled(MuiBox)`
@@ -143,13 +143,16 @@ function Calendar({ times, addTime, deleteTime }) {
 						startAccessor="start"
 						endAccessor="end"
 						selectable
-						style={{height: "80vh"}}
+						style={{height: "85vh"}}
 						defaultView={Views.WEEK}
 						views={{ month: true, week: true }}
 						scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 						onSelectSlot={handleSelectSlot}
 						components = {{ toolbar : CustomToolbar }}
-						formats={{ dayFormat: 'ddd D' }}
+						formats={{ 
+							dayFormat: 'ddd D',
+							timeGutterFormat: 'h A'
+						}}
 					/>
 				</Grid>
 				<Grid item md={3} xs={12}>
@@ -171,7 +174,7 @@ function Calendar({ times, addTime, deleteTime }) {
 											{moment(time.start).format('ddd, MMM Do')}
 										</Row>
 										<Row>
-											{moment(time.start).format('h:mm a') + " – " + moment(time.end).format('h:mm a')} 
+											{moment(time.start).format('h:mm A') + " – " + moment(time.end).format('h:mm A')} 
 										</Row>
 									</CardBody>
 								</Card>

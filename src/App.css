@@ -24,3 +24,7 @@
   padding-right: 2px !important;
   padding-bottom: 2px !important;
 }
+
+.rbc-timeslot-group { 
+  height: 60px;
+}
