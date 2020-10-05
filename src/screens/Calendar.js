@@ -175,28 +175,41 @@ function Calendar({ times, addTime, deleteTime }) {
 				<Grid item md={3} xs={12}>
 					{
 						times.length === 0 ? 
-						<ShortPaper>
-							<MuiBox m={2} style={{ fontSize: '18px', textAlign: 'center' }}>
-								Select times that work for you.
-							</MuiBox>
-						</ShortPaper>
-						:
-						<Paper variant="outlined">
-							{times.map(time => {
-								return (
-								<Card key={time.id} body outline color="primary">
-									<CardBody>
-										<CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
-										<Row>
-											{moment(time.start).format('ddd, MMM Do')}
-										</Row>
-										<Row>
-											{moment(time.start).format('h:mm A') + " – " + moment(time.end).format('h:mm A')} 
-										</Row>
-									</CardBody>
-								</Card>
-							)})}
-						</Paper>
+							<ShortPaper>
+								<MuiBox m={2} style={{ fontSize: '18px', textAlign: 'center' }}>
+									Select times that work for you.
+								</MuiBox>
+							</ShortPaper>
+							:
+							<Paper variant="outlined">
+								{times.map(time => {
+									if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
+										return (
+											<Card key={time.id} body outline color="primary">
+												<CardBody>
+													<CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
+													<Row>
+														{moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
+													</Row>
+												</CardBody>
+											</Card>
+										);
+									} else {
+										return (
+											<Card key={time.id} body outline color="primary">
+												<CardBody>
+													<CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
+													<Row>
+														{moment(time.start).format('ddd, MMM D')}
+													</Row>
+													<Row>
+														{moment(time.start).format('h:mm A') + " – " + moment(time.end).format('h:mm A')} 
+													</Row>
+												</CardBody>
+											</Card>
+										);
+									}})}
+							</Paper>
 					}
 				</Grid>
 			</Grid>
