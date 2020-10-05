@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from 'react-redux';
 import moment from "moment";
 import styled from 'styled-components'
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
-import { Grid, Box as MuiBox, Paper as MuiPaper } from '@material-ui/core';
-import { Clear as ClearIcon } from '@material-ui/icons';
+import { 
+	Grid, 
+	Box as MuiBox, 
+	Paper as MuiPaper,
+	Button,
+	Select as MuiSelect,
+	MenuItem,
+	Tooltip
+} from '@material-ui/core';
+import { 
+	Clear as ClearIcon,
+	ArrowRight as ArrowRightIcon,
+	ArrowLeft as ArrowLeftIcon,
+	Today as TodayIcon,
+} from '@material-ui/icons';
 import { 
 	Card as ReactCard,
 	CardTitle as ReactCardTitle,
@@ -50,6 +63,62 @@ const Box = styled(MuiBox)`
 	margin-top: 50px;
 `
 
+const ToolbarBox = styled(MuiBox)`
+	margin-bottom: 10px;
+`
+
+const Select = styled(MuiSelect)`
+	padding: 5px;
+`
+
+const CustomToolbar = (toolbar) => {
+	const [calendarView, setCalendarView] = useState('week');
+
+	const handleCalendarViewChange = (e) => {
+		const view = e.target.value
+		setCalendarView(view);
+		toolbar.onView(view);
+	}
+
+	const handleBackClick = () => { toolbar.onNavigate('PREV'); };
+
+	const handleNextClick = () => { toolbar.onNavigate('NEXT'); };
+
+	const handleTodayClick = () => { toolbar.onNavigate('TODAY'); };
+
+	const monthYearLabel = () => {
+		const toolbarDate = moment(toolbar.date);
+		return toolbarDate.format('MMM') + ' ' + toolbarDate.format('YYYY')
+  };
+
+	return (
+		<ToolbarBox>
+			<Grid container direction="row" justify="space-between" alignItems="center">
+				<Grid item md={2} xs={12}>
+					<Tooltip title="Today">
+						<Button onClick={handleTodayClick}><TodayIcon alt="Today" /></Button>
+					</Tooltip>
+				</Grid>
+
+				<Grid item md={4} xs={12}>
+					<Grid container direction="row" justify="space-between" alignItems="center">
+						<Button onClick={handleBackClick}><ArrowLeftIcon /></Button>
+						<span>{monthYearLabel()}</span>
+						<Button onClick={handleNextClick}><ArrowRightIcon /></Button>
+					</Grid>
+				</Grid>
+
+				<Grid item md={1} xs={12}>
+					<Select value={calendarView} onChange={handleCalendarViewChange}>
+						<MenuItem value={'week'}>Week</MenuItem>
+						<MenuItem value={'month'}>Month</MenuItem>
+					</Select>
+				</Grid>
+			</Grid>
+		</ToolbarBox>
+	)
+}
+
 function Calendar({ times, addTime, deleteTime }) {
 
 	const handleSelectSlot = (selected) => {
@@ -79,6 +148,7 @@ function Calendar({ times, addTime, deleteTime }) {
 						views={{ month: true, week: true }}
 						scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 						onSelectSlot={handleSelectSlot}
+						components = {{ toolbar : CustomToolbar }}
 					/>
 				</Grid>
 				<Grid item md={3} xs={12}>
