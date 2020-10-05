@@ -143,7 +143,7 @@ function Calendar({ times, addTime, deleteTime }) {
 						startAccessor="start"
 						endAccessor="end"
 						selectable
-						style={{height: "70vh"}}
+						style={{height: "80vh"}}
 						defaultView={Views.WEEK}
 						views={{ month: true, week: true }}
 						scrollToTime={new Date(0, 0, 0, 7, 0, 0)}

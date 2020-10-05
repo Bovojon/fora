@@ -1,0 +1,26 @@
+.rbc-header {
+  border: 0px !important;
+}
+
+.rbc-header a {
+  text-decoration: none !important;
+}
+
+.rbc-day-bg {
+  border: 0px !important;
+}
+
+.rbc-time-header-content {
+  border: 0px !important;
+}
+
+.rbc-time-header {
+  border: 0px !important;
+}
+
+.rbc-time-view {
+  border-radius: 4px !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+  padding-bottom: 2px !important;
+}
