@@ -1,21 +1,14 @@
 .rbc-header {
   border: 0px !important;
+  padding: 8px 1px !important;
+}
+
+.rbc-day-bg, .rbc-time-header-content, .rbc-time-header {
+  border: 0px !important;
 }
 
 .rbc-header a {
   text-decoration: none !important;
-}
-
-.rbc-day-bg {
-  border: 0px !important;
-}
-
-.rbc-time-header-content {
-  border: 0px !important;
-}
-
-.rbc-time-header {
-  border: 0px !important;
 }
 
 .rbc-time-view {
@@ -25,6 +18,14 @@
   padding-bottom: 2px !important;
 }
 
+.rbc-row {
+  min-height: 0px !important;
+}
+
 .rbc-timeslot-group { 
   height: 60px;
+}
+
+.rbc-allday-cell {
+  display: none;
 }

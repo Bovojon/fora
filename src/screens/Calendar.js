@@ -119,6 +119,20 @@ const CustomToolbar = (toolbar) => {
 	)
 }
 
+const CustomWeekHeader = ({ label }) => {
+	const labels = label.split(" ");
+	return (
+		<Grid container direction="column" justify="center" alignItems="center">
+			<Grid item xs={12}>
+				{labels[0]}
+			</Grid>
+			<Grid item xs={12}>
+				{labels[1]}
+			</Grid>
+		</Grid>
+	);
+}
+
 function Calendar({ times, addTime, deleteTime }) {
 
 	const handleSelectSlot = (selected) => {
@@ -148,7 +162,10 @@ function Calendar({ times, addTime, deleteTime }) {
 						views={{ month: true, week: true }}
 						scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 						onSelectSlot={handleSelectSlot}
-						components = {{ toolbar : CustomToolbar }}
+						components = {{ 
+							toolbar : CustomToolbar,
+							week: { header: CustomWeekHeader }
+						}}
 						formats={{ 
 							dayFormat: 'ddd D',
 							timeGutterFormat: 'h A'
