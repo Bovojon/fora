@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { useLocation } from 'react-router-dom';
 import tw from "twin.macro";
 import styled from "styled-components";
 import {
@@ -34,13 +35,13 @@ const NavLinks = styled.div`
 `
 
 const NavLink = tw.a`
-  text-lg my-2 lg:text-sm lg:mx-6 lg:my-0 font-semibold tracking-wide transition duration-300
+  text-lg my-2 lg:mx-6 lg:my-0 font-semibold tracking-wide transition duration-300
   pb-1 border-b-2 border-transparent hover:border-blue-500 hocus:text-blue-500 no-underline
 `;
 
 const PrimaryLink = tw.a`
   lg:mx-0 px-4 py-3 rounded bg-blue-500 text-gray-100 ml-3 hover:bg-blue-700 hover:text-gray-200 
-  hover:shadow-outline border-b-0 font-semibold lg:text-sm
+  hover:shadow-outline border-b-0 font-semibold
 `;
 
 const MainNavbar = ({ navigateTo }) => {
@@ -57,6 +58,8 @@ const MainNavbar = ({ navigateTo }) => {
     e.preventDefault();
     navigateTo("/calendar");
   }
+  
+  const location = useLocation();
 
   return (
     <Navbar expand="md" light>
@@ -64,10 +67,17 @@ const MainNavbar = ({ navigateTo }) => {
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="ml-auto" navbar>
-          <NavLinks>
-            <NavLink href="#">About us</NavLink>
-            <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="#">Find a time</PrimaryLink>
-          </NavLinks>
+        {
+          location.pathname === "/calendar" ?
+            <NavLinks>
+              <PrimaryLink css="rounded-full" href="#">Share calendar</PrimaryLink>
+            </NavLinks>
+            :
+            <NavLinks>
+              <NavLink href="#">About us</NavLink>
+              <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="#">Find a time</PrimaryLink>
+            </NavLinks>
+        }
         </Nav>
       </Collapse>
     </Navbar>
