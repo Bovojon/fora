@@ -149,6 +149,7 @@ function Calendar({ times, addTime, deleteTime }) {
 						scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 						onSelectSlot={handleSelectSlot}
 						components = {{ toolbar : CustomToolbar }}
+						formats={{ dayFormat: 'ddd D' }}
 					/>
 				</Grid>
 				<Grid item md={3} xs={12}>
