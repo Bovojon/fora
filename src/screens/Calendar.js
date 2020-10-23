@@ -94,7 +94,7 @@ const CustomToolbar = (toolbar) => {
 	return (
 		<ToolbarBox>
 			<Grid container direction="row" justify="space-between" alignItems="center">
-				<Grid item md={2} xs={12}>
+				<Grid item md={1} xs={12}>
 					<Tooltip title="Today">
 						<Button onClick={handleTodayClick}><TodayIcon alt="Today" /></Button>
 					</Tooltip>
