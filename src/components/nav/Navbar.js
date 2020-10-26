@@ -5,33 +5,22 @@ import { useLocation } from 'react-router-dom';
 import tw from "twin.macro";
 import styled from "styled-components";
 import {
-  Navbar as BootNavbar,
+  Navbar,
   NavbarBrand as BootNavbarBrand,
   NavbarToggler,
   Collapse,
   Nav,
+  NavItem
 } from 'reactstrap';
 
-const Navbar = styled(BootNavbar)`
-  ${tw`flex justify-between items-center max-w-screen-xl mx-auto`};
-  padding: 0
-`
-
 const NavbarBrand = styled(BootNavbarBrand)`
-  ${tw`flex items-center font-black border-b-0 text-2xl! ml-0! text-4xl`};
-  
-  a {
-    ${tw`no-underline`}
-  };
-
+  ${tw`text-2xl! text-4xl font-black`};
   color: #4299e1 !important;
 `
 
 const NavLinks = styled.div`
   ${tw`inline-block my-5`};
-  a {
-    ${tw`no-underline`}
-  }
+  a { ${tw`no-underline`} }
 `
 
 const NavLink = tw.a`
@@ -62,22 +51,25 @@ const MainNavbar = ({ navigateTo }) => {
   const location = useLocation();
 
   return (
-    <Navbar expand="md" light>
-      <NavbarBrand onClick={handleBrandClick} href="#">Fora</NavbarBrand>
+    <Navbar light expand="md" className="pl-md-5 pr-md-5">
+      <NavbarBrand onClick={handleBrandClick} href="/">Fora</NavbarBrand>
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="ml-auto" navbar>
-        {
-          location.pathname === "/calendar" ?
-            <NavLinks>
-              <PrimaryLink css="rounded-full" href="#">Share calendar</PrimaryLink>
-            </NavLinks>
+          {location.pathname === "/calendar" ?
+            <NavItem>
+              <NavLinks>
+                <PrimaryLink css="rounded-full" href="/">Share calendar</PrimaryLink>
+              </NavLinks>
+            </NavItem>
             :
-            <NavLinks>
-              <NavLink href="#">About us</NavLink>
-              <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="#">Find a time</PrimaryLink>
-            </NavLinks>
-        }
+            <NavItem>
+              <NavLinks>
+                <NavLink href="/">About us</NavLink>
+                <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="/">Find a time</PrimaryLink>
+              </NavLinks>
+            </NavItem>
+          }
         </Nav>
       </Collapse>
     </Navbar>
