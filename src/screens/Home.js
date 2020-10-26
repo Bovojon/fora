@@ -26,7 +26,7 @@ const Actions = styled.div`
   }
 `;
 
-function Home() {
+const Home = () => {
   return (
     <Reveal>
       <Container>

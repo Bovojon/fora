@@ -18,7 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const StyledDiv = tw.div`min-h-screen text-gray-800 p-4 overflow-hidden`;
 
-function App() {
+const App = () => {
   return (
       <StyledDiv className="App">
         <ReduxToastr timeOut={4000} transitionIn="fadeIn" transitionOut="fadeOut" />

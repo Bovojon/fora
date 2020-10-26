@@ -5,7 +5,7 @@ import Reveal from "../components/animations/Reveal";
 
 const Container = tw.div`relative`;
 
-function Home() {
+const NotFound = () => {
   return (
     <Reveal>
       <Container>Oops, this page doesn't exist.</Container>
@@ -13,4 +13,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default NotFound;

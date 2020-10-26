@@ -5,7 +5,7 @@ import useInView from "use-in-view";
 
 const StyledDiv = tw.div`min-h-screen overflow-hidden`;
 
-function AnimationReveal({ disabled, children }) {
+const AnimationReveal = ({ disabled, children }) => {
   if (disabled) {
     return <>{children}</>;
   }
@@ -23,7 +23,7 @@ function AnimationReveal({ disabled, children }) {
   return <>{childrenWithAnimation}</>;
 }
 
-function AnimatedSlideInComponent({ direction = "left", offset = 30, children }) {
+const AnimatedSlideInComponent = ({ direction = "left", offset = 30, children }) => {
   const [ref, inView] = useInView(30);
 
   const x = { target: "0%" };
