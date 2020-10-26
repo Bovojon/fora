@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux';
 import moment from "moment";
-import styled from 'styled-components'
+import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { 
 	Grid, 
@@ -10,53 +10,26 @@ import {
 	Button,
 	Select as MuiSelect,
 	MenuItem,
-	Tooltip
+	Tooltip,
+	Divider
 } from '@material-ui/core';
-import { 
-	Clear as ClearIcon,
+import {
 	ArrowRight as ArrowRightIcon,
 	ArrowLeft as ArrowLeftIcon,
 	Today as TodayIcon,
 } from '@material-ui/icons';
-import { 
-	Card as ReactCard,
-	CardTitle as ReactCardTitle,
-	CardBody as ReactCardBody,
-	Row
-} from 'reactstrap';
 
 import { addTime, deleteTime } from '../actions/time';
+import UsersList from '../components/UsersList';
+import TimesList from '../components/TimesList';
 
 const localizer = momentLocalizer(moment);
 
-const Card = styled(ReactCard)`
-	padding: 0.7rem;
-	margin-bottom: 5px;
-`;
-
-const CardBody = styled(ReactCardBody)`
-	padding: 0
-`;
-
-const CardTitle = styled(ReactCardTitle)`
-	margin-left: 4px;
-	margin-bottom: 4px;
-	cursor: pointer;
-`
-
 const Paper = styled(MuiPaper)`
-	height: 65vh;
-	overflow: auto;
+	height: 80vh;
 	margin-top: 5vh;
 	padding: 14px;
-`
-
-const ShortPaper = styled(MuiPaper)`
-	padding: 20px;
-	height: 15vh;
-	display: flex;
-  justify-content: center;
-  align-items: center;
+	width: 100%;
 `
 
 const Box = styled(MuiBox)`
@@ -133,8 +106,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-function Calendar({ times, addTime, deleteTime }) {
-
+const Calendar = ({ times, addTime, deleteTime }) => {
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
 		start = new Date(start);
@@ -149,7 +121,7 @@ function Calendar({ times, addTime, deleteTime }) {
 
 	return (
 		<Box alignItems="center">
-			<Grid container spacing={3} direction="row" alignItems="center" justify="center">
+			<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
 				<Grid item md={8} xs={12}>
 					<BigCalendar
 						localizer={localizer}
@@ -173,44 +145,13 @@ function Calendar({ times, addTime, deleteTime }) {
 					/>
 				</Grid>
 				<Grid item md={3} xs={12}>
-					{
-						times.length === 0 ? 
-							<ShortPaper>
-								<MuiBox m={2} style={{ fontSize: '18px', textAlign: 'center' }}>
-									Select times that work for you.
-								</MuiBox>
-							</ShortPaper>
-							:
-							<Paper variant="outlined">
-								{times.map(time => {
-									if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
-										return (
-											<Card key={time.id} body outline color="primary">
-												<CardBody>
-													<CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
-													<Row>
-														{moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
-													</Row>
-												</CardBody>
-											</Card>
-										);
-									} else {
-										return (
-											<Card key={time.id} body outline color="primary">
-												<CardBody>
-													<CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
-													<Row>
-														{moment(time.start).format('ddd, MMM D')}
-													</Row>
-													<Row>
-														{moment(time.start).format('h:mm A') + " – " + moment(time.end).format('h:mm A')} 
-													</Row>
-												</CardBody>
-											</Card>
-										);
-									}})}
-							</Paper>
-					}
+					<Grid container direction="column" justify="center" alignItems="center">
+						<Paper variant="outlined">
+							<UsersList />
+							<Divider />
+							<TimesList times={times} handleDelete={handleDelete}  />
+						</Paper>
+					</Grid>
 				</Grid>
 			</Grid>
 		</Box>
