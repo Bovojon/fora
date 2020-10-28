@@ -12,6 +12,7 @@ import {
   Nav,
   NavItem
 } from 'reactstrap';
+import { Modal, Backdrop, Fade, makeStyles } from '@material-ui/core';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -33,46 +34,86 @@ const PrimaryLink = tw.a`
   hover:shadow-outline border-b-0 font-semibold
 `;
 
+const useStyles = makeStyles((theme) => {
+  console.log(theme.palette.background.paper)
+  console.log(theme.shadows[5])
+  console.log(theme.spacing(2, 4, 3))
+  return {
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  }}
+});
+
 const MainNavbar = ({ navigateTo }) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const toggle = () => setIsOpen(!isOpen);
-
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const classes = useStyles();
+  const location = useLocation();
   const handleBrandClick = (e) => {
     e.preventDefault();
     navigateTo("/");
   }
-
   const handleFindTimeClick = (e) => {
     e.preventDefault();
     navigateTo("/calendar");
   }
-  
-  const location = useLocation();
+  const toggle = () => {
+    setIsOpen(!isOpen);
+  };
+  const handleShareClick = () => {
+    setModalIsOpen(true);
+  };
+  const handleModalClose = () => {
+    setModalIsOpen(false);
+  };
 
   return (
-    <Navbar light expand="md" className="pl-md-5 pr-md-5">
-      <NavbarBrand onClick={handleBrandClick} href="/">Fora</NavbarBrand>
-      <NavbarToggler onClick={toggle} />
-      <Collapse isOpen={isOpen} navbar>
-        <Nav className="ml-auto" navbar>
-          {location.pathname === "/calendar" ?
-            <NavItem>
-              <NavLinks>
-                <PrimaryLink css="rounded-full" href="/">Share calendar</PrimaryLink>
-              </NavLinks>
-            </NavItem>
-            :
-            <NavItem>
-              <NavLinks>
-                <NavLink href="/">About us</NavLink>
-                <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="/">Find a time</PrimaryLink>
-              </NavLinks>
-            </NavItem>
-          }
-        </Nav>
-      </Collapse>
-    </Navbar>
+    <>
+      <Navbar light expand="md" className="pl-md-5 pr-md-5">
+        <NavbarBrand onClick={handleBrandClick} href="/">Fora</NavbarBrand>
+        <NavbarToggler onClick={toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          <Nav className="ml-auto" navbar>
+            {location.pathname === "/calendar" ?
+              <NavItem>
+                <NavLinks>
+                  <PrimaryLink css="rounded-full" href="#" onClick={handleShareClick}>Share calendar</PrimaryLink>
+                </NavLinks>
+              </NavItem>
+              :
+              <NavItem>
+                <NavLinks>
+                  <NavLink href="/">About us</NavLink>
+                  <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="/">Find a time</PrimaryLink>
+                </NavLinks>
+              </NavItem>
+            }
+          </Nav>
+        </Collapse>
+      </Navbar>
+      <Modal
+        aria-labelledby="Share calendar link"
+        className={classes.modal}
+        open={modalIsOpen}
+        onClose={handleModalClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{ timeout: 500 }}>
+        <Fade in={modalIsOpen}>
+          <div className={classes.paper}>
+            <h2 id="transition-modal-title">Transition modal</h2>
+            <p id="transition-modal-description">react-transition-group animates me.</p>
+          </div>
+        </Fade>
+      </Modal>
+    </>
   );
 }
 
