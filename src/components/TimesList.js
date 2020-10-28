@@ -65,7 +65,7 @@ const TimesList = ({ times, handleDelete }) => {
                 return (
                   <Card key={time.id} body outline color="primary">
                     <CardBody>
-                      <CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
+                      <CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon color="action" /> </CardTitle>
                       <Row>
                         {moment(time.start).format('ddd, MMM D')}
                       </Row>

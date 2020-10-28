@@ -4,10 +4,7 @@ import { push } from 'connected-react-router';
 import { useLocation } from 'react-router-dom';
 import tw from "twin.macro";
 import styled from "styled-components";
-import { 
-  Clear as ClearIcon, 
-  FilterNoneOutlined as CopyIcon 
-} from '@material-ui/icons';
+import { Clear, FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
 import {
   Navbar,
   NavbarBrand as BootNavbarBrand,
@@ -54,12 +51,12 @@ const SmallTitle = styled.span`
   font-weight: 500;
   letter-spacing: .1px;
   line-height: 24px;
-  padding-bottom: 15px;
 `
 
 const LightText = styled.span`
   color: #5f6368;
   font: 400 14px / 20px Roboto, sans-serif;
+  margin-top: 15px;
   margin-bottom: 12px;
 `
 
@@ -80,6 +77,10 @@ const LinkText = styled.span`
   line-height: 1.5rem;
   color: #202124;
   flex-grow: 1;
+`
+
+const ClearIcon = styled(Clear)`
+  cursor: pointer;
 `
 
 const useStyles = makeStyles((theme) => ({
@@ -147,7 +148,10 @@ const MainNavbar = ({ navigateTo }) => {
         BackdropProps={{ timeout: 500 }}>
         <Fade in={modalIsOpen}>
           <ModalContent boxShadow={5} container direction="column" justify="space-evenly" alignItems="flex-start">
-            <SmallTitle>Here's the link to the calendar</SmallTitle>
+            <Grid container direction="row" justify="space-between" alignItems="center">
+              <SmallTitle>Here's the link to this calendar</SmallTitle>
+              <ClearIcon onClick={handleModalClose} color="action" />
+            </Grid>
             <LightText>Also, here is the calendar ID if you just want to share that: </LightText>
             <CopyArea container direction="row" justify="space-between" alignItems="center">
               <LinkText>fora.com/calendar/link</LinkText>
