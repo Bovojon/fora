@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import tw from "twin.macro";
 import styled from "styled-components";
 import { Clear, FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
+import copy from 'copy-to-clipboard';
 import {
   Navbar,
   NavbarBrand as BootNavbarBrand,
@@ -18,6 +19,7 @@ import {
   Modal, 
   Backdrop, 
   Fade,
+  IconButton as MuiIconButton,
   makeStyles
 } from '@material-ui/core';
 
@@ -83,6 +85,11 @@ const ClearIcon = styled(Clear)`
   cursor: pointer;
 `
 
+const IconButton = styled(MuiIconButton)`
+  outline: none !important;
+  cursor: pointer;
+`
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -94,6 +101,7 @@ const useStyles = makeStyles((theme) => ({
 const MainNavbar = ({ navigateTo }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const location = useLocation();
   const classes = useStyles();
 
@@ -113,6 +121,10 @@ const MainNavbar = ({ navigateTo }) => {
   };
   const handleModalClose = () => {
     setModalIsOpen(false);
+  };
+  const handleCopyClick = (textToCopy) => {
+    copy(textToCopy);
+    setCopied(true);
   };
 
   return (
@@ -147,7 +159,7 @@ const MainNavbar = ({ navigateTo }) => {
         BackdropComponent={Backdrop}
         BackdropProps={{ timeout: 500 }}>
         <Fade in={modalIsOpen}>
-          <ModalContent boxShadow={5} container direction="column" justify="space-evenly" alignItems="flex-start">
+          <ModalContent container direction="column" justify="space-evenly" alignItems="flex-start">
             <Grid container direction="row" justify="space-between" alignItems="center">
               <SmallTitle>Here's the link to this calendar</SmallTitle>
               <ClearIcon onClick={handleModalClose} color="action" />
@@ -155,7 +167,9 @@ const MainNavbar = ({ navigateTo }) => {
             <LightText>Also, here is the calendar ID if you just want to share that: </LightText>
             <CopyArea container direction="row" justify="space-between" alignItems="center">
               <LinkText>fora.com/calendar/link</LinkText>
-              <CopyIcon />
+              <IconButton onClick={() => { handleCopyClick("Copied text") }}>
+                <CopyIcon /> 
+              </IconButton>
             </CopyArea>
           </ModalContent>
         </Fade>
