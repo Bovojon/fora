@@ -20,7 +20,8 @@ import {
   Backdrop, 
   Fade,
   IconButton as MuiIconButton,
-  makeStyles
+  makeStyles,
+  Snackbar
 } from '@material-ui/core';
 
 const NavbarBrand = styled(BootNavbarBrand)`
@@ -102,6 +103,7 @@ const MainNavbar = ({ navigateTo }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
   const location = useLocation();
   const classes = useStyles();
 
@@ -125,6 +127,13 @@ const MainNavbar = ({ navigateTo }) => {
   const handleCopyClick = (textToCopy) => {
     copy(textToCopy);
     setCopied(true);
+    setSnackBarIsOpen(true);
+  };
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackBarIsOpen(false);
   };
 
   return (
@@ -174,6 +183,13 @@ const MainNavbar = ({ navigateTo }) => {
           </ModalContent>
         </Fade>
       </Modal>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={snackBarIsOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackBarClose}
+        message="Copied calendar link"
+      />
     </>
   );
 }
