@@ -12,7 +12,7 @@ import {
   Nav,
   NavItem
 } from 'reactstrap';
-import { Modal, Backdrop, Fade, makeStyles } from '@material-ui/core';
+import { Modal, Backdrop, Fade, Box as MuiBox, makeStyles } from '@material-ui/core';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -34,28 +34,34 @@ const PrimaryLink = tw.a`
   hover:shadow-outline border-b-0 font-semibold
 `;
 
-const useStyles = makeStyles((theme) => {
-  console.log(theme.palette.background.paper)
-  console.log(theme.shadows[5])
-  console.log(theme.spacing(2, 4, 3))
-  return {
+const Box = styled(MuiBox)`
+  padding: 24px 24px 20px 24px;
+  border-radius: 8px;
+  background-color: #fff;
+`
+
+const SmallTitle = styled.p`
+  font: 500 20px Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: .1px;
+  line-height: 24px;
+`
+
+const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  }}
-});
+  }
+}));
 
 const MainNavbar = ({ navigateTo }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const classes = useStyles();
   const location = useLocation();
+  const classes = useStyles();
+
   const handleBrandClick = (e) => {
     e.preventDefault();
     navigateTo("/");
@@ -64,8 +70,8 @@ const MainNavbar = ({ navigateTo }) => {
     e.preventDefault();
     navigateTo("/calendar");
   }
-  const toggle = () => {
-    setIsOpen(!isOpen);
+  const toggleNavbar = () => {
+    setCollapseIsOpen(!collapseIsOpen);
   };
   const handleShareClick = () => {
     setModalIsOpen(true);
@@ -78,8 +84,8 @@ const MainNavbar = ({ navigateTo }) => {
     <>
       <Navbar light expand="md" className="pl-md-5 pr-md-5">
         <NavbarBrand onClick={handleBrandClick} href="/">Fora</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
+        <NavbarToggler onClick={toggleNavbar} />
+        <Collapse isOpen={collapseIsOpen} navbar>
           <Nav className="ml-auto" navbar>
             {location.pathname === "/calendar" ?
               <NavItem>
@@ -107,10 +113,9 @@ const MainNavbar = ({ navigateTo }) => {
         BackdropComponent={Backdrop}
         BackdropProps={{ timeout: 500 }}>
         <Fade in={modalIsOpen}>
-          <div className={classes.paper}>
-            <h2 id="transition-modal-title">Transition modal</h2>
-            <p id="transition-modal-description">react-transition-group animates me.</p>
-          </div>
+          <Box boxShadow={5}>
+            <SmallTitle>Here's the link to the calendar</SmallTitle>
+          </Box>
         </Fade>
       </Modal>
     </>
