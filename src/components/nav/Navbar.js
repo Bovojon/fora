@@ -96,7 +96,6 @@ const MainNavbar = ({ navigateTo }) => {
               :
               <NavItem>
                 <NavLinks>
-                  <NavLink href="/">About us</NavLink>
                   <PrimaryLink onClick={handleFindTimeClick} css="rounded-full" href="/">Find a time</PrimaryLink>
                 </NavLinks>
               </NavItem>
