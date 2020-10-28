@@ -34,14 +34,20 @@ const ListArea = styled(MuiBox)`
   overflow: auto;
 `
 
+const Header = styled.span`
+  font-size: 1.5em;
+  text-align: center;
+  color: #4299e1;
+`
+
 const TimesList = ({ times, handleDelete }) => {
   return (
     <Box mt={3}>
       {times.length === 0 ? 
-        <h4>Select times that work for you.</h4>
+        <Header><h4>Select times that work for you</h4></Header>
         :
         <>
-          <h4>Selected times:</h4>
+          <Header><h4>Your selected times:</h4></Header>
           <ListArea>
             {times.map(time => {
               if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
