@@ -31,3 +31,11 @@
 .rbc-allday-cell {
   display: none;
 }
+
+.rbc-time-content {
+  cursor: pointer;
+}
+
+.rbc-event-label {
+  display: none !important;
+}

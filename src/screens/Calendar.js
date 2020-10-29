@@ -17,6 +17,7 @@ import {
 	ArrowRight as ArrowRightIcon,
 	ArrowLeft as ArrowLeftIcon,
 	Today as TodayIcon,
+	Clear
 } from '@material-ui/icons';
 
 import { addTime, deleteTime } from '../actions/time';
@@ -42,6 +43,20 @@ const ToolbarBox = styled(MuiBox)`
 
 const Select = styled(MuiSelect)`
 	padding: 5px;
+`
+
+const ClearIcon = styled(Clear)`
+  cursor: pointer;
+`
+
+const Header = styled.span`
+  color: #FFFFFF;
+  font: 400 14px / 20px Roboto, sans-serif;
+`
+
+const TimeText = styled.span`
+  color: #FFFFFF;
+  font: 400 12px / 20px Roboto, sans-serif;
 `
 
 const CustomToolbar = (toolbar) => {
@@ -107,6 +122,8 @@ const CustomWeekHeader = ({ label }) => {
 }
 
 const Calendar = ({ times, addTime, deleteTime }) => {
+	const color = "#4299e1"
+
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
 		start = new Date(start);
@@ -118,6 +135,31 @@ const Calendar = ({ times, addTime, deleteTime }) => {
 	const handleDelete = (id) => {
 		deleteTime(id)
 	}
+
+	const CustomEvent = ({ event }) => {
+		return (
+			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
+				<Grid container direction="row" justify="space-between" alignItems="center">
+					<Header>Michael</Header>
+					<ClearIcon onClick={() => handleDelete(event.id)} color="action" />
+				</Grid>
+				<TimeText>
+					{moment(event.start).format('h:mm A') + " – " + moment(event.end).format('h:mm A')} 
+				</TimeText>
+			</Grid>
+		);
+	}
+
+	const getEventStyle = (color) => {
+		const style = {
+			backgroundColor: color,
+			borderRadius: '3px',
+			opacity: 0.5,
+		};
+		return {
+				style: style
+		};
+	};
 
 	return (
 		<Box alignItems="center">
@@ -136,12 +178,14 @@ const Calendar = ({ times, addTime, deleteTime }) => {
 						onSelectSlot={handleSelectSlot}
 						components = {{ 
 							toolbar : CustomToolbar,
+							event: CustomEvent,
 							week: { header: CustomWeekHeader }
 						}}
 						formats={{ 
 							dayFormat: 'ddd D',
 							timeGutterFormat: 'h A'
 						}}
+						eventPropGetter={() => getEventStyle(color)}
 					/>
 				</Grid>
 				<Grid item md={3} xs={12}>
