@@ -109,10 +109,12 @@ const MainNavbar = ({ navigateTo }) => {
 
   const handleBrandClick = (e) => {
     e.preventDefault();
+    setCollapseIsOpen(false);
     navigateTo("/");
   }
   const handleFindTimeClick = (e) => {
     e.preventDefault();
+    setCollapseIsOpen(false);
     navigateTo("/calendar");
   }
   const toggleNavbar = () => {

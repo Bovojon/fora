@@ -39,3 +39,7 @@
 .rbc-event-label {
   display: none !important;
 }
+
+.navbar-nav {
+  text-align: right;
+}
