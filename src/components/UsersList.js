@@ -40,7 +40,7 @@ const UsersList = () => {
   
   return (
     <Box my={2}>
-      <Header><h4>Filter times</h4></Header>
+      <Header><h4>Others in this calendar:</h4></Header>
       <List>
         {[0, 1,2,3,4,5,6,7,8,9].map((value) => {
           const labelId = `checkbox-list-secondary-label-${value}`;

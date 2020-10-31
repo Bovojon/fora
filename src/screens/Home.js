@@ -35,7 +35,7 @@ const Home = () => {
             <Heading>Find a time that works for<BlueHighlight> everyone.</BlueHighlight></Heading>
             <Paragraph><BlueHighlight>Fora</BlueHighlight> is a social calendar to plan group events.</Paragraph>
             <Actions>
-              <input type="text" placeholder="Enter a calendar id to join" />
+              <input type="text" placeholder="Enter calendar ID" />
               <button>Join</button>
             </Actions>
           </LeftColumn>
