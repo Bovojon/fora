@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;1,100&display=swap');
+@import 'react-redux-toastr/src/styles/index';
 
 .rbc-header {
   border: 0px !important;
