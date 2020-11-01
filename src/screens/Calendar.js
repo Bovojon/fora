@@ -20,7 +20,7 @@ import {
 	Clear
 } from '@material-ui/icons';
 
-import { addTime, deleteTime } from '../actions/timeActionCreators';
+import { addTimeCreator, deleteTimeCreator } from '../actions/timeActionCreators';
 import UsersList from '../components/UsersList';
 import TimesList from '../components/TimesList';
 
@@ -208,8 +208,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addTime: (time) => { dispatch(addTime(time)) },
-		deleteTime: (id) => { dispatch(deleteTime(id)) }
+		addTime: (time) => { dispatch(addTimeCreator(time)) },
+		deleteTime: (id) => { dispatch(deleteTimeCreator(id)) }
 	}
 }
 
