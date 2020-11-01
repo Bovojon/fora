@@ -20,7 +20,7 @@ import {
 	Clear
 } from '@material-ui/icons';
 
-import { addTime, deleteTime } from '../actions/time';
+import { addTime, deleteTime } from '../actions/timeActionCreators';
 import UsersList from '../components/UsersList';
 import TimesList from '../components/TimesList';
 
