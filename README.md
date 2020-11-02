@@ -48,8 +48,11 @@ Optionally, use functions from `@reduxjs/toolkit` to reduce boilerplate.
 5. `src/middleware`
     * Contains all business logic (e.g. Asynchronous API calls, logging, routing).
 
-
 ## Best Practices
+
+### `takeEvery` vs. `takeLatest`
+* `takeEvery` is used to run a Worker generator function every time the watched action is dispatched.
+* `takeLatest` is used to run a Worker generator function for the latest trigger.
 
 ### Fetching Data from API
 * When fetching data, it is best to first set the component in a pending state and show a loading spinner. Then, the data can be loaded successfully or the error message can be displayed:
