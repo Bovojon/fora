@@ -17,7 +17,9 @@ const middlewares = applyMiddleware(
   logger
 );
 
-const store = createStore(rootReducer(history), compose(middlewares));
+const enhancer = compose(middlewares);
+
+const store = createStore(rootReducer(history), enhancer);
 
 sagaMiddleware.run(rootSaga)
 
