@@ -11,8 +11,9 @@ const timeReducer = (state=[], { type, payload }) => {
   switch(type) {
     case ADD_TIME:
       /**
-       * Do not allow if the same user adds the same time.
-       * Allow if 2 different users add the same time.
+       * Put below Middleware (perform some action from the moment the action is dispatched to the moment it reaches reducer):
+       *    Do not allow if the same user adds the same time.
+       *    Allow if 2 different users add the same time.
        */
       const { start, end } = payload;
       const alreadyExists = state.filter(time => 
