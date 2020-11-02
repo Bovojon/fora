@@ -35,9 +35,10 @@ Optionally, use functions from `@reduxjs/toolkit` to reduce boilerplate.
 
 2. `src/actions`
     * Separated into constants and action creators, which take constant and payload and return action objects.
+    * Construct action types as `domain/eventName`.
 
 3. `src/reducers`
-    * Use `concat()`, `slice()`, or the spread syntax for arrays.
+    * Use `concat()`, `slice()` or the spread syntax for arrays.
     * Use `Object.assign()` or spread syntax for objects.
 
 4. `src/components`
