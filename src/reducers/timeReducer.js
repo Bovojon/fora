@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { ADD_TIME, DELETE_TIME} from '../actions/constants';
+import { TIME_ADDED_PENDING, TIME_REMOVED_PENDING} from '../actions/constants';
 
 let nextId = 0
 
@@ -9,9 +9,9 @@ const timeSorter = (a, b) => {
 
 const timeReducer = (state=[], { type, payload }) => {
   switch(type) {
-    case ADD_TIME:
+    case TIME_ADDED_PENDING:
       /**
-       * Put below Middleware (perform some action from the moment the action is dispatched to the moment it reaches reducer):
+       * Put the below Middleware (perform some action from the moment the action is dispatched to the moment it reaches reducer):
        *    Do not allow if the same user adds the same time.
        *    Allow if 2 different users add the same time.
        */
@@ -30,7 +30,7 @@ const timeReducer = (state=[], { type, payload }) => {
         return [...state, newTime].sort(timeSorter);
       }
       return state
-    case DELETE_TIME:
+    case TIME_REMOVED_PENDING:
       return state.filter(time => time.id !== payload)
     default:
       return state;

@@ -1,20 +1,20 @@
-import { call, takeLatest, all } from 'redux-saga/effects';
+import { call, takeLatest, all, put } from 'redux-saga/effects';
 
-// import { UserService } from '../services';
-import { POST_USER, POST_USER_SUCCESS } from '../actions/constants';
+import { UserService } from '../services';
+import { USER_CREATED_PENDING, USER_CREATED_SUCCESS } from '../actions/constants';
 
 function* postUser({ payload }) {
   try {
     const response = yield call(UserService.postUser, payload);
     const result = yield response.data;
-    yield put({ type: POST_USER_SUCCESS, payload: result });
+    yield put({ type: USER_CREATED_SUCCESS, payload: result });
   } catch(error) {
     console.error("Error posting new user");
   }
 }
 
 function* listenForPostUser() {
-  yield takeLatest(POST_USER, postUser)
+  yield takeLatest(USER_CREATED_PENDING, postUser)
 }
 
 function* userSaga() {

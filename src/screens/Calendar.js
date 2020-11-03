@@ -20,7 +20,7 @@ import {
 	Clear
 } from '@material-ui/icons';
 
-import { addTimeCreator, deleteTimeCreator } from '../actions/timeActionCreators';
+import { addTimeCreator, removeTimeCreator } from '../actions/timeActionCreators';
 import UsersList from '../components/UsersList';
 import TimesList from '../components/TimesList';
 
@@ -121,7 +121,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ times, addTime, deleteTime }) => {
+const Calendar = ({ times, addTime, removeTime }) => {
 	const color = "#4299e1"
 
 	const handleSelectSlot = (selected) => {
@@ -133,7 +133,7 @@ const Calendar = ({ times, addTime, deleteTime }) => {
 	}
 
 	const handleDelete = (id) => {
-		deleteTime(id)
+		removeTime(id)
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -209,7 +209,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addTime: (time) => { dispatch(addTimeCreator(time)) },
-		deleteTime: (id) => { dispatch(deleteTimeCreator(id)) }
+		removeTime: (id) => { dispatch(removeTimeCreator(id)) }
 	}
 }
 
