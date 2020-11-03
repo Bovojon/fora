@@ -11,12 +11,12 @@ import {
 /**
  * Workers
  */
-function* createCalendar(action) {
+function* createCalendar() {
   /**
    * Optionally use selector to get owner_id
    */
   try {
-    const response = yield call(CalendarService.createCalendar, action.payload);
+    const response = yield call(CalendarService.createCalendar);
     const calendarObject = yield response.data;
     yield put(createCalendarSuccessCreator(calendarObject.calendarId));
   } catch (error) {
