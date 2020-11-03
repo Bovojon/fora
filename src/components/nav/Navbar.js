@@ -24,6 +24,8 @@ import {
   Snackbar
 } from '@material-ui/core';
 
+import { createCalendarCreator } from '../../actions/calendarActionCreators';
+
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
   color: #4299e1 !important;
@@ -99,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MainNavbar = ({ navigateTo }) => {
+const MainNavbar = ({ navigateTo, createNewCalendar }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -114,6 +116,7 @@ const MainNavbar = ({ navigateTo }) => {
   }
   const handleFindTimeClick = (e) => {
     e.preventDefault();
+    createNewCalendar();
     setCollapseIsOpen(false);
     navigateTo("/calendar");
   }
@@ -198,7 +201,8 @@ const MainNavbar = ({ navigateTo }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => { dispatch(push(route)) }
+    navigateTo: (route) => dispatch(push(route)),
+    createNewCalendar: () => dispatch(createCalendarCreator)
   }
 }
 
