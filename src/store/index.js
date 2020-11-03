@@ -13,7 +13,6 @@ export const history = createBrowserHistory();
 const logger = createLogger();
 
 const middlewares = applyMiddleware(
-  ...customMiddlewares,
   sagaMiddleware,
   routerMiddleware(history),
   logger
