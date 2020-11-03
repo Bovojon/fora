@@ -11,9 +11,12 @@ import {
 /**
  * Workers
  */
-function* createCalendar() {
+function* createCalendar(action) {
+  /**
+   * Optionally use selector to get owner_id
+   */
   try {
-    const response = yield call(CalendarService.createCalendar);
+    const response = yield call(CalendarService.createCalendar, action.payload);
     const calendarObject = yield response.data;
     yield put(createCalendarSuccessCreator(calendarObject.calendarId));
   } catch (error) {
@@ -21,9 +24,9 @@ function* createCalendar() {
   }
 }
 
-function* getCalendar({ payload: { calendarId } }) {
+function* getCalendar(action) {
   try {
-    const response = yield call(CalendarService.getCalendar, calendarId);
+    const response = yield call(CalendarService.getCalendar, action.payload);
     const calendarObject = yield response.data;
     yield put(putCalendarCreator(calendarObject))
   } catch(error) {
