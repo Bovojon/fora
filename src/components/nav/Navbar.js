@@ -202,7 +202,7 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => dispatch(push(route)),
-    createNewCalendar: () => dispatch(createCalendarCreator)
+    createNewCalendar: () => dispatch(createCalendarCreator())
   }
 }
 
