@@ -1,10 +1,10 @@
-import { CREATE_CALENDAR } from "../actions/constants";
+import { CREATE_CALENDAR_SUCCESS } from "../actions/constants";
 
 const calendarReducer = (state={}, { type, payload }) => {
   switch(type) {
-    case CREATE_CALENDAR:
-      const { calendarId, ownerId } = payload;
-      return {...state, calendarId, ownerId }
+    case CREATE_CALENDAR_SUCCESS:
+      const { calendarId } = payload;
+      return {...state, calendarId }
     default:
       return state
   }
