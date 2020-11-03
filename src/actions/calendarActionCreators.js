@@ -1,16 +1,18 @@
 import { createAction } from '@reduxjs/toolkit';
 
 import { 
-  CREATE_CALENDAR,
-  CREATE_CALENDAR_SUCCESS,
-  CREATE_CALENDAR_ERROR,
-  GET_CALENDAR, 
-  GET_CALENDAR_SUCCESS 
+  CALENDAR_CREATED_PENDING,
+  CALENDAR_CREATED_SUCCESS,
+  CALENDAR_CREATED_ERROR,
+
+  CALENDAR_FETCHED, 
+  CALENDAR_FETCHED_SUCCESS,
+  CALENDAR_FETCHED_PENDING
 } from './constants';
 
-export const createCalendarCreator = createAction(CREATE_CALENDAR);
-export const createCalendarSuccessCreator = createAction(CREATE_CALENDAR_SUCCESS);
-export const createCalendarErrorCreator = createAction(CREATE_CALENDAR_ERROR);
+export const createCalendarCreator = createAction(CALENDAR_CREATED_PENDING);
+export const createCalendarSuccessCreator = createAction(CALENDAR_CREATED_SUCCESS);
+export const createCalendarErrorCreator = createAction(CALENDAR_CREATED_ERROR);
 
-export const getCalendarCreator = createAction(GET_CALENDAR);
-export const putCalendarCreator = createAction(GET_CALENDAR_SUCCESS);
+export const getCalendarCreator = createAction(CALENDAR_FETCHED);
+export const putCalendarCreator = createAction(CALENDAR_FETCHED_SUCCESS);
