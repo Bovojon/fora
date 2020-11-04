@@ -6,7 +6,6 @@ import { createLogger } from 'redux-logger';
 
 import rootReducer from '../reducers';
 import rootSaga from '../sagas';
-import customMiddlewares from '../middlewares';
 
 const sagaMiddleware = createSagaMiddle();
 export const history = createBrowserHistory();
