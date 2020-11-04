@@ -1,10 +1,9 @@
 import { call, put, all, takeEvery, takeLatest } from 'redux-saga/effects';
+import { CALENDAR_CREATED_PENDING, CALENDAR_FETCHED_PENDING } from '../actions/constants';
 
 import { CalendarService } from '../services';
-import { 
-  createCalendarCreator,
+import {
   createCalendarSuccessCreator,
-  getCalendarCreator, 
   putCalendarCreator
 } from '../actions/calendarActionCreators';
 
@@ -38,11 +37,11 @@ function* getCalendar(action) {
  * Watchers
  */
 function* listenForCreateCalendar() {
-  yield takeLatest(createCalendarCreator, createCalendar);
+  yield takeLatest(CALENDAR_CREATED_PENDING, createCalendar);
 }
 
 function* listenForGetCalendar() {
-  yield takeEvery(getCalendarCreator, getCalendar);
+  yield takeEvery(CALENDAR_FETCHED_PENDING, getCalendar);
 }
 
 function* calendarSaga() {
