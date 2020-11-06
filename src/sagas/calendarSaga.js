@@ -27,25 +27,6 @@ function* createCalendar() {
   }
 }
 
-function* setCalendarOwner(action) {
-  try {
-    const currentUserObject = yield select(UserSelector.getCurrentUser);
-    let ownerId = currentUserObject?.userId;
-    if (typeof ownerId === "undefined") {
-      const response = yield call(UserService.createUser, {});
-      const { user } = yield response.data;
-      ownerId = user.id;
-      yield put({ type: USER_CREATED_SUCCESS, payload: {user: user} });
-    }
-    yield all([
-      call(CalendarService.setCalendarOwner, { calendar_id: action.payload.id, user_id: ownerId }),
-      call(CalendarService.addUserToCalendar, { calendar_id: action.payload.id, user_id: ownerId })
-    ]);
-  } catch (error) {
-    console.error("Error in adding user to calendar: ", error);
-  }
-}
-
 function* getCalendar(action) {
   try {
     const response = yield call(CalendarService.getCalendar, action.payload);
@@ -63,10 +44,6 @@ function* watchCalendarCreated() {
   yield takeLatest(CALENDAR_CREATED_PENDING, createCalendar);
 }
 
-function* watchCalendarCreatedSuccess() {
-  yield takeLatest(CALENDAR_CREATED_SUCCESS, setCalendarOwner);
-}
-
 function* watchCalendarFetched() {
   yield takeEvery(CALENDAR_FETCHED_PENDING, getCalendar);
 }
@@ -74,7 +51,6 @@ function* watchCalendarFetched() {
 function* calendarSaga() {
   yield all([
     call(watchCalendarCreated),
-    call(watchCalendarCreatedSuccess),
     call(watchCalendarFetched)
   ]);
 }
