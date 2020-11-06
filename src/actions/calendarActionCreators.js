@@ -9,9 +9,9 @@ import {
   CALENDAR_FETCHED_SUCCESS
 } from './constants';
 
-export const createCalendarCreator = createAction(CALENDAR_CREATED_PENDING);
-export const createCalendarSuccessCreator = createAction(CALENDAR_CREATED_SUCCESS);
-export const createCalendarErrorCreator = createAction(CALENDAR_CREATED_ERROR);
+export const createCalendarPending = createAction(CALENDAR_CREATED_PENDING);
+export const createCalendarSuccess = createAction(CALENDAR_CREATED_SUCCESS);
+export const createCalendarError = createAction(CALENDAR_CREATED_ERROR);
 
-export const getCalendarCreator = createAction(CALENDAR_FETCHED_PENDING);
-export const putCalendarCreator = createAction(CALENDAR_FETCHED_SUCCESS);
+export const fetchCalendarPending = createAction(CALENDAR_FETCHED_PENDING);
+export const fetchCalendarSuccess = createAction(CALENDAR_FETCHED_SUCCESS);

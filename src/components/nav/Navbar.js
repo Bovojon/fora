@@ -24,7 +24,7 @@ import {
   Snackbar
 } from '@material-ui/core';
 
-import { createCalendarCreator } from '../../actions/calendarActionCreators';
+import { createCalendarPending } from '../../actions/calendarActionCreators';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -202,7 +202,7 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => dispatch(push(route)),
-    createNewCalendar: () => dispatch(createCalendarCreator())
+    createNewCalendar: () => dispatch(createCalendarPending())
   }
 }
 

@@ -3,9 +3,9 @@ import { call, put, all, takeEvery, takeLatest, select } from 'redux-saga/effect
 import { CalendarService, UserService } from '../services';
 import { UserSelector } from '../selectors';
 import { 
-  createCalendarSuccessCreator, 
-  putCalendarCreator,
-  createUserCreator
+  createCalendarSuccess, 
+  fetchCalendarSuccess,
+  createUserPending
 } from '../actions/calendarActionCreators';
 import { 
   CALENDAR_CREATED_PENDING, 
@@ -21,7 +21,7 @@ function* createCalendar() {
   try {
     const response = yield call(CalendarService.createCalendar);
     const { calendar } = yield response.data;
-    yield put(createCalendarSuccessCreator(calendar));
+    yield put(createCalendarSuccess(calendar));
   } catch (error) {
     console.error("Error in creating new calendar: ", error);
   }
@@ -50,7 +50,7 @@ function* getCalendar(action) {
   try {
     const response = yield call(CalendarService.getCalendar, action.payload);
     const calendarObject = yield response.data;
-    yield put(putCalendarCreator({ calendarObject }))
+    yield put(fetchCalendarSuccess({ calendarObject }))
   } catch(error) {
     console.error("Error in getting Calendar: ", error);
   }
