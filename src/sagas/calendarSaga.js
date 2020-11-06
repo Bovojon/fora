@@ -20,8 +20,8 @@ import {
 function* createCalendar() {
   try {
     const response = yield call(CalendarService.createCalendar);
-    const { calendar_id } = yield response.data;
-    yield put(createCalendarSuccessCreator({ calendar_id }));
+    const { calendar } = yield response.data;
+    yield put(createCalendarSuccessCreator(calendar));
   } catch (error) {
     console.error("Error in creating new calendar: ", error);
   }
@@ -32,13 +32,14 @@ function* setCalendarOwner(action) {
     const currentUserObject = yield select(UserSelector.getCurrentUser);
     let ownerId = currentUserObject?.userId;
     if (typeof ownerId === "undefined") {
-      const result = yield call(UserService.createUser, {});
-      ownerId = result.data.user.id
-      yield put({ type: USER_CREATED_SUCCESS, payload: {userId: ownerId} });
+      const response = yield call(UserService.createUser, {});
+      const { user } = yield response.data;
+      ownerId = user.id;
+      yield put({ type: USER_CREATED_SUCCESS, payload: {user: user} });
     }
     yield all([
-      call(CalendarService.setCalendarOwner, { calendar_id: action.payload.calendar_id, user_id: ownerId }),
-      call(CalendarService.addUserToCalendar, { calendar_id: action.payload.calendar_id, user_id: ownerId })
+      call(CalendarService.setCalendarOwner, { calendar_id: action.payload.id, user_id: ownerId }),
+      call(CalendarService.addUserToCalendar, { calendar_id: action.payload.id, user_id: ownerId })
     ]);
   } catch (error) {
     console.error("Error in adding user to calendar: ", error);
