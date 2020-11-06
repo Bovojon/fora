@@ -4,7 +4,7 @@ const calendarReducer = (state={}, { type, payload }) => {
   switch(type) {
     case CALENDAR_CREATED_SUCCESS:
       const { calendarId } = payload;
-      return {...state, calendarId }
+      return {...state, calendarId}
     default:
       return state
   }
