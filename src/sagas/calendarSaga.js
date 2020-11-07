@@ -2,16 +2,15 @@ import { call, put, all, takeEvery, takeLatest, select } from 'redux-saga/effect
 
 import { CalendarService, UserService } from '../services';
 import { UserSelector } from '../selectors';
+import { createUserSuccess } from '../actions/userActionCreators';
 import { 
   createCalendarSuccess, 
-  fetchCalendarSuccess,
-  createUserPending
+  fetchCalendarSuccess
 } from '../actions/calendarActionCreators';
 import { 
   CALENDAR_CREATED_PENDING, 
   CALENDAR_FETCHED_PENDING,
-  CALENDAR_CREATED_SUCCESS,
-  USER_CREATED_SUCCESS
+  CALENDAR_CREATED_SUCCESS
 } from '../actions/constants';
 
 /**
@@ -19,11 +18,29 @@ import {
  */
 function* createCalendar() {
   try {
-    const response = yield call(CalendarService.createCalendar);
-    const { calendar } = yield response.data;
+    const currentUserObject = yield select(UserSelector.getCurrentUser);
+    let creatorId = currentUserObject?.userId;
+    if (typeof creatorId === "undefined") {
+      const userResponse = yield call(UserService.createUser, {});
+      const { user } = yield userResponse.data;
+      creatorId = yield user.id;
+      yield put(createUserSuccess(user));
+    }
+    const calResponse = yield call(CalendarService.createCalendar, { user_id: creatorId });
+    const { calendar } = yield calResponse.data;
     yield put(createCalendarSuccess(calendar));
   } catch (error) {
     console.error("Error in creating new calendar: ", error);
+  }
+}
+
+function* addUserToCalendar(action) {
+  try {
+    const calendarId = action.payload.id;
+    const creatorId = action.payload.creator_id;
+    const result = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: creatorId }) 
+  } catch (error) {
+    console.error("Error in adding creator to calendar: ", error);
   }
 }
 
@@ -40,18 +57,23 @@ function* getCalendar(action) {
 /**
  * Watchers
  */
-function* watchCalendarCreated() {
+function* watchCalendarCreatedPending() {
   yield takeLatest(CALENDAR_CREATED_PENDING, createCalendar);
 }
 
-function* watchCalendarFetched() {
+function* watchCalendarCreatedSuccess() {
+  yield takeLatest(CALENDAR_CREATED_SUCCESS, addUserToCalendar);
+}
+
+function* watchCalendarFetchedPending() {
   yield takeEvery(CALENDAR_FETCHED_PENDING, getCalendar);
 }
 
 function* calendarSaga() {
   yield all([
-    call(watchCalendarCreated),
-    call(watchCalendarFetched)
+    call(watchCalendarCreatedPending),
+    call(watchCalendarCreatedSuccess),
+    call(watchCalendarFetchedPending),
   ]);
 }
 
