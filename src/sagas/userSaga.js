@@ -1,24 +1,31 @@
-import { call, takeLatest, all, put } from 'redux-saga/effects';
+import { call, takeLatest, all, put, select } from 'redux-saga/effects';
 
 import { UserService } from '../services';
-import { USER_CREATED_PENDING, USER_CREATED_SUCCESS } from '../actions/constants';
+import { CalendarSelector } from '../selectors';
+import { USER_CREATED_PENDING } from '../actions/constants';
+import { createUserSuccess } from '../actions/userActionCreators';
 
-function* postUser({ payload }) {
+function* createUser(action) {
   try {
-    const response = yield call(UserService.postUser, payload);
-    const result = yield response.data;
-    yield put({ type: USER_CREATED_SUCCESS, payload: result });
+    const userObj = action.payload;
+    if (userObj.name === "undefined") {
+      const totalParticipants = yield select(CalendarSelector.getTotalParticipants);
+      userObj.name = `Person ${totalParticipants}`;
+    }
+    const userResponse = yield call(UserService.createUser, { user: userObj });
+    const { newUser } = yield userResponse.data;
+    yield put(createUserSuccess(newUser));
   } catch(error) {
-    console.error("Error posting new user");
+    console.error("Error creating new user.");
   }
 }
 
-function* listenForPostUser() {
-  yield takeLatest(USER_CREATED_PENDING, postUser)
+function* watchUserCreatedPending() {
+  yield takeLatest(USER_CREATED_PENDING, createUser)
 }
 
 function* userSaga() {
-  yield all([ call(listenForPostUser) ])
+  yield all([ call(watchUserCreatedPending) ])
 }
 
 export default userSaga;
