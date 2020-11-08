@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
 const MainNavbar = ({ navigateTo, createNewCalendar }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
   const location = useLocation();
   const classes = useStyles();
@@ -131,8 +131,8 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
   };
   const handleCopyClick = (textToCopy) => {
     copy(textToCopy);
-    setCopied(true);
-    setSnackBarIsOpen(true);
+    setIsCopied(true);
+    setSnackBarIsOpen(isCopied);
   };
   const handleSnackBarClose = (event, reason) => {
     if (reason === 'clickaway') {
