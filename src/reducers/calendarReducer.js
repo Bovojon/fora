@@ -1,10 +1,11 @@
-import { CALENDAR_CREATED_SUCCESS } from "../actions/constants";
+import { CALENDAR_CREATED_SUCCESS, CALENDAR_ADDED_USER_SUCCESS } from "../actions/constants";
 
 const calendarReducer = (state={}, { type, payload }) => {
   switch(type) {
     case CALENDAR_CREATED_SUCCESS:
-      const { calendarId } = payload;
-      return {...state, calendarId}
+    case CALENDAR_ADDED_USER_SUCCESS:
+      const calendarObj = payload;
+      return {...state, ...calendarObj}
     default:
       return state
   }
