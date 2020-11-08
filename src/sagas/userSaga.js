@@ -13,8 +13,8 @@ function* createUser(action) {
       userObj.name = `Person ${totalParticipants}`;
     }
     const userResponse = yield call(UserService.createUser, { user: userObj });
-    const { newUser } = yield userResponse.data;
-    yield put(createUserSuccess(newUser));
+    const { user } = yield userResponse.data;
+    yield put(createUserSuccess(user));
   } catch(error) {
     console.error("Error creating new user.");
   }
