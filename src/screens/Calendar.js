@@ -202,9 +202,11 @@ const Calendar = ({ times, addTime, removeTime }) => {
 	)
 }
 
-const mapStateToProps = (state) => ({
-	times: state.time,
-})
+const mapStateToProps = (state) => {
+  return {
+    times: state.times
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
 	return {
