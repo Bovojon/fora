@@ -5,12 +5,14 @@ import { UserSelector } from '../selectors';
 import { createUserSuccess } from '../actions/userActionCreators';
 import { 
   createCalendarSuccess, 
-  fetchCalendarSuccess
+  fetchCalendarSuccess,
+  addUserToCalendarSuccess
 } from '../actions/calendarActionCreators';
 import { 
   CALENDAR_CREATED_PENDING, 
   CALENDAR_FETCHED_PENDING,
-  CALENDAR_CREATED_SUCCESS
+  CALENDAR_CREATED_SUCCESS,
+  CALENDAR_ADDED_USER_PENDING
 } from '../actions/constants';
 
 /**
@@ -38,7 +40,9 @@ function* addUserToCalendar(action) {
   try {
     const calendarId = action.payload.id;
     const creatorId = action.payload.creator_id;
-    const result = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: creatorId }) 
+    const calResponse = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: creatorId });
+    const { calendar } = yield calResponse.data;
+    yield put(addUserToCalendarSuccess(calendar));
   } catch (error) {
     console.error("Error in adding creator to calendar: ", error);
   }
@@ -65,6 +69,10 @@ function* watchCalendarCreatedSuccess() {
   yield takeLatest(CALENDAR_CREATED_SUCCESS, addUserToCalendar);
 }
 
+function* watchCalendarAddedUserPending() {
+  yield takeEvery(CALENDAR_ADDED_USER_PENDING, addUserToCalendar);
+}
+
 function* watchCalendarFetchedPending() {
   yield takeEvery(CALENDAR_FETCHED_PENDING, getCalendar);
 }
@@ -73,6 +81,7 @@ function* calendarSaga() {
   yield all([
     call(watchCalendarCreatedPending),
     call(watchCalendarCreatedSuccess),
+    call(watchCalendarAddedUserPending),
     call(watchCalendarFetchedPending),
   ]);
 }
