@@ -50,9 +50,10 @@ function* addUserToCalendar(action) {
 
 function* getCalendar(action) {
   try {
-    const response = yield call(CalendarService.getCalendar, action.payload);
-    const calendarObject = yield response.data;
-    yield put(fetchCalendarSuccess({ calendarObject }))
+    const calendarId = action.payload;
+    const calResponse = yield call(CalendarService.getCalendar, { calendar_id: calendarId });
+    const { calendar } = yield calResponse.data;
+    yield put(fetchCalendarSuccess(calendar));
   } catch(error) {
     console.error("Error in getting Calendar: ", error);
   }
