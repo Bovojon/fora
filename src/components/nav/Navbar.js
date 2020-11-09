@@ -151,7 +151,7 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
             {location.pathname === "/calendar" ?
               <NavItem>
                 <NavLinks>
-                  <PrimaryLink css="rounded-full" onClick={handleShareClick}>Share calendar</PrimaryLink>
+                  <PrimaryLink onClick={handleShareClick} css="rounded-full">Share calendar</PrimaryLink>
                 </NavLinks>
               </NavItem>
               :
