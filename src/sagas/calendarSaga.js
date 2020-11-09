@@ -42,10 +42,8 @@ function* addUserToCalendar() {
     const calendarId = yield select(CalendarSelector.getCalendarId);
     const userId = yield select(UserSelector.getCurrentUserId);
     if (typeof calendarId === "undefined") {
-      // yield* watchCalendarCreatedSuccess();
       yield take(CALENDAR_CREATED_PENDING, createCalendar);
     } else if (typeof userId === "undefined") {
-      // yield* watchUserCreatedSuccess();
       yield take(USER_CREATED_SUCCESS, addUserToCalendar);
     } else {
       console.log(calendarId, userId);
