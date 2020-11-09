@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
+import copy from 'copy-to-clipboard';
+import { FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
 import { 
   List,  
   ListItem,
@@ -9,7 +11,9 @@ import {
   ListItemAvatar,
   Checkbox,
   Avatar,
-  Box as MuiBox
+  Box as MuiBox,
+  Grid,
+  IconButton as MuiIconButton
 } from '@material-ui/core';
 
 const Box = styled(MuiBox)`
@@ -21,6 +25,42 @@ const Header = styled.span`
   font-size: 1.5em;
   text-align: center;
   color: #4299e1;
+`
+
+const SmallTitle = styled.span`
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: .1px;
+  line-height: 24px;
+  margin: 10px 0px;
+`
+
+const CopyArea = styled(Grid)`
+  align-items: center;
+  background: #f1f3f4;
+  border-radius: 4px;
+  color: #5f6368;
+  display: flex;
+  padding: 3px 12px;
+`
+
+const LinkText = styled.span`
+  letter-spacing: .00625em;
+  font-family: Roboto,Arial,sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  color: #202124;
+  flex-grow: 1;
+`
+
+const IconButton = styled(MuiIconButton)`
+  outline: none !important;
+  cursor: pointer;
+`
+
+const InviteGrid = styled(Grid)`
+  padding: 25px 20px;
 `
 
 const LoadingListSkeleton = () => {
@@ -54,6 +94,20 @@ const LoadingListSkeleton = () => {
   );
 }
 
+const InviteText = ({ handleCopyClick }) => {
+  return (
+    <InviteGrid container direction="column" justify="center" alignItems="center">
+      <SmallTitle>Share the link below to invite others to this calendar.</SmallTitle>
+      <CopyArea container direction="row" justify="space-between" alignItems="center">
+        <LinkText>fora.com/calendar/link</LinkText>
+        <IconButton onClick={() => { handleCopyClick("Copied text") }}>
+          <CopyIcon /> 
+        </IconButton>
+      </CopyArea>
+    </InviteGrid>
+  );
+}
+
 const ParticipantsList = ({ participants }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
@@ -67,6 +121,10 @@ const ParticipantsList = ({ participants }) => {
       newChecked.splice(currentIndex, 1);
     }
     setChecked(newChecked);
+  };
+
+  const handleCopyClick = (textToCopy) => {
+    copy(textToCopy);
   };
 
   useEffect(() => {
@@ -86,22 +144,28 @@ const ParticipantsList = ({ participants }) => {
       {isLoading ? 
         <LoadingListSkeleton />
         :
-        <List>
-          {participants.map((participant) => {
-            const labelId = participant.id;
-            return (
-              <ListItem key={labelId} button>
-                <ListItemAvatar>
-                  <Avatar/>
-                </ListItemAvatar>
-                <ListItemText id={labelId} primary={participant.name} />
-                <ListItemSecondaryAction>
-                  <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
-                </ListItemSecondaryAction>
-              </ListItem>
-            );
-          })}
-        </List>
+        <>
+        {participants.length > 1 ?
+          <List>
+            {participants.map((participant) => {
+              const labelId = participant.id;
+              return (
+                <ListItem key={labelId} button>
+                  <ListItemAvatar>
+                    <Avatar/>
+                  </ListItemAvatar>
+                  <ListItemText id={labelId} primary={participant.name} />
+                  <ListItemSecondaryAction>
+                    <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })}
+          </List>
+          :
+          <InviteText handleCopyClick={handleCopyClick}  />
+        }
+        </>
       }
     </Box>
   );
