@@ -1,7 +1,7 @@
 import { call, put, all, takeEvery, takeLatest, select } from 'redux-saga/effects';
 
 import { CalendarService, UserService } from '../services';
-import { UserSelector } from '../selectors';
+import { UserSelector, CalendarSelector } from '../selectors';
 import { createUserSuccess } from '../actions/userActionCreators';
 import { 
   createCalendarSuccess, 
@@ -12,7 +12,7 @@ import {
   CALENDAR_CREATED_PENDING, 
   CALENDAR_FETCHED_PENDING,
   CALENDAR_CREATED_SUCCESS,
-  CALENDAR_ADDED_USER_PENDING
+  USER_CREATED_SUCCESS
 } from '../actions/constants';
 
 /**
@@ -20,10 +20,11 @@ import {
  */
 function* createCalendar() {
   try {
-    const currentUserObject = yield select(UserSelector.getCurrentUser);
-    let creatorId = currentUserObject?.userId;
+    const currentUserObj = yield select(UserSelector.getCurrentUser);
+    let creatorId = currentUserObj.userId;
     if (typeof creatorId === "undefined") {
-      const userResponse = yield call(UserService.createUser, {});
+      const newUserObj = { name: "Person 1" };
+      const userResponse = yield call(UserService.createUser, { user: newUserObj });
       const { user } = yield userResponse.data;
       creatorId = yield user.id;
       yield put(createUserSuccess(user));
@@ -36,13 +37,22 @@ function* createCalendar() {
   }
 }
 
-function* addUserToCalendar(action) {
+function* addUserToCalendar() {
   try {
-    const calendarId = action.payload.id;
-    const creatorId = action.payload.creator_id;
-    const calResponse = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: creatorId });
-    const { calendar } = yield calResponse.data;
-    yield put(addUserToCalendarSuccess(calendar));
+    const calendarId = yield select(CalendarSelector.getCalendarId);
+    const userId = yield select(UserSelector.getCurrentUserId);
+    if (typeof calendarId === "undefined") {
+      // yield* watchCalendarCreatedSuccess();
+      yield take(CALENDAR_CREATED_PENDING, createCalendar);
+    } else if (typeof userId === "undefined") {
+      // yield* watchUserCreatedSuccess();
+      yield take(USER_CREATED_SUCCESS, addUserToCalendar);
+    } else {
+      console.log(calendarId, userId);
+      const calResponse = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: userId });
+      const { calendar } = yield calResponse.data;
+      yield put(addUserToCalendarSuccess(calendar));
+    }
   } catch (error) {
     console.error("Error in adding creator to calendar: ", error);
   }
@@ -70,8 +80,8 @@ function* watchCalendarCreatedSuccess() {
   yield takeLatest(CALENDAR_CREATED_SUCCESS, addUserToCalendar);
 }
 
-function* watchCalendarAddedUserPending() {
-  yield takeEvery(CALENDAR_ADDED_USER_PENDING, addUserToCalendar);
+function* watchUserCreatedSuccess() {
+  yield takeEvery(USER_CREATED_SUCCESS, addUserToCalendar);
 }
 
 function* watchCalendarFetchedPending() {
@@ -82,7 +92,7 @@ function* calendarSaga() {
   yield all([
     call(watchCalendarCreatedPending),
     call(watchCalendarCreatedSuccess),
-    call(watchCalendarAddedUserPending),
+    call(watchUserCreatedSuccess),
     call(watchCalendarFetchedPending),
   ]);
 }
