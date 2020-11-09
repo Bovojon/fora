@@ -121,7 +121,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ times, addTime, removeTime }) => {
+const Calendar = ({ times, participants, addTime, removeTime }) => {
 	const color = "#4299e1"
 
 	const handleSelectSlot = (selected) => {
@@ -191,7 +191,7 @@ const Calendar = ({ times, addTime, removeTime }) => {
 				<Grid item md={3} xs={12}>
 					<Grid container direction="column" justify="center" alignItems="center">
 						<Paper variant="outlined">
-							<UsersList />
+							<UsersList participants={participants} />
 							<Divider />
 							<TimesList times={times} handleDelete={handleDelete}  />
 						</Paper>
@@ -204,7 +204,8 @@ const Calendar = ({ times, addTime, removeTime }) => {
 
 const mapStateToProps = (state) => {
   return {
-    times: state.times
+		times: state.times,
+		participants: state.calendar.participants
   }
 }
 
