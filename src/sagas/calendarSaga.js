@@ -6,13 +6,13 @@ import { createUserSuccess } from '../actions/userActionCreators';
 import { 
   createCalendarSuccess, 
   fetchCalendarSuccess,
+  addUserToCalendarPending,
   addUserToCalendarSuccess
 } from '../actions/calendarActionCreators';
 import { 
   CALENDAR_CREATED_PENDING, 
   CALENDAR_FETCHED_PENDING,
-  CALENDAR_CREATED_SUCCESS,
-  USER_CREATED_SUCCESS
+  CALENDAR_ADDED_USER_PENDING
 } from '../actions/constants';
 
 /**
@@ -32,6 +32,7 @@ function* createCalendar() {
     const calResponse = yield call(CalendarService.createCalendar, { user_id: creatorId });
     const { calendar } = yield calResponse.data;
     yield put(createCalendarSuccess(calendar));
+    yield put(addUserToCalendarPending());
   } catch (error) {
     console.error("Error in creating new calendar: ", error);
   }
@@ -41,16 +42,21 @@ function* addUserToCalendar() {
   try {
     const calendarId = yield select(CalendarSelector.getCalendarId);
     const userId = yield select(UserSelector.getCurrentUserId);
-    if (typeof calendarId === "undefined") {
-      yield take(CALENDAR_CREATED_PENDING, createCalendar);
-    } else if (typeof userId === "undefined") {
-      yield take(USER_CREATED_SUCCESS, addUserToCalendar);
-    } else {
-      console.log(calendarId, userId);
+    if (typeof calendarId !== "undefined" && typeof userId !== "undefined") {
       const calResponse = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: userId });
       const { calendar } = yield calResponse.data;
       yield put(addUserToCalendarSuccess(calendar));
     }
+    // if (typeof calendarId === "undefined") {
+    //   yield take(CALENDAR_CREATED_PENDING, createCalendar);
+    // } else if (typeof userId === "undefined") {
+    //   yield take(USER_CREATED_SUCCESS, addUserToCalendar);
+    // } else {
+    //   console.log(calendarId, userId);
+    //   const calResponse = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: userId });
+    //   const { calendar } = yield calResponse.data;
+    //   yield put(addUserToCalendarSuccess(calendar));
+    // }
   } catch (error) {
     console.error("Error in adding creator to calendar: ", error);
   }
@@ -74,13 +80,16 @@ function* watchCalendarCreatedPending() {
   yield takeLatest(CALENDAR_CREATED_PENDING, createCalendar);
 }
 
-function* watchCalendarCreatedSuccess() {
-  yield takeLatest(CALENDAR_CREATED_SUCCESS, addUserToCalendar);
+function* watchCalendarAddedUserPending() {
+  yield takeLatest(CALENDAR_ADDED_USER_PENDING, addUserToCalendar);
 }
 
-function* watchUserCreatedSuccess() {
-  yield takeEvery(USER_CREATED_SUCCESS, addUserToCalendar);
-}
+// function* watchCalendarCreatedSuccess() {
+//   yield takeLatest(CALENDAR_CREATED_SUCCESS, addUserToCalendar);
+// }
+// function* watchUserCreatedSuccess() {
+//   yield takeEvery(USER_CREATED_SUCCESS, addUserToCalendar);
+// }
 
 function* watchCalendarFetchedPending() {
   yield takeEvery(CALENDAR_FETCHED_PENDING, getCalendar);
@@ -89,8 +98,7 @@ function* watchCalendarFetchedPending() {
 function* calendarSaga() {
   yield all([
     call(watchCalendarCreatedPending),
-    call(watchCalendarCreatedSuccess),
-    call(watchUserCreatedSuccess),
+    call(watchCalendarAddedUserPending),
     call(watchCalendarFetchedPending),
   ]);
 }

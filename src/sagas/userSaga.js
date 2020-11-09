@@ -4,6 +4,7 @@ import { UserService } from '../services';
 import { CalendarSelector } from '../selectors';
 import { USER_CREATED_PENDING } from '../actions/constants';
 import { createUserSuccess } from '../actions/userActionCreators';
+import { addUserToCalendarPending } from '../actions/calendarActionCreators';
 
 function* createUser(action) {
   try {
@@ -15,6 +16,7 @@ function* createUser(action) {
     const userResponse = yield call(UserService.createUser, { user: userObj });
     const { user } = yield userResponse.data;
     yield put(createUserSuccess(user));
+    yield put(addUserToCalendarPending());
   } catch(error) {
     console.error("Error creating new user.");
   }
