@@ -21,7 +21,7 @@ import {
 } from '@material-ui/icons';
 
 import { addTimePending, removeTimePending } from '../actions/timeActionCreators';
-import UsersList from '../components/UsersList';
+import ParticipantsList from '../components/ParticipantsList';
 import TimesList from '../components/TimesList';
 
 const localizer = momentLocalizer(moment);
@@ -191,7 +191,7 @@ const Calendar = ({ times, participants, addTime, removeTime }) => {
 				<Grid item md={3} xs={12}>
 					<Grid container direction="column" justify="center" alignItems="center">
 						<Paper variant="outlined">
-							<UsersList participants={participants} />
+							<ParticipantsList participants={participants} />
 							<Divider />
 							<TimesList times={times} handleDelete={handleDelete}  />
 						</Paper>

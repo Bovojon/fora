@@ -54,7 +54,7 @@ const LoadingListSkeleton = () => {
   );
 }
 
-const UsersList = ({ participants }) => {
+const ParticipantsList = ({ participants }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
 
@@ -107,4 +107,4 @@ const UsersList = ({ participants }) => {
   );
 }
 
-export default UsersList;
+export default ParticipantsList;
