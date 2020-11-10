@@ -26,12 +26,13 @@ const CardTitle = styled(ReactCardTitle)`
 `
 
 const Box = styled(MuiBox)`
-  height: 42vh;
+  height: 41vh;
 `
 
 const ListArea = styled(MuiBox)`
-  height: 38vh;
+  height: 36vh;
   overflow: auto;
+  margin-top: 15px;
 `
 
 const Header = styled.span`
@@ -42,9 +43,9 @@ const Header = styled.span`
 
 const TimesList = ({ times, handleDelete }) => {
   return (
-    <Box mt={3}>
+    <Box mt={4}>
       {times.length === 0 ? 
-        <Header><h4>Select times that work for you</h4></Header>
+        <Header><h4>Select times that work for you.</h4></Header>
         :
         <>
           <Header><h4>Your selected times:</h4></Header>
