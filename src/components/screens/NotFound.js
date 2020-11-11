@@ -1,7 +1,7 @@
 import React from "react";
 import tw from "twin.macro";
 
-import Reveal from "../components/animations/Reveal";
+import Reveal from "../animations/Reveal";
 
 const Container = tw.div`relative`;
 

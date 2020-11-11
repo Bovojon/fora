@@ -20,9 +20,9 @@ import {
 	Clear
 } from '@material-ui/icons';
 
-import { addTimePending, removeTimePending } from '../actions/timeActionCreators';
-import ParticipantsList from '../components/ParticipantsList';
-import TimesList from '../components/TimesList';
+import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
+import ParticipantsList from '../ParticipantsList';
+import TimesList from '../TimesList';
 
 const localizer = momentLocalizer(moment);
 

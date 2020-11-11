@@ -2,9 +2,9 @@ import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 
-import Reveal from "../components/animations/Reveal";
+import Reveal from "../animations/Reveal";
 
-import TeamIllustration from "../images/team-illustration-2.svg";
+import TeamIllustration from "../../images/team-illustration-2.svg";
 
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col lg:flex-row lg:items-center max-w-screen-xl mx-auto py-20 md:py-24`;
