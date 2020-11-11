@@ -59,6 +59,10 @@ const TimeText = styled.span`
   font: 400 12px / 20px Roboto, sans-serif;
 `
 
+const timeSorter = (a, b) => {
+  return moment(a.start).diff(b.start)
+}
+
 const CustomToolbar = (toolbar) => {
 	const [calendarView, setCalendarView] = useState('week');
 
@@ -121,26 +125,31 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ times, participants, addTime, removeTime }) => {
+const Calendar = ({ times, calendar, currentUser, addTime, removeTime }) => {
 	const color = "#4299e1"
 
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
 		start = new Date(start);
 		end = new Date(end);
-		const newTime = { start, end }
-		addTime(newTime)
+		const newTime = { 
+			start, 
+			end, 
+			calendar_id: calendar.id, 
+			user_id: currentUser.id 
+		}
+		addTime(newTime);
 	}
 
-	const handleDelete = (id) => {
-		removeTime(id)
+	const handleDelete = (time_id) => {
+		removeTime(time_id);
 	}
 
 	const CustomEvent = ({ event }) => {
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<Grid container direction="row" justify="space-between" alignItems="center">
-					<Header>Michael</Header>
+					<Header>{currentUser.name}</Header>
 					<ClearIcon onClick={() => handleDelete(event.id)} color="action" />
 				</Grid>
 				<TimeText>
@@ -191,9 +200,9 @@ const Calendar = ({ times, participants, addTime, removeTime }) => {
 				<Grid item md={3} xs={12}>
 					<Grid container direction="column" justify="center" alignItems="center">
 						<Paper variant="outlined">
-							<ParticipantsList participants={participants} />
+							<ParticipantsList participants={calendar.participants} />
 							<Divider />
-							<TimesList times={times} handleDelete={handleDelete}  />
+							<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} />
 						</Paper>
 					</Grid>
 				</Grid>
@@ -205,14 +214,15 @@ const Calendar = ({ times, participants, addTime, removeTime }) => {
 const mapStateToProps = (state) => {
   return {
 		times: state.times,
-		participants: state.calendar.participants
+		calendar: state.calendar,
+		currentUser: state.user
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addTime: (time) => { dispatch(addTimePending(time)) },
-		removeTime: (id) => { dispatch(removeTimePending(id)) }
+		addTime: (timeObj) => { dispatch(addTimePending(timeObj)) },
+		removeTime: (time_id) => { dispatch(removeTimePending(time_id)) }
 	}
 }
 

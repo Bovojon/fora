@@ -41,7 +41,7 @@ const Header = styled.span`
   color: #4299e1;
 `
 
-const TimesList = ({ times, handleDelete }) => {
+const TimesList = ({ times, handleDelete, currentUser }) => {
   return (
     <Box mt={4}>
       {times.length === 0 ? 
