@@ -37,10 +37,10 @@ const LightText = styled.span`
 const CopyArea = styled(Grid)`
   align-items: center;
   background: #f1f3f4;
-  border-radius: 4px;
+  border-radius: 10px;
   color: #5f6368;
   display: flex;
-  padding: 3px 12px;
+  padding: 3px 15px;
 `
 
 const LinkText = styled.span`
