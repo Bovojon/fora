@@ -13,7 +13,8 @@ import {
   Avatar,
   Box as MuiBox,
   Grid,
-  IconButton as MuiIconButton
+  IconButton as MuiIconButton,
+  Snackbar
 } from '@material-ui/core';
 
 const Box = styled(MuiBox)`
@@ -27,12 +28,10 @@ const Header = styled.span`
   color: #4299e1;
 `
 
-const SmallTitle = styled.span`
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: .1px;
-  line-height: 24px;
-  margin: 10px 0px;
+const LightText = styled.span`
+  color: #5f6368;
+  font: 400 16px / 20px Roboto, sans-serif;
+  margin-bottom: 15px;
 `
 
 const CopyArea = styled(Grid)`
@@ -97,7 +96,7 @@ const LoadingListSkeleton = () => {
 const InviteText = ({ handleCopyClick }) => {
   return (
     <InviteGrid container direction="column" justify="center" alignItems="center">
-      <SmallTitle>Share the link below to invite others to this calendar.</SmallTitle>
+      <LightText>Share the link below to invite others.</LightText>
       <CopyArea container direction="row" justify="space-between" alignItems="center">
         <LinkText>fora.com/calendar/link</LinkText>
         <IconButton onClick={() => { handleCopyClick("Copied text") }}>
@@ -111,6 +110,7 @@ const InviteText = ({ handleCopyClick }) => {
 const ParticipantsList = ({ participants }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
+  const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
 
   const handleCheckBoxClick = (labelId) => () => {
     const currentIndex = checked.indexOf(labelId);
@@ -122,9 +122,15 @@ const ParticipantsList = ({ participants }) => {
     }
     setChecked(newChecked);
   };
-
   const handleCopyClick = (textToCopy) => {
     copy(textToCopy);
+    setSnackBarIsOpen(true);
+  };
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackBarIsOpen(false);
   };
 
   useEffect(() => {
@@ -139,35 +145,44 @@ const ParticipantsList = ({ participants }) => {
   }, [participants]);
   
   return (
-    <Box my={2}>
-      <Header><h4>Others in this calendar:</h4></Header>
-      {isLoading ? 
-        <LoadingListSkeleton />
-        :
-        <>
-        {participants.length > 1 ?
-          <List>
-            {participants.map((participant) => {
-              const labelId = participant.id;
-              return (
-                <ListItem key={labelId} button>
-                  <ListItemAvatar>
-                    <Avatar/>
-                  </ListItemAvatar>
-                  <ListItemText id={labelId} primary={participant.name} />
-                  <ListItemSecondaryAction>
-                    <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })}
-          </List>
+    <>
+      <Box my={2}>
+        <Header><h4>Others on this calendar:</h4></Header>
+        {isLoading ? 
+          <LoadingListSkeleton />
           :
-          <InviteText handleCopyClick={handleCopyClick}  />
+          <>
+          {participants.length > 1 ?
+            <List>
+              {participants.map((participant) => {
+                const labelId = participant.id;
+                return (
+                  <ListItem key={labelId} button>
+                    <ListItemAvatar>
+                      <Avatar/>
+                    </ListItemAvatar>
+                    <ListItemText id={labelId} primary={participant.name} />
+                    <ListItemSecondaryAction>
+                      <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })}
+            </List>
+            :
+            <InviteText handleCopyClick={handleCopyClick}  />
+          }
+          </>
         }
-        </>
-      }
-    </Box>
+      </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={snackBarIsOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackBarClose}
+        message="Copied calendar link"
+      />
+    </>
   );
 }
 
