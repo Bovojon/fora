@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
+import { useParams } from "react-router-dom";
 import moment from "moment";
 import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
@@ -21,6 +22,7 @@ import {
 } from '@material-ui/icons';
 
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
+import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import ParticipantsList from '../ParticipantsList';
 import TimesList from '../TimesList';
 
@@ -125,7 +127,18 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ times, calendar, currentUser, addTime, removeTime }) => {
+const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCalendar }) => {
+	const { calendarId } = useParams();
+	const [isLoading, setIsLoading] = useState(typeof calendar === "undefined");
+	console.log(isLoading);
+	useEffect(() => {
+		console.log(isLoading);
+		fetchCalendar(calendarId);
+		console.log(isLoading);
+		setIsLoading(typeof calendar === "undefined");
+		console.log(isLoading);
+	}, [calendarId]);
+
 	const color = "#4299e1"
 
 	const handleSelectSlot = (selected) => {
@@ -140,9 +153,8 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime }) => {
 		}
 		addTime(newTime);
 	}
-
-	const handleDelete = (time_id) => {
-		removeTime(time_id);
+	const handleDelete = (timeId) => {
+		removeTime(timeId);
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -158,7 +170,6 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime }) => {
 			</Grid>
 		);
 	}
-
 	const getEventStyle = (color) => {
 		const style = {
 			backgroundColor: color,
@@ -172,41 +183,45 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime }) => {
 
 	return (
 		<Box alignItems="center">
-			<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
-				<Grid item md={8} xs={12}>
-					<BigCalendar
-						localizer={localizer}
-						events={times}
-						startAccessor="start"
-						endAccessor="end"
-						selectable
-						style={{height: "85vh"}}
-						defaultView={Views.WEEK}
-						views={{ month: true, week: true }}
-						scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
-						onSelectSlot={handleSelectSlot}
-						components = {{ 
-							toolbar : CustomToolbar,
-							event: CustomEvent,
-							week: { header: CustomWeekHeader }
-						}}
-						formats={{ 
-							dayFormat: 'ddd D',
-							timeGutterFormat: 'h A'
-						}}
-						eventPropGetter={() => getEventStyle(color)}
-					/>
-				</Grid>
-				<Grid item md={3} xs={12}>
-					<Grid container direction="column" justify="center" alignItems="center">
-						<Paper variant="outlined">
-							<ParticipantsList participants={calendar.participants} />
-							<Divider />
-							<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} />
-						</Paper>
+			{isLoading ?
+				<p>Loading</p>
+				:
+				<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
+					<Grid item md={8} xs={12}>
+						<BigCalendar
+							localizer={localizer}
+							events={times}
+							startAccessor="start"
+							endAccessor="end"
+							selectable
+							style={{height: "85vh"}}
+							defaultView={Views.WEEK}
+							views={{ month: true, week: true }}
+							scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
+							onSelectSlot={handleSelectSlot}
+							components = {{ 
+								toolbar : CustomToolbar,
+								event: CustomEvent,
+								week: { header: CustomWeekHeader }
+							}}
+							formats={{ 
+								dayFormat: 'ddd D',
+								timeGutterFormat: 'h A'
+							}}
+							eventPropGetter={() => getEventStyle(color)}
+						/>
+					</Grid>
+					<Grid item md={3} xs={12}>
+						<Grid container direction="column" justify="center" alignItems="center">
+							<Paper variant="outlined">
+								<ParticipantsList participants={calendar.participants} />
+								<Divider />
+								<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} />
+							</Paper>
+						</Grid>
 					</Grid>
 				</Grid>
-			</Grid>
+			}
 		</Box>
 	)
 }
@@ -222,7 +237,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addTime: (timeObj) => { dispatch(addTimePending(timeObj)) },
-		removeTime: (time_id) => { dispatch(removeTimePending(time_id)) }
+		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
+		fetchCalendar: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) }
 	}
 }
 
