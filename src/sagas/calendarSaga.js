@@ -55,7 +55,7 @@ function* addUserToCalendar() {
 function* getCalendar(action) {
   try {
     const calendarId = action.payload;
-    const calResponse = yield call(CalendarService.getCalendar, { calendar_id: calendarId });
+    const calResponse = yield call(CalendarService.getCalendar, { params: { calendarId: calendarId } });
     const { calendar } = yield calResponse.data;
     yield put(fetchCalendarSuccess(calendar));
   } catch(error) {
