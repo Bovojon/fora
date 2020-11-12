@@ -6,9 +6,9 @@ import tw from "twin.macro";
 
 import { history } from './store';
 import Navbar from "./components/nav/Navbar";
-import Home from './screens/Home';
-import Calendar from './screens/Calendar';
-import NotFound from './screens/NotFound';
+import Home from './components/screens/Home';
+import Calendar from './components/screens/Calendar';
+import NotFound from './components/screens/NotFound';
 
 import "tailwindcss/dist/base.css";
 
@@ -26,7 +26,7 @@ const App = () => {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/calendar" component={Calendar} />
+            <Route exact path="/calendar/:calendarId" component={Calendar} />
             <Route component={NotFound} />
           </Switch>
         </ConnectedRouter>
