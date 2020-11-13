@@ -1,5 +1,6 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
+import { Skeleton } from '@material-ui/lab';
 import copy from 'copy-to-clipboard';
 import { FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
 import { 
@@ -61,6 +62,37 @@ const InviteGrid = styled(Grid)`
   padding: 25px 20px;
 `
 
+const LoadingListSkeleton = () => {
+  return (
+    <List>
+      <ListItem>
+        <ListItemAvatar>
+          <Skeleton animation="wave" variant="circle" width={40} height={40} />
+        </ListItemAvatar>
+        <ListItemText>
+          <Skeleton animation="wave" variant="text" height={20} width="90%" />
+        </ListItemText>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Skeleton animation="wave" variant="circle" width={40} height={40} />
+        </ListItemAvatar>
+        <ListItemText>
+          <Skeleton animation="wave" variant="text" height={20} width="90%" />
+        </ListItemText>
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Skeleton animation="wave" variant="circle" width={40} height={40} />
+        </ListItemAvatar>
+        <ListItemText>
+          <Skeleton animation="wave" variant="text" height={20} width="90%" />
+        </ListItemText>
+      </ListItem>
+    </List>
+  );
+}
+
 const InviteText = ({ handleCopyClick }) => {
   return (
     <InviteGrid container direction="column" justify="center" alignItems="center">
@@ -77,6 +109,7 @@ const InviteText = ({ handleCopyClick }) => {
 
 const ParticipantsList = ({ participants }) => {
   const [checked, setChecked] = useState([]);
+  const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
 
   const handleCheckBoxClick = (labelId) => () => {
@@ -99,30 +132,44 @@ const ParticipantsList = ({ participants }) => {
     }
     setSnackBarIsOpen(false);
   };
+
+  useEffect(() => {
+    if (typeof participants === "undefined") {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [participants]);
   
   return (
     <Fragment>
       <Box my={2}>
         <Header><h4>Others on this calendar:</h4></Header>
-        {participants.length === 1 ?
-          <InviteText handleCopyClick={handleCopyClick}  />
+        {isLoading ? 
+          <LoadingListSkeleton />
           :
-          <List>
-            {participants.map((participant) => {
-              const labelId = participant.id;
-              return (
-                <ListItem key={labelId} button>
-                  <ListItemAvatar>
-                    <Avatar/>
-                  </ListItemAvatar>
-                  <ListItemText id={labelId} primary={participant.name} />
-                  <ListItemSecondaryAction>
-                    <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })}
-          </List>
+          <Fragment>
+            {participants.length === 1 ?
+              <InviteText handleCopyClick={handleCopyClick} />
+              :
+              <List>
+                {participants.map((participant) => {
+                  const labelId = participant.id;
+                  return (
+                    <ListItem key={labelId} button>
+                      <ListItemAvatar>
+                        <Avatar/>
+                      </ListItemAvatar>
+                      <ListItemText id={labelId} primary={participant.name} />
+                      <ListItemSecondaryAction>
+                        <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            }
+          </Fragment>
         }
       </Box>
       <Snackbar
