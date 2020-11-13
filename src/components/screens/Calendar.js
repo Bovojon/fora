@@ -68,20 +68,20 @@ const timeSorter = (a, b) => {
 
 const Loading = () => {
 	return (
-		<div class="loader-wrapper">
-			<div class="loader">
-				<div class="roller"></div>
-				<div class="roller"></div>
+		<div className="loader-wrapper">
+			<div className="loader">
+				<div className="roller"></div>
+				<div className="roller"></div>
 			</div>
 			
-			<div id="loader2" class="loader">
-				<div class="roller"></div>
-				<div class="roller"></div>
+			<div id="loader2" className="loader">
+				<div className="roller"></div>
+				<div className="roller"></div>
 			</div>
 			
-			<div id="loader3" class="loader">
-				<div class="roller"></div>
-				<div class="roller"></div>
+			<div id="loader3" className="loader">
+				<div className="roller"></div>
+				<div className="roller"></div>
 			</div>
 		</div>
 	);
@@ -232,7 +232,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 					<Grid item md={3} xs={12}>
 						<Grid container direction="column" justify="center" alignItems="center">
 							<Paper variant="outlined">
-								<ParticipantsList participants={calendar.participants} />
+								<ParticipantsList participants={calendar.participants} calendarUniqueId={calendar.unique_id} />
 								<Divider />
 								<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} />
 							</Paper>
