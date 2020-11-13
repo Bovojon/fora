@@ -43,7 +43,7 @@ const Home = ({ navigateTo }) => {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading>Find a time that works for<BlueHighlight> everyone.</BlueHighlight></Heading>
+            <Heading>Find a time that works <BlueHighlight>for all.</BlueHighlight></Heading>
             <Paragraph><BlueHighlight>Fora</BlueHighlight> is a social calendar to plan group events.</Paragraph>
             <Actions>
               <input value={inputId} onChange={handleInputChange} type="text" placeholder="Enter calendar ID" />
