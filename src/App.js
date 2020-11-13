@@ -5,7 +5,7 @@ import ReduxToastr from 'react-redux-toastr';
 import tw from "twin.macro";
 
 import { history } from './store';
-import Navbar from "./components/nav/Navbar";
+import Navbar from "./components/Navbar";
 import Home from './components/screens/Home';
 import Calendar from './components/screens/Calendar';
 import NotFound from './components/screens/NotFound';

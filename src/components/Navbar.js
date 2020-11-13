@@ -24,7 +24,7 @@ import {
   Snackbar
 } from '@material-ui/core';
 
-import { createCalendarPending } from '../../actions/calendarActionCreators';
+import { createCalendarPending } from '../actions/calendarActionCreators';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
