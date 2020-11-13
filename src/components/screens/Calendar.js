@@ -127,17 +127,12 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCalendar }) => {
+const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCalendarPending }) => {
 	const { calendarId } = useParams();
-	const [isLoading, setIsLoading] = useState(typeof calendar === "undefined");
-	console.log(isLoading);
+
 	useEffect(() => {
-		console.log(isLoading);
-		fetchCalendar(calendarId);
-		console.log(isLoading);
-		setIsLoading(typeof calendar === "undefined");
-		console.log(isLoading);
-	}, [calendarId]);
+		fetchCalendarPending(calendarId);
+	}, [fetchCalendarPending, calendarId]);
 
 	const color = "#4299e1"
 
@@ -183,7 +178,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 
 	return (
 		<Box alignItems="center">
-			{isLoading ?
+			{calendar.status.isLoading ?
 				<p>Loading</p>
 				:
 				<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
@@ -238,7 +233,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		addTime: (timeObj) => { dispatch(addTimePending(timeObj)) },
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
-		fetchCalendar: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) }
+		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) }
 	}
 }
 
