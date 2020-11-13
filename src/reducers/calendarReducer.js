@@ -5,28 +5,19 @@ import {
   CALENDAR_FETCHED_SUCCESS
 } from "../actions/constants";
 
-const initialState = {
-  status: {
-    isLoading: false,
-    error: null,
-  }
+const initialCalendarObj = {
+  status: { isLoading: false }
 }
 
-const calendarReducer = (state=initialState, { type, payload }) => {
+const calendarReducer = (state=initialCalendarObj, { type, payload }) => {
   switch(type) {
     case CALENDAR_FETCHED_PENDING: {
-      const status = {
-        isLoading: true,
-        error: null,
-      }
+      const status = { isLoading: true }
       return {...state, status}
     }
     case CALENDAR_FETCHED_SUCCESS: {
-      let calendarObj = payload;
-      calendarObj.status = {
-        isLoading: false,
-        error: null,
-      }
+      const calendarObj = payload;
+      calendarObj.status = { isLoading: false };
       return {...state, ...calendarObj}
     }
     case CALENDAR_CREATED_SUCCESS:
