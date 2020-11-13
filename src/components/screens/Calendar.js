@@ -132,7 +132,8 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 
 	useEffect(() => {
 		fetchCalendarPending(calendarId);
-	}, [fetchCalendarPending, calendarId]);
+		// eslint-disable-next-line
+	}, []);
 
 	const color = "#4299e1"
 
