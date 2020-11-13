@@ -25,6 +25,7 @@ import { addTimePending, removeTimePending } from '../../actions/timeActionCreat
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import ParticipantsList from '../ParticipantsList';
 import TimesList from '../TimesList';
+import '../animations/styles/loading.scss';
 
 const localizer = momentLocalizer(moment);
 
@@ -63,6 +64,27 @@ const TimeText = styled.span`
 
 const timeSorter = (a, b) => {
   return moment(a.start).diff(b.start)
+}
+
+const Loading = () => {
+	return (
+		<div class="loader-wrapper">
+			<div class="loader">
+				<div class="roller"></div>
+				<div class="roller"></div>
+			</div>
+			
+			<div id="loader2" class="loader">
+				<div class="roller"></div>
+				<div class="roller"></div>
+			</div>
+			
+			<div id="loader3" class="loader">
+				<div class="roller"></div>
+				<div class="roller"></div>
+			</div>
+		</div>
+	);
 }
 
 const CustomToolbar = (toolbar) => {
@@ -132,7 +154,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 
 	useEffect(() => {
 		fetchCalendarPending(calendarId);
-		// eslint-disable-next-line
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const color = "#4299e1"
@@ -180,7 +202,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	return (
 		<Box alignItems="center">
 			{calendar.status.isLoading ?
-				<p>Loading</p>
+				<Loading />
 				:
 				<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
 					<Grid item md={8} xs={12}>
