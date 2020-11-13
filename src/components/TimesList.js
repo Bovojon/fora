@@ -26,11 +26,11 @@ const CardTitle = styled(ReactCardTitle)`
 `
 
 const Box = styled(MuiBox)`
-  height: 41vh;
+  height: 51vh;
 `
 
 const ListArea = styled(Grid)`
-  height: 36vh;
+  height: 46vh;
   overflow: auto;
   margin-top: 15px;
 `

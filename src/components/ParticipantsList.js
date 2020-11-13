@@ -18,7 +18,7 @@ import {
 } from '@material-ui/core';
 
 const Box = styled(MuiBox)`
-  height: 30vh;
+  height: 20vh;
   overflow: auto;
 `
 
