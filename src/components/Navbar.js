@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MainNavbar = ({ navigateTo, createNewCalendar }) => {
+const MainNavbar = ({ navigateTo, createNewCalendar, calendarUniqueId }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -138,6 +138,7 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
     }
     setSnackBarIsOpen(false);
   };
+  const shareLink = `letsfora.com/${calendarUniqueId}`
 
   return (
     <>
@@ -178,8 +179,8 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
             </Grid>
             <LightText>Also, here is the calendar ID if you just want to share that: </LightText>
             <CopyArea container direction="row" justify="space-between" alignItems="center">
-              <LinkText>fora.com/calendar/link</LinkText>
-              <IconButton onClick={() => { handleCopyClick("Copied text") }}>
+              <LinkText>{shareLink}</LinkText>
+              <IconButton onClick={() => { handleCopyClick(shareLink) }}>
                 <CopyIcon /> 
               </IconButton>
             </CopyArea>
@@ -197,6 +198,12 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
   );
 }
 
+const mapStateToProps = (state) => {
+  return {
+    calendarUniqueId: state.calendar.unique_id
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => dispatch(push(route)),
@@ -204,4 +211,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(MainNavbar);
+export default connect(mapStateToProps, mapDispatchToProps)(MainNavbar);
