@@ -93,13 +93,14 @@ const LoadingListSkeleton = () => {
   );
 }
 
-const InviteText = ({ handleCopyClick }) => {
+const InviteText = ({ handleCopyClick, calendarUniqueId }) => {
+  const shareLink = `letsfora.com/${calendarUniqueId}`
   return (
     <InviteGrid container direction="column" justify="center" alignItems="center">
       <LightText>Share the link below to invite others.</LightText>
       <CopyArea container direction="row" justify="space-between" alignItems="center">
-        <LinkText>fora.com/calendar/link</LinkText>
-        <IconButton onClick={() => { handleCopyClick("Copied text") }}>
+        <LinkText>{shareLink}</LinkText>
+        <IconButton onClick={() => { handleCopyClick(shareLink) }}>
           <CopyIcon /> 
         </IconButton>
       </CopyArea>
@@ -107,7 +108,7 @@ const InviteText = ({ handleCopyClick }) => {
   );
 }
 
-const ParticipantsList = ({ participants }) => {
+const ParticipantsList = ({ participants, calendarUniqueId }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -150,7 +151,7 @@ const ParticipantsList = ({ participants }) => {
           :
           <Fragment>
             {participants.length === 1 ?
-              <InviteText handleCopyClick={handleCopyClick} />
+              <InviteText handleCopyClick={handleCopyClick} calendarUniqueId={calendarUniqueId} />
               :
               <List>
                 {participants.map((participant) => {
