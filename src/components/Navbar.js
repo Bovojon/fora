@@ -117,7 +117,7 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
     e.preventDefault();
     createNewCalendar();
     setCollapseIsOpen(false);
-    navigateTo("/calendar");
+    navigateTo("/loading");
   }
   const toggleNavbar = () => {
     setCollapseIsOpen(!collapseIsOpen);
@@ -146,16 +146,16 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
         <NavbarToggler onClick={toggleNavbar} />
         <Collapse isOpen={collapseIsOpen} navbar>
           <Nav className="ml-auto" navbar>
-            {location.pathname === "/calendar" ?
+            {location.pathname === "/" ?
               <NavItem>
                 <NavLinks>
-                  <PrimaryLink onClick={handleShareClick} css="rounded-full">Share calendar</PrimaryLink>
+                  <PrimaryLink onClick={handleFindTimeClick} css="rounded-full">Find a time</PrimaryLink>
                 </NavLinks>
               </NavItem>
               :
               <NavItem>
                 <NavLinks>
-                  <PrimaryLink onClick={handleFindTimeClick} css="rounded-full">Find a time</PrimaryLink>
+                  <PrimaryLink onClick={handleShareClick} css="rounded-full">Share calendar</PrimaryLink>
                 </NavLinks>
               </NavItem>
             }
