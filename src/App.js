@@ -27,7 +27,7 @@ const App = () => {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/loading" component={LoadingTransition} />
+            <Route exact path="/creating_calendar" component={LoadingTransition} />
             <Route exact path="/:calendarId" component={Calendar} />
             <Route component={NotFound} />
           </Switch>

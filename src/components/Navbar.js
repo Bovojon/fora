@@ -117,7 +117,7 @@ const MainNavbar = ({ navigateTo, createNewCalendar }) => {
     e.preventDefault();
     createNewCalendar();
     setCollapseIsOpen(false);
-    navigateTo("/loading");
+    navigateTo("/creating_calendar");
   }
   const toggleNavbar = () => {
     setCollapseIsOpen(!collapseIsOpen);
