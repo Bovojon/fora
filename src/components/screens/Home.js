@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import tw from "twin.macro";
 import styled from "styled-components";
 
@@ -26,7 +28,16 @@ const Actions = styled.div`
   }
 `;
 
-const Home = () => {
+const Home = ({ navigateTo }) => {
+  const [inputId, setInputId] = useState('');
+
+  const handleInputChange = (event) => {
+    setInputId(event.target.value);
+  }
+  const handleJoinClick = () => {
+    navigateTo(`/${inputId}`);
+  }
+
   return (
     <Reveal>
       <Container>
@@ -35,8 +46,8 @@ const Home = () => {
             <Heading>Find a time that works for<BlueHighlight> everyone.</BlueHighlight></Heading>
             <Paragraph><BlueHighlight>Fora</BlueHighlight> is a social calendar to plan group events.</Paragraph>
             <Actions>
-              <input type="text" placeholder="Enter calendar ID" />
-              <button>Join</button>
+              <input value={inputId} onChange={handleInputChange} type="text" placeholder="Enter calendar ID" />
+              <button onClick={handleJoinClick}>Join</button>
             </Actions>
           </LeftColumn>
           <RightColumn>
@@ -50,4 +61,10 @@ const Home = () => {
   );
 }
 
-export default Home;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    navigateTo: (route) => dispatch(push(route))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Home);
