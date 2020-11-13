@@ -43,11 +43,11 @@ const PrimaryLink = styled.a`
 `
 
 const ModalContent = styled(Grid)`
-  padding: 15px 24px 20px 24px;
+  padding: 0px 25px 0px 25px;
   border-radius: 8px;
   background-color: #fff;
   max-width: 400px;
-  min-height: 200px;
+  min-height: 160px;
   min-width: 400px;
 `
 
@@ -58,20 +58,13 @@ const SmallTitle = styled.span`
   line-height: 24px;
 `
 
-const LightText = styled.span`
-  color: #5f6368;
-  font: 400 14px / 20px Roboto, sans-serif;
-  margin-top: 15px;
-  margin-bottom: 12px;
-`
-
 const CopyArea = styled(Grid)`
   align-items: center;
   background: #f1f3f4;
   border-radius: 10px;
   color: #5f6368;
   display: flex;
-  padding: 15px 15px;
+  padding: 0px 15px;
 `
 
 const LinkText = styled.span`
@@ -84,7 +77,7 @@ const LinkText = styled.span`
   flex-grow: 1;
 `
 
-const ClearIcon = styled(Clear)`
+const CloseIcon = styled(Clear)`
   cursor: pointer;
 `
 
@@ -175,9 +168,8 @@ const MainNavbar = ({ navigateTo, createNewCalendar, calendarUniqueId }) => {
           <ModalContent container direction="column" justify="space-evenly" alignItems="flex-start">
             <Grid container direction="row" justify="space-between" alignItems="center">
               <SmallTitle>Here's the link to this calendar</SmallTitle>
-              <ClearIcon onClick={handleModalClose} color="action" />
+              <CloseIcon onClick={handleModalClose} color="action" />
             </Grid>
-            <LightText>Also, here is the calendar ID if you just want to share that: </LightText>
             <CopyArea container direction="row" justify="space-between" alignItems="center">
               <LinkText>{shareLink}</LinkText>
               <IconButton onClick={() => { handleCopyClick(shareLink) }}>
