@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 import moment from "moment";
 import styled from 'styled-components';
-import { Clear as ClearIcon } from '@material-ui/icons';
+import { Clear, Create } from '@material-ui/icons';
 import { Box as MuiBox, Grid } from '@material-ui/core';
 import { 
 	Card as ReactCard,
 	CardTitle as ReactCardTitle,
   CardBody as ReactCardBody,
-	Row
+	Row as ReactCardRow
 } from 'reactstrap';
 
 const Card = styled(ReactCard)`
@@ -16,13 +16,29 @@ const Card = styled(ReactCard)`
 `;
 
 const CardBody = styled(ReactCardBody)`
-	padding: 0
+	padding: 0px;
 `;
 
 const CardTitle = styled(ReactCardTitle)`
 	margin-left: 4px;
 	margin-bottom: 4px;
 	cursor: pointer;
+`
+
+const Row = styled(ReactCardRow)`
+  margin-left: 0px;
+`
+
+const TopRightArea = styled.span`
+	position: absolute;
+	right: 0;
+	top: 0;
+  padding-top: 0.7rem;	
+	padding-right: 0.7rem;
+`
+
+const ClearIcon = styled(Clear)`
+  cursor: pointer;
 `
 
 const Box = styled(MuiBox)`
@@ -39,6 +55,23 @@ const Header = styled.span`
   font-size: 1.5em;
   text-align: center;
   color: #4299e1;
+`
+
+const PencilIcon = styled(Create)`
+  cursor: pointer;
+	display: none;
+`
+
+const NameHeader = styled.span`
+	margin-right: 5px;
+`
+
+const NameArea = styled(Grid)`
+	width: 70%;
+
+	&:hover ${PencilIcon} {
+    display: block;
+  }
 `
 
 const TimesList = ({ times, handleDelete, currentUser }) => {
@@ -67,12 +100,20 @@ const TimesList = ({ times, handleDelete, currentUser }) => {
                 return (
                   <Card key={time.id} body outline color="primary">
                     <CardBody>
-                      <CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon color="action" /> </CardTitle>
+                      <TopRightArea>
+                        <ClearIcon onClick={() => handleDelete(time.id)} color="action" />
+                      </TopRightArea>
+                      <Row>
+                        <NameArea container direction="row" justify="flex-start" alignItems="center">
+                          <NameHeader>{currentUser.name}</NameHeader>
+                          <PencilIcon fontSize="small" />
+                        </NameArea>
+                      </Row>
                       <Row>
                         {moment(time.start).format('ddd, MMM D')}
                       </Row>
                       <Row>
-                        {moment(time.start).format('h:mm A') + " – " + moment(time.end).format('h:mm A')} 
+                        {moment(time.start).format('h:mm a') + " – " + moment(time.end).format('h:mm a')} 
                       </Row>
                     </CardBody>
                   </Card>

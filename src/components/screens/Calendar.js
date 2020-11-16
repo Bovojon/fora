@@ -202,7 +202,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 					<PencilIcon fontSize="small" />
 				</NameArea>
 				<TimeText>
-					{moment(event.start).format('h:mm A') + " – " + moment(event.end).format('h:mm A')} 
+					{moment(event.start).format('h:mm a') + " – " + moment(event.end).format('h:mm a')} 
 				</TimeText>
 				<ClearIcon onClick={() => handleDelete(event.id)} color="action" />
 			</Grid>
