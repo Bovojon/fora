@@ -18,7 +18,8 @@ import {
 	ArrowRight as ArrowRightIcon,
 	ArrowLeft as ArrowLeftIcon,
 	Today as TodayIcon,
-	Clear
+	Clear,
+	Create
 } from '@material-ui/icons';
 
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
@@ -49,12 +50,30 @@ const Select = styled(MuiSelect)`
 `
 
 const ClearIcon = styled(Clear)`
+	position: absolute;
+	right: 0;
+	top: 0;
   cursor: pointer;
+`
+
+const PencilIcon = styled(Create)`
+	width: 15%;
+  height: 15%;
+	display: none;
+`
+
+const NameArea = styled(Grid)`
+	width: 70%;
+
+	&:hover ${PencilIcon} {
+    display: block;
+  }
 `
 
 const Header = styled.span`
   color: #FFFFFF;
   font: 400 14px / 20px Roboto, sans-serif;
+	margin-right: 5px;
 `
 
 const TimeText = styled.span`
@@ -178,13 +197,14 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	const CustomEvent = ({ event }) => {
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
-				<Grid container direction="row" justify="space-between" alignItems="center">
+				<NameArea container direction="row" justify="flex-start" alignItems="center">
 					<Header>{currentUser.name}</Header>
-					<ClearIcon onClick={() => handleDelete(event.id)} color="action" />
-				</Grid>
+					<PencilIcon fontSize="small" />
+				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mm A') + " – " + moment(event.end).format('h:mm A')} 
 				</TimeText>
+				<ClearIcon onClick={() => handleDelete(event.id)} color="action" />
 			</Grid>
 		);
 	}
