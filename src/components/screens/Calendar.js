@@ -57,7 +57,7 @@ const ClearIcon = styled(Clear)`
 `
 
 const PencilIcon = styled(Create)`
-	width: 15%;
+	width: 13%;
   height: 15%;
 	display: none;
 `

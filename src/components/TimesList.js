@@ -60,10 +60,11 @@ const Header = styled.span`
 const PencilIcon = styled(Create)`
   cursor: pointer;
 	display: none;
+  height: 60%;
 `
 
 const NameHeader = styled.span`
-	margin-right: 5px;
+	margin-right: 7px;
 `
 
 const NameArea = styled(Grid)`
