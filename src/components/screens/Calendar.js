@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
+import { useTheme } from '@material-ui/core/styles';
 import { 
 	Grid, 
 	Box as MuiBox, 
@@ -12,7 +13,8 @@ import {
 	Select as MuiSelect,
 	MenuItem,
 	Tooltip,
-	Divider
+	Divider,
+	useMediaQuery
 } from '@material-ui/core';
 import {
 	ArrowRight as ArrowRightIcon,
@@ -22,10 +24,11 @@ import {
 	Create
 } from '@material-ui/icons';
 
-import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
-import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import ParticipantsList from '../ParticipantsList';
 import TimesList from '../TimesList';
+import UserForm from '../forms/UserForm';
+import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
+import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import '../animations/styles/loading.scss';
 
 const localizer = momentLocalizer(moment);
@@ -170,6 +173,9 @@ const CustomWeekHeader = ({ label }) => {
 
 const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCalendarPending }) => {
 	const { calendarId } = useParams();
+	const [userFormOpen, setUserFormOpen] = useState(false);
+	const theme = useTheme();
+	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
 	useEffect(() => {
 		fetchCalendarPending(calendarId);
@@ -193,13 +199,20 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	const handleDelete = (timeId) => {
 		removeTime(timeId);
 	}
+	const handleEditUserName = () => {
+    setUserFormOpen(true);
+  };
+
+  const handleUserFormClose = () => {
+    setUserFormOpen(false);
+  };
 
 	const CustomEvent = ({ event }) => {
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
 					<Header>{currentUser.name}</Header>
-					<PencilIcon fontSize="small" />
+					<PencilIcon onClick={handleEditUserName} fontSize="small" />
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mm a') + " – " + moment(event.end).format('h:mm a')} 
@@ -220,47 +233,50 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	};
 
 	return (
-		<Box alignItems="center">
-			{calendar.status.isLoading ?
-				<Loading />
-				:
-				<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
-					<Grid item md={8} xs={12}>
-						<BigCalendar
-							localizer={localizer}
-							events={times}
-							startAccessor="start"
-							endAccessor="end"
-							selectable
-							style={{height: "85vh"}}
-							defaultView={Views.WEEK}
-							views={{ month: true, week: true }}
-							scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
-							onSelectSlot={handleSelectSlot}
-							components = {{ 
-								toolbar : CustomToolbar,
-								event: CustomEvent,
-								week: { header: CustomWeekHeader }
-							}}
-							formats={{ 
-								dayFormat: 'ddd D',
-								timeGutterFormat: 'h A'
-							}}
-							eventPropGetter={() => getEventStyle(color)}
-						/>
-					</Grid>
-					<Grid item md={3} xs={12}>
-						<Grid container direction="column" justify="center" alignItems="center">
-							<Paper variant="outlined">
-								<ParticipantsList participants={calendar.participants} calendarUniqueId={calendar.unique_id} />
-								<Divider />
-								<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} />
-							</Paper>
+		<Fragment>
+			<Box alignItems="center">
+				{calendar.status.isLoading ?
+					<Loading />
+					:
+					<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
+						<Grid item md={8} xs={12}>
+							<BigCalendar
+								localizer={localizer}
+								events={times}
+								startAccessor="start"
+								endAccessor="end"
+								selectable
+								style={{height: "85vh"}}
+								defaultView={Views.WEEK}
+								views={{ month: true, week: true }}
+								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
+								onSelectSlot={handleSelectSlot}
+								components = {{ 
+									toolbar : CustomToolbar,
+									event: CustomEvent,
+									week: { header: CustomWeekHeader }
+								}}
+								formats={{ 
+									dayFormat: 'ddd D',
+									timeGutterFormat: 'h A'
+								}}
+								eventPropGetter={() => getEventStyle(color)}
+							/>
+						</Grid>
+						<Grid item md={3} xs={12}>
+							<Grid container direction="column" justify="center" alignItems="center">
+								<Paper variant="outlined">
+									<ParticipantsList participants={calendar.participants} calendarUniqueId={calendar.unique_id} />
+									<Divider />
+									<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} />
+								</Paper>
+							</Grid>
 						</Grid>
 					</Grid>
-				</Grid>
-			}
-		</Box>
+				}
+			</Box>
+			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
+		</Fragment>
 	)
 }
 
