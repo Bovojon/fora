@@ -90,7 +90,15 @@ const TimesList = ({ times, handleDelete, currentUser }) => {
                 return (
                   <Card key={time.id} body outline color="primary">
                     <CardBody>
-                      <CardTitle onClick={() => handleDelete(time.id)} className="float-right"> <ClearIcon /> </CardTitle>
+                      <TopRightArea>
+                        <ClearIcon onClick={() => handleDelete(time.id)} color="action" />
+                      </TopRightArea>
+                      <Row>
+                        <NameArea container direction="row" justify="flex-start" alignItems="center">
+                          <NameHeader>{currentUser.name}</NameHeader>
+                          <PencilIcon fontSize="small" />
+                        </NameArea>
+                      </Row>
                       <Row>
                         {moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
                       </Row>
