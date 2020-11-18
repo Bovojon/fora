@@ -5,7 +5,7 @@ import copy from 'copy-to-clipboard';
 import { FilterNoneOutlined as CopyIcon, Create } from '@material-ui/icons';
 import { 
   List,  
-  ListItem,
+  ListItem as MuiListItem,
   ListItemSecondaryAction,
   ListItemText,
   ListItemAvatar,
@@ -26,6 +26,10 @@ const Header = styled.span`
   font-size: 1.5em;
   text-align: center;
   color: #4299e1;
+`
+
+const ListItem = styled(MuiListItem)`
+  padding-left: 12px;
 `
 
 const LightText = styled.span`

@@ -37,7 +37,7 @@ const Paper = styled(MuiPaper)`
 	height: 80vh;
 	margin-top: 5vh;
 	padding: 14px;
-	width: 100%;
+	width: 95%;
 `
 
 const Box = styled(MuiBox)`

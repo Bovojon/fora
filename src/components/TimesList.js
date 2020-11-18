@@ -40,8 +40,10 @@ const Box = styled(MuiBox)`
 
 const ListArea = styled(Grid)`
   height: 46vh;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin-top: 15px;
+  padding: 0px 13px;
 `
 
 const Header = styled.span`
