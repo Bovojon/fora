@@ -166,7 +166,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, handleEditUserName }
           <LoadingListSkeleton />
           :
           <Fragment>
-            {participants.length === 1 ?
+            {participants.length === 0 ?
               <InviteText handleCopyClick={handleCopyClick} calendarUniqueId={calendarUniqueId} />
               :
               <List>
