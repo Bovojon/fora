@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
 import copy from 'copy-to-clipboard';
-import { FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
+import { FilterNoneOutlined as CopyIcon, Create } from '@material-ui/icons';
 import { 
   List,  
   ListItem,
@@ -62,6 +62,22 @@ const InviteGrid = styled(Grid)`
   padding: 25px 20px;
 `
 
+const PencilIcon = styled(Create)`
+  cursor: pointer;
+	display: none;
+  width: 5%;
+`
+
+const NameArea = styled(Grid)`
+	&:hover ${PencilIcon} {
+    display: block;
+  }
+`
+
+const Name = styled.span`
+  margin-right: 7px;
+`
+
 const LoadingListSkeleton = () => {
   return (
     <List>
@@ -108,7 +124,7 @@ const InviteText = ({ handleCopyClick, calendarUniqueId }) => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId }) => {
+const ParticipantsList = ({ participants, calendarUniqueId, handleEditUserName }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -156,12 +172,18 @@ const ParticipantsList = ({ participants, calendarUniqueId }) => {
               <List>
                 {participants.map((participant) => {
                   const labelId = participant.id;
+                  const nameAndEditIcon = (
+                    <NameArea container direction="row" justify="flex-start" alignItems="center">
+                      <Name>{participant.name}</Name>
+                      <PencilIcon onClick={handleEditUserName} fontSize="small" />
+                    </NameArea>
+                  );
                   return (
-                    <ListItem key={labelId} button>
+                    <ListItem key={labelId}>
                       <ListItemAvatar>
                         <Avatar/>
                       </ListItemAvatar>
-                      <ListItemText id={labelId} primary={participant.name} />
+                      <ListItemText id={labelId} primary={nameAndEditIcon} />
                       <ListItemSecondaryAction>
                         <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
                       </ListItemSecondaryAction>

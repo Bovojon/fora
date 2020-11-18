@@ -73,7 +73,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
   return (
     <Box mt={4}>
       {times.length === 0 ?
-        <Header><h4>Selected times will be listed here.</h4></Header>
+        <Header><h4>Click and drag on the calendar to select times.</h4></Header>
         :
         <Fragment>
           <Header><h4>Selected times:</h4></Header>
