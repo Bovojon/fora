@@ -27,6 +27,7 @@ import {
 import ParticipantsList from '../ParticipantsList';
 import TimesList from '../TimesList';
 import UserForm from '../forms/UserForm';
+import UserLogin from '../forms/UserLogin';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import '../animations/styles/loading.scss';
@@ -95,12 +96,10 @@ const Loading = () => {
 				<div className="roller"></div>
 				<div className="roller"></div>
 			</div>
-			
 			<div id="loader2" className="loader">
 				<div className="roller"></div>
 				<div className="roller"></div>
 			</div>
-			
 			<div id="loader3" className="loader">
 				<div className="roller"></div>
 				<div className="roller"></div>
@@ -117,13 +116,9 @@ const CustomToolbar = (toolbar) => {
 		setCalendarView(view);
 		toolbar.onView(view);
 	}
-
 	const handleBackClick = () => { toolbar.onNavigate('PREV'); };
-
 	const handleNextClick = () => { toolbar.onNavigate('NEXT'); };
-
 	const handleTodayClick = () => { toolbar.onNavigate('TODAY'); };
-
 	const monthYearLabel = () => {
 		const toolbarDate = moment(toolbar.date);
 		return toolbarDate.format('MMM') + ' ' + toolbarDate.format('YYYY')
@@ -137,7 +132,6 @@ const CustomToolbar = (toolbar) => {
 						<Button onClick={handleTodayClick}><TodayIcon alt="Today" /></Button>
 					</Tooltip>
 				</Grid>
-
 				<Grid item md={4} xs={12}>
 					<Grid container direction="row" justify="space-between" alignItems="center">
 						<Button onClick={handleBackClick}><ArrowLeftIcon /></Button>
@@ -145,7 +139,6 @@ const CustomToolbar = (toolbar) => {
 						<Button onClick={handleNextClick}><ArrowRightIcon /></Button>
 					</Grid>
 				</Grid>
-
 				<Grid item md={1} xs={12}>
 					<Select value={calendarView} onChange={handleCalendarViewChange}>
 						<MenuItem value={'week'}>Week</MenuItem>
@@ -174,6 +167,8 @@ const CustomWeekHeader = ({ label }) => {
 const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCalendarPending }) => {
 	const { calendarId } = useParams();
 	const [userFormOpen, setUserFormOpen] = useState(false);
+	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
+	const [selectedAccount, setSelectedAccount] = useState(null);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -183,6 +178,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	}, []);
 
 	const color = "#4299e1"
+	const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
@@ -202,9 +198,12 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	const handleEditUserName = () => {
     setUserFormOpen(true);
   };
-
   const handleUserFormClose = () => {
     setUserFormOpen(false);
+	};
+	const handleUserLoginClose = (account) => {
+    setUserLoginOpen(false);
+    setSelectedAccount(account);
   };
 
 	const CustomEvent = ({ event }) => {
@@ -276,8 +275,9 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 				}
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
+			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} selectedAccount={selectedAccount} emails={emails} />
 		</Fragment>
-	)
+	);
 }
 
 const mapStateToProps = (state) => {
