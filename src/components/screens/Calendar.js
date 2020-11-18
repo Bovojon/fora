@@ -268,7 +268,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 								<Paper variant="outlined">
 									<ParticipantsList participants={calendar.participants} calendarUniqueId={calendar.unique_id} />
 									<Divider />
-									<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} />
+									<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} handleEditUserName={handleEditUserName} />
 								</Paper>
 							</Grid>
 						</Grid>

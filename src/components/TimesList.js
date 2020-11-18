@@ -5,7 +5,6 @@ import { Clear, Create } from '@material-ui/icons';
 import { Box as MuiBox, Grid } from '@material-ui/core';
 import { 
 	Card as ReactCard,
-	CardTitle as ReactCardTitle,
   CardBody as ReactCardBody,
 	Row as ReactCardRow
 } from 'reactstrap';
@@ -18,12 +17,6 @@ const Card = styled(ReactCard)`
 const CardBody = styled(ReactCardBody)`
 	padding: 0px;
 `;
-
-const CardTitle = styled(ReactCardTitle)`
-	margin-left: 4px;
-	margin-bottom: 4px;
-	cursor: pointer;
-`
 
 const Row = styled(ReactCardRow)`
   margin-left: 0px;
@@ -75,7 +68,7 @@ const NameArea = styled(Grid)`
   }
 `
 
-const TimesList = ({ times, handleDelete, currentUser }) => {
+const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => {
 
   return (
     <Box mt={4}>
@@ -96,7 +89,7 @@ const TimesList = ({ times, handleDelete, currentUser }) => {
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{currentUser.name}</NameHeader>
-                          <PencilIcon fontSize="small" />
+                          <PencilIcon onClick={handleEditUserName} fontSize="small" />
                         </NameArea>
                       </Row>
                       <Row>
@@ -115,7 +108,7 @@ const TimesList = ({ times, handleDelete, currentUser }) => {
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{currentUser.name}</NameHeader>
-                          <PencilIcon fontSize="small" />
+                          <PencilIcon onClick={handleEditUserName} fontSize="small" />
                         </NameArea>
                       </Row>
                       <Row>
