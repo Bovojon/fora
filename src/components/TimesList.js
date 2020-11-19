@@ -71,7 +71,6 @@ const NameArea = styled(Grid)`
 `
 
 const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => {
-
   return (
     <Box mt={4}>
       {times.length === 0 ?
@@ -81,6 +80,12 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
           <Header><h4>Selected times:</h4></Header>
           <ListArea>
             {times.map(time => {
+              let userName;
+              if (typeof time.creator?.name === "undefined") {
+                userName = currentUser.name;
+              } else {
+                userName = time.creator.name;
+              }
               if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
                 return (
                   <Card key={time.id} body outline color="primary">
@@ -90,7 +95,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
-                          <NameHeader>{currentUser.name}</NameHeader>
+                          <NameHeader>{userName}</NameHeader>
                           <PencilIcon onClick={handleEditUserName} fontSize="small" />
                         </NameArea>
                       </Row>
@@ -109,7 +114,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
-                          <NameHeader>{currentUser.name}</NameHeader>
+                          <NameHeader>{userName}</NameHeader>
                           <PencilIcon onClick={handleEditUserName} fontSize="small" />
                         </NameArea>
                       </Row>

@@ -204,10 +204,16 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
   };
 
 	const CustomEvent = ({ event }) => {
+		let userName;
+		if (typeof event.creator?.name === "undefined") {
+			userName = currentUser.name;
+		} else {
+			userName = event.creator.name;
+		}
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
-					<Header>{currentUser.name}</Header>
+					<Header>{userName}</Header>
 					<PencilIcon onClick={handleEditUserName} fontSize="small" />
 				</NameArea>
 				<TimeText>
