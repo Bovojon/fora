@@ -81,10 +81,13 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
           <ListArea>
             {times.map(time => {
               let userName;
+              let canEditName = false;
               if (typeof time.creator?.name === "undefined") {
                 userName = currentUser.name;
+                canEditName = true;
               } else {
                 userName = time.creator.name;
+                if (currentUser.id === time.creator.id) canEditName = true;
               }
               if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
                 return (
@@ -96,7 +99,11 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          <PencilIcon onClick={handleEditUserName} fontSize="small" />
+                          {canEditName ?
+                            <PencilIcon onClick={handleEditUserName} fontSize="small" />
+                            :
+                            null
+                          }
                         </NameArea>
                       </Row>
                       <Row>
@@ -115,7 +122,11 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          <PencilIcon onClick={handleEditUserName} fontSize="small" />
+                          {canEditName ?
+                            <PencilIcon onClick={handleEditUserName} fontSize="small" />
+                            :
+                            null
+                          }
                         </NameArea>
                       </Row>
                       <Row>
