@@ -4,7 +4,7 @@ import { Skeleton } from '@material-ui/lab';
 import copy from 'copy-to-clipboard';
 import { FilterNoneOutlined as CopyIcon, Create } from '@material-ui/icons';
 import { 
-  List,  
+  List as MuiList,  
   ListItem as MuiListItem,
   ListItemSecondaryAction,
   ListItemText,
@@ -26,6 +26,13 @@ const Header = styled.span`
   font-size: 1.5em;
   text-align: center;
   color: #4299e1;
+`
+
+const List = styled(MuiList)`
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 15px;
+  padding: 0px 13px;
 `
 
 const ListItem = styled(MuiListItem)`
