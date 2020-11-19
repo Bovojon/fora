@@ -168,7 +168,6 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	const { calendarId } = useParams();
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
-	const [selectedAccount, setSelectedAccount] = useState(null);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -200,9 +199,8 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
   const handleUserFormClose = () => {
     setUserFormOpen(false);
 	};
-	const handleUserLoginClose = (account) => {
+	const handleUserLoginClose = () => {
     setUserLoginOpen(false);
-    setSelectedAccount(account);
   };
 
 	const CustomEvent = ({ event }) => {
@@ -274,7 +272,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 				}
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
-			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} selectedAccount={selectedAccount} />
+			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} />
 		</Fragment>
 	);
 }

@@ -15,6 +15,8 @@ import {
   Add as AddIcon
 } from '@material-ui/icons';
 
+import { createUserPending } from '../../actions/userActionCreators';
+
 const Avatar = styled(MuiAvatar)`
   background-color: #bbdefb;
   color: #1e88e5;
@@ -28,7 +30,7 @@ const List = styled(MuiList)`
   padding: 0px 24px 16px 24px;
 `
 
-const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, selectedAccount, participants }) => {
+const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, participants, createUserPending }) => {
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
 
   useEffect(() => {
@@ -39,20 +41,27 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, selectedAccoun
     }
   }, [participants]);
 
-  const handleListItemClick = (value) => {
-    handleDialogClose(value);
-  };
+  const handleBackdropClick = () => {
+    const userObj = {};
+    createUserPending(userObj);
+    handleDialogClose();
+  }
+  const handleSelectAccount = (participantId) => {
+    // setCurrentUser(participantId);
+  }
+  const handleCreateNewClick = () => {
+  }
 
   return (
     <Fragment>
       {isLoading ?
         null
         :
-        <Dialog open={dialogIsOpen} onClose={() => handleDialogClose(selectedAccount)} fullWidth={fullScreen} maxWidth="sm">
+        <Dialog open={dialogIsOpen} onBackdropClick={handleBackdropClick} fullWidth={fullScreen} maxWidth="sm">
           <DialogTitle>Continue as</DialogTitle>
           <List>
             {participants.map((participant) => (
-              <ListItem key={participant.id} onClick={() => handleListItemClick(participant)} button>
+              <ListItem key={participant.id} onClick={() => handleSelectAccount(participant.id)} button>
                 <ListItemAvatar>
                   <Avatar>
                     <PersonIcon />
@@ -61,13 +70,13 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, selectedAccoun
                 <ListItemText primary={participant.name} />
               </ListItem>
             ))}
-            <ListItem button onClick={() => handleListItemClick('addAccount')}>
+            <ListItem onClick={handleCreateNewClick} button>
               <ListItemAvatar>
                 <Avatar>
                   <AddIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary="Add account" />
+              <ListItemText primary="Create new" />
             </ListItem>
           </List>
         </Dialog>
@@ -84,6 +93,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+    createUserPending: (userObj) => { dispatch(createUserPending(userObj)) }
 	}
 }
 
