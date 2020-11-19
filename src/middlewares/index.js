@@ -1,5 +1,6 @@
-import { timeCreationMiddleware } from './timeMiddleware.js';
+import { timeCreationMiddleware, timeFetchMiddleware } from './timeMiddleware.js';
 
 export default [
-  timeCreationMiddleware
+  timeCreationMiddleware,
+  timeFetchMiddleware
 ]

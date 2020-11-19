@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { TIME_ADDED_PENDING, TIME_ADDED_DUPLICATE } from "../actions/constants";
+import { TIME_ADDED_PENDING, TIME_ADDED_DUPLICATE, TIMES_FETCHED_SUCCESS } from "../actions/constants";
 
 const checkDuplicateTimes = (timeObj, newTimeObj) => {
   const sameStartTimes = moment(timeObj.start).format('X') === moment(newTimeObj.start).format('X');
@@ -14,6 +14,10 @@ const checkDuplicateTimes = (timeObj, newTimeObj) => {
   return false;
 }
 
+const changeTimeFormat = (time) => {
+  time.start = moment(time.start).toDate();
+  time.end = moment(time.end).toDate();
+}
 
 export const timeCreationMiddleware = ({ getState, dispatch }) => next => action => {
   if (action.type === TIME_ADDED_PENDING) {
@@ -22,6 +26,15 @@ export const timeCreationMiddleware = ({ getState, dispatch }) => next => action
     if (duplicated === true) {
       action.type = TIME_ADDED_DUPLICATE;
     }
+  }
+  return next(action);
+}
+
+export const timeFetchMiddleware = ({ getState, dispatch }) => next => action => {
+  if (action.type === TIMES_FETCHED_SUCCESS) {
+    const times = action.payload;
+    times.forEach(time => changeTimeFormat(time));
+    action.payload = times;
   }
   return next(action);
 }
