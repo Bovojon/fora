@@ -12,7 +12,10 @@ const initialCalendarObj = {
 
 const calendarReducer = (state=initialCalendarObj, { type, payload }) => {
   switch(type) {
-    case CALENDAR_CREATED_PENDING:
+    case CALENDAR_CREATED_PENDING: {
+      const status = { isLoading: true }
+      return {status}
+    }
     case CALENDAR_FETCHED_PENDING: {
       const status = { isLoading: true }
       return {...state, status}
