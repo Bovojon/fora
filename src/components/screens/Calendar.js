@@ -178,7 +178,6 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 	}, []);
 
 	const color = "#4299e1"
-	const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
@@ -275,7 +274,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 				}
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
-			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} selectedAccount={selectedAccount} emails={emails} />
+			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} selectedAccount={selectedAccount} />
 		</Fragment>
 	);
 }

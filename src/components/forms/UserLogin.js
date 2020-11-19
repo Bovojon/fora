@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import { connect } from 'react-redux';
 import styled from "styled-components";
 import { 
 	Avatar as MuiAvatar, 
@@ -27,37 +28,63 @@ const List = styled(MuiList)`
   padding: 0px 24px 16px 24px;
 `
 
-const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, selectedAccount, emails }) => {
+const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, selectedAccount, participants }) => {
+  const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
+
+  useEffect(() => {
+    if (typeof participants === "undefined") {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [participants]);
+
   const handleListItemClick = (value) => {
     handleDialogClose(value);
   };
 
   return (
-    <Dialog open={dialogIsOpen} onClose={() => handleDialogClose(selectedAccount)} fullWidth={fullScreen} maxWidth="sm">
-      <DialogTitle>Continue as</DialogTitle>
-      <List>
-        {emails.map((email) => (
-          <ListItem button onClick={() => handleListItemClick(email)} key={email}>
-            <ListItemAvatar>
-              <Avatar>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={email} />
-          </ListItem>
-        ))}
-
-        <ListItem button onClick={() => handleListItemClick('addAccount')}>
-          <ListItemAvatar>
-            <Avatar>
-              <AddIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
-      </List>
-    </Dialog>
+    <Fragment>
+      {isLoading ?
+        null
+        :
+        <Dialog open={dialogIsOpen} onClose={() => handleDialogClose(selectedAccount)} fullWidth={fullScreen} maxWidth="sm">
+          <DialogTitle>Continue as</DialogTitle>
+          <List>
+            {participants.map((participant) => (
+              <ListItem key={participant.id} onClick={() => handleListItemClick(participant)} button>
+                <ListItemAvatar>
+                  <Avatar>
+                    <PersonIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={participant.name} />
+              </ListItem>
+            ))}
+            <ListItem button onClick={() => handleListItemClick('addAccount')}>
+              <ListItemAvatar>
+                <Avatar>
+                  <AddIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary="Add account" />
+            </ListItem>
+          </List>
+        </Dialog>
+      }
+    </Fragment>
   );
 }
 
-export default UserLogin;
+const mapStateToProps = (state) => {
+  return {
+		participants: state.calendar.participants,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserLogin);
