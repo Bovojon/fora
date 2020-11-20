@@ -285,7 +285,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 				}
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
-			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} />
+			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} handleUserFormOpen={setUserFormOpen} />
 		</Fragment>
 	);
 }

@@ -30,7 +30,7 @@ const List = styled(MuiList)`
   padding: 0px 24px 16px 24px;
 `
 
-const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, participants, createUserPending, setCurrentUserPending }) => {
+const UserLogin = ({ dialogIsOpen, handleDialogClose, handleUserFormOpen, fullScreen, participants, createUserPending, setCurrentUserPending }) => {
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
 
   useEffect(() => {
@@ -51,6 +51,8 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, participants, 
     handleDialogClose();
   }
   const handleCreateNewClick = () => {
+    handleDialogClose();
+    handleUserFormOpen(true);
   }
 
   return (
