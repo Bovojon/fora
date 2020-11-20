@@ -184,7 +184,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUserId, handl
                 {participants.map((participant) => {
                   const participantId = participant.id;
                   let canEditName = false;
-                  if (currentUserId === participantId) canEditName = true;                  
+                  if (currentUserId === participantId) canEditName = true;
                   const nameAndEditIcon = (
                     <NameArea container direction="row" justify="flex-start" alignItems="center">
                       <Name>{participant.name}</Name>

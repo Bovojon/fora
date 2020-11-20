@@ -205,16 +205,23 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 
 	const CustomEvent = ({ event }) => {
 		let userName;
+		let canEditName = false;
 		if (typeof event.creator?.name === "undefined") {
 			userName = currentUser.name;
+			canEditName = true;
 		} else {
 			userName = event.creator.name;
+			if (currentUser.id === event.creator.id) canEditName = true;
 		}
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
 					<Header>{userName}</Header>
-					<PencilIcon onClick={handleEditUserName} fontSize="small" />
+					{canEditName ?
+						<PencilIcon onClick={handleEditUserName} fontSize="small" />
+						:
+						null
+					}
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mm a') + " – " + moment(event.end).format('h:mm a')} 
@@ -258,7 +265,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 									event: CustomEvent,
 									week: { header: CustomWeekHeader }
 								}}
-								formats={{ 
+								formats={{
 									dayFormat: 'ddd D',
 									timeGutterFormat: 'h A'
 								}}
