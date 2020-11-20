@@ -15,8 +15,8 @@ const checkDuplicateTimes = (timeObj, newTimeObj) => {
 }
 
 const changeTimeFormat = (time) => {
-  time.start = moment(time.start).toDate();
-  time.end = moment(time.end).toDate();
+  time.start = new Date(time.start);
+  time.end = new Date(time.end);
 }
 
 export const timeCreationMiddleware = ({ getState, dispatch }) => next => action => {
