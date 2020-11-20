@@ -8,7 +8,6 @@ const userReducer = (state={}, { type, payload }) => {
     }
     case USER_SET_CURRENT_PENDING: {
       const userObj = payload;
-      console.log(userObj)
       return {...userObj}
     }
     default:

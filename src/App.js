@@ -1,7 +1,6 @@
 import React from 'react';
 import { Switch, Route } from "react-router-dom";
 import { ConnectedRouter } from 'connected-react-router';
-import ReduxToastr from 'react-redux-toastr';
 import tw from "twin.macro";
 
 import { history } from './store';
@@ -22,7 +21,6 @@ const StyledDiv = tw.div`min-h-screen text-gray-800 p-4 overflow-hidden`;
 const App = () => {
   return (
       <StyledDiv className="App">
-        <ReduxToastr timeOut={4000} transitionIn="fadeIn" transitionOut="fadeOut" />
         <ConnectedRouter history={history}>
           <Navbar />
           <Switch>
