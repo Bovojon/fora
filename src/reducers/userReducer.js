@@ -1,10 +1,16 @@
-import { USER_CREATED_SUCCESS } from "../actions/constants";
+import { USER_CREATED_SUCCESS, USER_SET_CURRENT_PENDING } from "../actions/constants";
 
 const userReducer = (state={}, { type, payload }) => {
   switch(type) {
-    case USER_CREATED_SUCCESS:
+    case USER_CREATED_SUCCESS: {
       const userObj = payload;
       return {...state, ...userObj}
+    }
+    case USER_SET_CURRENT_PENDING: {
+      const userObj = payload;
+      console.log(userObj)
+      return {...userObj}
+    }
     default:
       return state
   }

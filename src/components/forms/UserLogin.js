@@ -15,7 +15,7 @@ import {
   Add as AddIcon
 } from '@material-ui/icons';
 
-import { createUserPending } from '../../actions/userActionCreators';
+import { createUserPending, setCurrentUserPending } from '../../actions/userActionCreators';
 
 const Avatar = styled(MuiAvatar)`
   background-color: #bbdefb;
@@ -30,7 +30,7 @@ const List = styled(MuiList)`
   padding: 0px 24px 16px 24px;
 `
 
-const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, participants, createUserPending }) => {
+const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, participants, createUserPending, setCurrentUserPending }) => {
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
 
   useEffect(() => {
@@ -46,8 +46,9 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, participants, 
     createUserPending(userObj);
     handleDialogClose();
   }
-  const handleSelectAccount = (participantId) => {
-    // setCurrentUser(participantId);
+  const handleSelectAccount = (participantObj) => {
+    setCurrentUserPending(participantObj);
+    handleDialogClose();
   }
   const handleCreateNewClick = () => {
   }
@@ -61,7 +62,7 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, fullScreen, participants, 
           <DialogTitle>Continue as</DialogTitle>
           <List>
             {participants.map((participant) => (
-              <ListItem key={participant.id} onClick={() => handleSelectAccount(participant.id)} button>
+              <ListItem key={participant.id} onClick={() => handleSelectAccount(participant)} button>
                 <ListItemAvatar>
                   <Avatar>
                     <PersonIcon />
@@ -93,6 +94,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+    setCurrentUserPending: (userObj) => { dispatch(setCurrentUserPending(userObj)) },
     createUserPending: (userObj) => { dispatch(createUserPending(userObj)) }
 	}
 }
