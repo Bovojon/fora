@@ -34,6 +34,7 @@ function* createCalendar() {
     const { calendar } = yield calResponse.data;
     yield put(createCalendarSuccess(calendar));
     yield put(addUserToCalendarPending());
+    yield put(fetchTimesSuccess([]));
   } catch (error) {
     console.error("Error in creating new calendar: ", error);
   }

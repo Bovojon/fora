@@ -25,7 +25,6 @@ import {
 } from '@material-ui/core';
 
 import { createCalendarPending } from '../actions/calendarActionCreators';
-import { clearTimesPending } from '../actions/timeActionCreators';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -95,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MainNavbar = ({ navigateTo, createCalendarPending, clearTimesPending, calendarUniqueId }) => {
+const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -110,7 +109,6 @@ const MainNavbar = ({ navigateTo, createCalendarPending, clearTimesPending, cale
   const handleFindTimeClick = (e) => {
     e.preventDefault();
     createCalendarPending();
-    clearTimesPending();
     setCollapseIsOpen(false);
     navigateTo("/creating_calendar");
   }
@@ -201,8 +199,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => dispatch(push(route)),
-    createCalendarPending: () => dispatch(createCalendarPending()),
-    clearTimesPending: () => dispatch(clearTimesPending())
+    createCalendarPending: () => dispatch(createCalendarPending())
   }
 }
 

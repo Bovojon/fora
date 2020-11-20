@@ -1,8 +1,7 @@
 import { 
   TIME_ADDED_SUCCESS, 
   TIMES_FETCHED_SUCCESS, 
-  TIME_REMOVED_SUCCESS,
-  TIMES_CLEARED_PENDING
+  TIME_REMOVED_SUCCESS
 } from '../actions/constants';
 
 const timeReducer = (state=[], { type, payload }) => {
@@ -17,10 +16,7 @@ const timeReducer = (state=[], { type, payload }) => {
     }
     case TIMES_FETCHED_SUCCESS: {
       const times = payload;
-      return [...state, ...times]
-    }
-    case TIMES_CLEARED_PENDING: {  
-      return []
+      return [...times]
     }
     default:
       return state;
