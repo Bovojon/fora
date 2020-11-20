@@ -135,16 +135,16 @@ const InviteText = ({ handleCopyClick, calendarUniqueId }) => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId, handleEditUserName }) => {
+const ParticipantsList = ({ participants, calendarUniqueId, currentUserId, handleEditUserName }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
 
-  const handleCheckBoxClick = (labelId) => () => {
-    const currentIndex = checked.indexOf(labelId);
+  const handleCheckBoxClick = (participantId) => () => {
+    const currentIndex = checked.indexOf(participantId);
     const newChecked = [...checked];
     if (currentIndex === -1) {
-      newChecked.push(labelId);
+      newChecked.push(participantId);
     } else {
       newChecked.splice(currentIndex, 1);
     }
@@ -177,26 +177,32 @@ const ParticipantsList = ({ participants, calendarUniqueId, handleEditUserName }
           <LoadingListSkeleton />
           :
           <Fragment>
-            {participants.length === 0 ?
+            {participants.length === 1 ?
               <InviteText handleCopyClick={handleCopyClick} calendarUniqueId={calendarUniqueId} />
               :
               <List>
                 {participants.map((participant) => {
-                  const labelId = participant.id;
+                  const participantId = participant.id;
+                  let canEditName = false;
+                  if (currentUserId === participantId) canEditName = true;                  
                   const nameAndEditIcon = (
                     <NameArea container direction="row" justify="flex-start" alignItems="center">
                       <Name>{participant.name}</Name>
-                      <PencilIcon onClick={handleEditUserName} fontSize="small" />
+                      {canEditName ?
+                        <PencilIcon onClick={handleEditUserName} fontSize="small" />
+                        :
+                        null
+                      }
                     </NameArea>
                   );
                   return (
-                    <ListItem key={labelId}>
+                    <ListItem key={participantId}>
                       <ListItemAvatar>
                         <Avatar/>
                       </ListItemAvatar>
-                      <ListItemText id={labelId} primary={nameAndEditIcon} />
+                      <ListItemText id={participantId} primary={nameAndEditIcon} />
                       <ListItemSecondaryAction>
-                        <Checkbox edge="end" onChange={handleCheckBoxClick(labelId)} checked={checked.indexOf(labelId) !== -1} inputProps={{ 'aria-labelledby': labelId }} />
+                        <Checkbox edge="end" onChange={handleCheckBoxClick(participantId)} checked={checked.indexOf(participantId) !== -1} inputProps={{ 'aria-labelledby': participantId }} />
                       </ListItemSecondaryAction>
                     </ListItem>
                   );
