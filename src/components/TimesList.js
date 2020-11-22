@@ -122,11 +122,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          {canEditName ?
-                            <PencilIcon onClick={handleEditUserName} fontSize="small" />
-                            :
-                            null
-                          }
+                          {canEditName && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
                         </NameArea>
                       </Row>
                       <Row>

@@ -275,7 +275,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper variant="outlined">
-									<ParticipantsList participants={calendar.participants} calendarUniqueId={calendar.unique_id} currentUserId={currentUser.id} handleEditUserName={handleEditUserName} />
+									<ParticipantsList participants={calendar.participants} calendarUniqueId={calendar.unique_id} currentUser={currentUser} handleEditUserName={handleEditUserName} />
 									<Divider />
 									<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} handleEditUserName={handleEditUserName} />
 								</Paper>

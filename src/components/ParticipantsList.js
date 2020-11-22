@@ -135,7 +135,7 @@ const InviteText = ({ handleCopyClick, calendarUniqueId }) => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId, currentUserId, handleEditUserName }) => {
+const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -184,15 +184,15 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUserId, handl
                 {participants.map((participant) => {
                   const participantId = participant.id;
                   let canEditName = false;
-                  if (currentUserId === participantId) canEditName = true;
+                  let name = participant.name;
+                  if (currentUser.id === participantId) {
+                    canEditName = true;
+                    name = currentUser.name
+                  }
                   const nameAndEditIcon = (
                     <NameArea container direction="row" justify="flex-start" alignItems="center">
-                      <Name>{participant.name}</Name>
-                      {canEditName ?
-                        <PencilIcon onClick={handleEditUserName} fontSize="small" />
-                        :
-                        null
-                      }
+                      <Name>{name}</Name>
+                      {canEditName && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
                     </NameArea>
                   );
                   return (
