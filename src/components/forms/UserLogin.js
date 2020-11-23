@@ -51,6 +51,8 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, handleUserFormOpen, fullSc
     handleDialogClose();
   }
   const handleCreateNewClick = () => {
+    const userObj = {};
+    createUserPending(userObj);
     handleDialogClose();
     handleUserFormOpen(true);
   }

@@ -11,7 +11,7 @@ import {
   CircularProgress
 } from '@material-ui/core';
 
-import { createUserPending, updateUserPending } from '../../actions/userActionCreators';
+import { updateUserPending } from '../../actions/userActionCreators';
 
 const DialogContent = styled(MuiDialogContent)`
   min-width: 320px;
@@ -41,9 +41,7 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
   const handleSubmitClick = () => {
     const userObj = { email, name };
     const userId = user?.id;
-    if (typeof userId === "undefined") {
-      createUser(userObj);
-    } else {
+    if (typeof userId !== "undefined") {
       userObj.id = userId;
       updateUser(userObj);
     }
@@ -81,7 +79,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-    createUser: (userObj) => { dispatch(createUserPending(userObj)) },
     updateUser: (userObj) => { dispatch(updateUserPending(userObj)) }
 	}
 }
