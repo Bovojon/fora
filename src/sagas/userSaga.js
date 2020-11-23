@@ -26,9 +26,8 @@ function* updateUser(action) {
   try {
     const userObj = action.payload;
     const userResponse = yield call(UserService.updateUser, { user: userObj });
-    const { result } = yield userResponse.data;
-    const udpatedUser = result[1][0]
-    yield put(updateUserSuccess(udpatedUser));
+    const { user } = yield userResponse.data;
+    yield put(updateUserSuccess(user));
   } catch(error) {
     console.error("Error updating user: ", error);
   }
