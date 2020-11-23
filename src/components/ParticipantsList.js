@@ -135,7 +135,7 @@ const InviteText = ({ handleCopyClick, calendarUniqueId }) => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName }) => {
+const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, setTimes }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -149,6 +149,13 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
       newChecked.splice(currentIndex, 1);
     }
     setChecked(newChecked);
+
+    if (newChecked.length > 0 && initialTimes.length > 0) {
+      const newTimes = initialTimes.filter(time => newChecked.includes(time.creator.id));
+      setTimes(newTimes);
+    } else {
+      setTimes(initialTimes);
+    }
   };
   const handleCopyClick = (textToCopy) => {
     copy(textToCopy);

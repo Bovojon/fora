@@ -164,10 +164,11 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCalendarPending }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fetchCalendarPending }) => {
 	const { calendarId } = useParams();
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
+	const [times, setTimes] = useState(initialTimes);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -175,6 +176,8 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 		fetchCalendarPending(calendarId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
 	const color = "#4299e1"
 
@@ -278,9 +281,22 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper variant="outlined">
-									<ParticipantsList participants={calendar.participants} calendarUniqueId={calendar.unique_id} currentUser={currentUser} handleEditUserName={handleEditUserName} />
+									<ParticipantsList
+										participants={calendar.participants}
+										calendarUniqueId={calendar.unique_id}
+										currentUser={currentUser}
+										handleEditUserName={handleEditUserName}
+										initialTimes={initialTimes}
+										setTimes={setTimes}
+									/>
 									<Divider />
-									<TimesList times={times.sort(timeSorter)} handleDelete={handleDelete} currentUser={currentUser} handleEditUserName={handleEditUserName} />
+									<TimesList
+										times={times.sort(timeSorter)} 
+										handleDelete={handleDelete} 
+										currentUser={currentUser} 
+										handleEditUserName={handleEditUserName} 
+										initialTimes={initialTimes}
+									/>
 								</Paper>
 							</Grid>
 						</Grid>
@@ -295,7 +311,7 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 
 const mapStateToProps = (state) => {
   return {
-		times: state.times,
+		initialTimes: state.times,
 		calendar: state.calendar,
 		currentUser: state.user
   }
