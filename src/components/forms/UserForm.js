@@ -62,14 +62,12 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
         <Grid container direction="column" justify="center" alignItems="center">
           <TextField value={name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" placeholder="Name" type="text" fullWidth margin="normal" autoFocus />
           <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" placeholder="Email" type="email" fullWidth margin="normal" />
-          <Button color="primary" disabled={user.status.isLoading} onClick={handleSubmitClick}>
-            {user.status.isLoading && <CircularProgress size={24} />}
-          </Button>
-
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmitClick} color="primary">Done</Button>
+        <Button onClick={handleSubmitClick} disabled={user.status.isLoading} color="primary">
+          { user.status.isLoading ? <CircularProgress size={24} /> : "Done" }
+        </Button>
       </DialogActions>
     </Dialog>
   );
