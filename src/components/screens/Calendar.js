@@ -165,18 +165,18 @@ const CustomWeekHeader = ({ label }) => {
 }
 
 const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fetchCalendarPending }) => {
-	const { calendarId } = useParams();
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
-	const [times, setTimes] = useState(initialTimes);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+	const { calendarId } = useParams();
 	useEffect(() => {
 		fetchCalendarPending(calendarId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
+	
+	const [times, setTimes] = useState(initialTimes);
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
 	const color = "#4299e1"
