@@ -151,7 +151,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
     setChecked(newChecked);
 
     if (newChecked.length > 0 && initialTimes.length > 0) {
-      const newTimes = initialTimes.filter(time => newChecked.includes(time.creator.id));
+      const newTimes = initialTimes.filter(time => newChecked.includes(time.user_id));
       setTimes(newTimes);
     } else {
       setTimes(initialTimes);
