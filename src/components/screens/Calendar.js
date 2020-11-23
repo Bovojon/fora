@@ -211,7 +211,10 @@ const Calendar = ({ times, calendar, currentUser, addTime, removeTime, fetchCale
 			canEditName = true;
 		} else {
 			userName = event.creator.name;
-			if (currentUser.id === event.creator.id) canEditName = true;
+			if (currentUser.id === event.creator.id) {
+				userName = currentUser.name;
+				canEditName = true;
+			}
 		}
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
