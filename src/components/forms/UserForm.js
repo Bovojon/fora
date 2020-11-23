@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from "styled-components";
 import { 
@@ -25,6 +25,7 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
 
   const [name, setName] = useState(initialName);
   const [email, setEmail] = useState(initialEmail);
+  const inputRef = useRef();
 
   useEffect(() => {
     if (initialName !== null && typeof initialName !== "undefined") setName(initialName);
@@ -48,13 +49,19 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
     }
     handleDialogClose();
   };
+  const handleNameKeyPress = (e) => {
+    if(e.keyCode === 13) inputRef.current.focus();
+  }
+  const handleEmailKeyPress = (e) => {
+    if(e.keyCode === 13) handleSubmitClick()
+  }
 
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
       <DialogContent>
         <Grid container direction="column" justify="center" alignItems="center">
-          <TextField value={name} onChange={handleNameChange} id="name" placeholder="Name" type="text" fullWidth margin="normal" autoFocus />
-          <TextField value={email} onChange={handleEmailChange} id="email" placeholder="Email" type="email" fullWidth margin="normal" />
+          <TextField value={name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" placeholder="Name" type="text" fullWidth margin="normal" autoFocus />
+          <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" placeholder="Email" type="email" fullWidth margin="normal" />
           <Button color="primary" disabled={user.status.isLoading} onClick={handleSubmitClick}>
             {user.status.isLoading && <CircularProgress size={24} />}
           </Button>
