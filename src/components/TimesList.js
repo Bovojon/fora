@@ -70,10 +70,10 @@ const NameArea = styled(Grid)`
   }
 `
 
-const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => {
+const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initialTimes }) => {
   return (
     <Box mt={4}>
-      {times.length === 0 ?
+      {initialTimes.length === 0 ?
         <Header><h4>Click and drag on the calendar to select times.</h4></Header>
         :
         <Fragment>
