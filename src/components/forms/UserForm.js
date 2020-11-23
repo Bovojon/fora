@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from "styled-components";
 import { 
@@ -18,8 +18,18 @@ const DialogContent = styled(MuiDialogContent)`
 `
 
 const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUser, updateUser }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  let initialName = user?.name;
+  let initialEmail = user?.email;
+  if (initialName === null || typeof initialName === "undefined") initialName = "";
+  if (initialEmail === null || typeof initialEmail === "undefined") initialEmail = "";
+
+  const [name, setName] = useState(initialName);
+  const [email, setEmail] = useState(initialEmail);
+
+  useEffect(() => {
+    if (initialName !== null && typeof initialName !== "undefined") setName(initialName);
+    if (initialEmail !== null && typeof initialEmail !== "undefined") setEmail(initialEmail);
+  }, [initialName, initialEmail]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
