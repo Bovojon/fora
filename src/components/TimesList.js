@@ -87,7 +87,10 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
                 canEditName = true;
               } else {
                 userName = time.creator.name;
-                if (currentUser.id === time.creator.id) canEditName = true;
+                if (currentUser.id === time.creator.id) {
+                  userName = currentUser.name;
+                  canEditName = true;
+                }
               }
               if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
                 return (
@@ -99,11 +102,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName }) => 
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          {canEditName ?
-                            <PencilIcon onClick={handleEditUserName} fontSize="small" />
-                            :
-                            null
-                          }
+                          {canEditName && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
                         </NameArea>
                       </Row>
                       <Row>
