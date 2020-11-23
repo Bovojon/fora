@@ -208,31 +208,27 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 
 	const CustomEvent = ({ event }) => {
 		let userName;
-		let canEditName = false;
+		let canEdit = false;
 		if (typeof event.creator?.name === "undefined") {
 			userName = currentUser.name;
-			canEditName = true;
+			canEdit = true;
 		} else {
 			userName = event.creator.name;
 			if (currentUser.id === event.creator.id) {
 				userName = currentUser.name;
-				canEditName = true;
+				canEdit = true;
 			}
 		}
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
 					<Header>{userName}</Header>
-					{canEditName ?
-						<PencilIcon onClick={handleEditUserName} fontSize="small" />
-						:
-						null
-					}
+					{canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mm a') + " – " + moment(event.end).format('h:mm a')} 
 				</TimeText>
-				<ClearIcon onClick={() => handleDelete(event.id)} color="action" />
+				{canEdit && <ClearIcon onClick={() => handleDelete(event.id)} color="action" />}
 			</Grid>
 		);
 	}

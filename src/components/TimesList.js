@@ -81,15 +81,15 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
           <ListArea>
             {times.map(time => {
               let userName;
-              let canEditName = false;
+              let canEdit = false;
               if (typeof time.creator?.name === "undefined") {
                 userName = currentUser.name;
-                canEditName = true;
+                canEdit = true;
               } else {
                 userName = time.creator.name;
                 if (currentUser.id === time.creator.id) {
                   userName = currentUser.name;
-                  canEditName = true;
+                  canEdit = true;
                 }
               }
               if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
@@ -97,12 +97,12 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
                   <Card key={time.id} body outline color="primary">
                     <CardBody>
                       <TopRightArea>
-                        <ClearIcon onClick={() => handleDelete(time.id)} color="action" />
+                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="action" />}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          {canEditName && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
+                          {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
                         </NameArea>
                       </Row>
                       <Row>
@@ -116,12 +116,12 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
                   <Card key={time.id} body outline color="primary">
                     <CardBody>
                       <TopRightArea>
-                        <ClearIcon onClick={() => handleDelete(time.id)} color="action" />
+                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="action" />}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          {canEditName && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
+                          {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
                         </NameArea>
                       </Row>
                       <Row>
