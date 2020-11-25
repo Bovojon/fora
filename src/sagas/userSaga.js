@@ -9,10 +9,8 @@ import { addUserToCalendarPending } from '../actions/calendarActionCreators';
 function* createUser(action) {
   try {
     const userObj = action.payload;
-    if (typeof userObj.name === "undefined") {
-      const totalParticipants = yield select(CalendarSelector.getTotalParticipants);
-      userObj.name = `Person ${totalParticipants + 1}`;
-    }
+    const totalParticipants = yield select(CalendarSelector.getTotalParticipants);
+    if (typeof userObj.name === "undefined") userObj.name = `Person ${totalParticipants + 1}`;
     const userResponse = yield call(UserService.createUser, { user: userObj, participantNumber: totalParticipants });
     const { user } = yield userResponse.data;
     yield put(createUserSuccess(user));
