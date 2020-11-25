@@ -10,7 +10,7 @@ import {
   ListItemText,
   ListItemAvatar,
   Checkbox,
-  Avatar,
+  Avatar as MuiAvatar,
   Box as MuiBox,
   Grid,
   IconButton as MuiIconButton,
@@ -83,6 +83,10 @@ const NameArea = styled(Grid)`
 	&:hover ${PencilIcon} {
     display: block;
   }
+`
+
+const Avatar = styled(MuiAvatar)`
+  background-color: ${props => props.background};
 `
 
 const Name = styled.span`
@@ -192,6 +196,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
                   const participantId = participant.id;
                   let canEditName = false;
                   let name = participant.name;
+                  let background = participant?.color;
                   if (currentUser.id === participantId) {
                     canEditName = true;
                     name = currentUser.name
@@ -205,7 +210,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
                   return (
                     <ListItem key={participantId}>
                       <ListItemAvatar>
-                        <Avatar/>
+                        <Avatar background={background}>{name.charAt(0)}</Avatar>
                       </ListItemAvatar>
                       <ListItemText id={participantId} primary={nameAndEditIcon} />
                       <ListItemSecondaryAction>
