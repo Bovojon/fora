@@ -28,7 +28,9 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
   const inputRef = useRef();
 
   useEffect(() => {
-    if (initialName !== null && typeof initialName !== "undefined") setName(initialName);
+    if (initialName !== null && typeof initialName !== "undefined") {
+      if (initialName.includes("Person") === false) setName(initialName);
+    }
     if (initialEmail !== null && typeof initialEmail !== "undefined") setEmail(initialEmail);
   }, [initialName, initialEmail]);
 
