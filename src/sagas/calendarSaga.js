@@ -25,7 +25,7 @@ function* createCalendar() {
     let creatorId = currentUserObj.userId;
     if (typeof creatorId === "undefined") {
       const newUserObj = { name: "Person 1" };
-      const userResponse = yield call(UserService.createUser, { user: newUserObj });
+      const userResponse = yield call(UserService.createUser, { user: newUserObj, participantNumber: 0 });
       const { user } = yield userResponse.data;
       creatorId = yield user.id;
       yield put(createUserSuccess(user));

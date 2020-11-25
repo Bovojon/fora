@@ -13,7 +13,7 @@ function* createUser(action) {
       const totalParticipants = yield select(CalendarSelector.getTotalParticipants);
       userObj.name = `Person ${totalParticipants + 1}`;
     }
-    const userResponse = yield call(UserService.createUser, { user: userObj });
+    const userResponse = yield call(UserService.createUser, { user: userObj, participantNumber: totalParticipants });
     const { user } = yield userResponse.data;
     yield put(createUserSuccess(user));
     yield put(addUserToCalendarPending());
