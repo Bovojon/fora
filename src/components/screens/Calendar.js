@@ -30,7 +30,6 @@ import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
-import { UserSelector } from '../../selectors';
 import '../animations/styles/loading.scss';
 
 const localizer = momentLocalizer(moment);
@@ -58,7 +57,8 @@ const ClearIcon = styled(Clear)`
 	position: absolute;
 	right: 0;
 	top: 0;
-  cursor: pointer;
+	cursor: pointer;
+	color: white;
 `
 
 const PencilIcon = styled(Create)`
@@ -180,8 +180,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 	const [times, setTimes] = useState(initialTimes);
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
-	const color = "#4299e1"
-
 	const handleSelectSlot = (selected) => {
 		let { start, end } = selected;
 		start = new Date(start);
@@ -229,7 +227,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 				<TimeText>
 					{moment(event.start).format('h:mm a') + " – " + moment(event.end).format('h:mm a')} 
 				</TimeText>
-				{canEdit && <ClearIcon onClick={() => handleDelete(event.id)} color="white" />}
+				{canEdit && <ClearIcon onClick={() => handleDelete(event.id)} />}
 			</Grid>
 		);
 	}

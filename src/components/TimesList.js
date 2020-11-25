@@ -35,6 +35,7 @@ const TopRightArea = styled.span`
 
 const ClearIcon = styled(Clear)`
   cursor: pointer;
+  color: white;
 `
 
 const Box = styled(MuiBox)`
@@ -102,7 +103,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
                   <Card key={time.id} body background={background}>
                     <CardBody>
                       <TopRightArea>
-                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="white" />}
+                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
@@ -121,7 +122,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
                   <Card key={time.id} body background={background}>
                     <CardBody>
                       <TopRightArea>
-                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="white" />}
+                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
