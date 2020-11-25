@@ -30,6 +30,7 @@ import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
+import { UserSelector } from '../../selectors';
 import '../animations/styles/loading.scss';
 
 const localizer = momentLocalizer(moment);
@@ -228,15 +229,19 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 				<TimeText>
 					{moment(event.start).format('h:mm a') + " – " + moment(event.end).format('h:mm a')} 
 				</TimeText>
-				{canEdit && <ClearIcon onClick={() => handleDelete(event.id)} color="action" />}
+				{canEdit && <ClearIcon onClick={() => handleDelete(event.id)} color="white" />}
 			</Grid>
 		);
 	}
-	const getEventStyle = (color) => {
+	const getEventStyle = (event) => {
+		let background = event.creator?.color;
+		if (typeof background === "undefined") background = currentUser.color;
 		const style = {
-			backgroundColor: color,
+			backgroundColor: background,
 			borderRadius: '3px',
-			opacity: 0.5,
+			opacity: 0.8,
+			border: '0px',
+			display: 'block'
 		};
 		return {
 				style: style
@@ -271,7 +276,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 									dayFormat: 'ddd D',
 									timeGutterFormat: 'h A'
 								}}
-								eventPropGetter={() => getEventStyle(color)}
+								eventPropGetter={getEventStyle}
 							/>
 						</Grid>
 						<Grid item md={3} xs={12}>
