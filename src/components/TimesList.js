@@ -10,6 +10,9 @@ import {
 } from 'reactstrap';
 
 const Card = styled(ReactCard)`
+  background-color: ${props => props.background};
+  color: white;
+  border: 0px;
 	padding: 0.7rem;
 	margin-bottom: 5px;
 `;
@@ -82,6 +85,8 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
             {times.map(time => {
               let userName;
               let canEdit = false;
+              let background = time.creator?.color;
+		          if (typeof background === "undefined") background = currentUser.color;
               if (typeof time.creator?.name === "undefined") {
                 userName = currentUser.name;
                 canEdit = true;
@@ -94,10 +99,10 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
               }
               if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
                 return (
-                  <Card key={time.id} body outline color="primary">
+                  <Card key={time.id} body background={background}>
                     <CardBody>
                       <TopRightArea>
-                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="action" />}
+                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="white" />}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
@@ -113,10 +118,10 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
                 );
               } else {
                 return (
-                  <Card key={time.id} body outline color="primary">
+                  <Card key={time.id} body background={background}>
                     <CardBody>
                       <TopRightArea>
-                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="action" />}
+                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} color="white" />}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
