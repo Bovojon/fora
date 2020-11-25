@@ -28,9 +28,7 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
   const inputRef = useRef();
 
   useEffect(() => {
-    if (initialName !== null && typeof initialName !== "undefined") {
-      if (initialName.includes("Person") === false) setName(initialName);
-    }
+    if (initialName !== null && typeof initialName !== "undefined") setName(initialName);
     if (initialEmail !== null && typeof initialEmail !== "undefined") setEmail(initialEmail);
   }, [initialName, initialEmail]);
 
@@ -60,7 +58,7 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
       <DialogContent>
         <Grid container direction="column" justify="center" alignItems="center">
-          <TextField value={name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" placeholder="Name" type="text" fullWidth margin="normal" autoFocus />
+          <TextField value={name.includes("Person") ? "" : name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" placeholder="Name" type="text" fullWidth margin="normal" autoFocus />
           <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" placeholder="Email" type="email" fullWidth margin="normal" />
         </Grid>
       </DialogContent>
