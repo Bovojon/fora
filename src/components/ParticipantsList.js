@@ -214,7 +214,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
                       </ListItemAvatar>
                       <ListItemText id={participantId} primary={nameAndEditIcon} />
                       <ListItemSecondaryAction>
-                        <Checkbox edge="end" onChange={handleCheckBoxClick(participantId)} checked={checked.indexOf(participantId) !== -1} inputProps={{ 'aria-labelledby': participantId }} />
+                        <Checkbox edge="end" onChange={handleCheckBoxClick(participantId)} checked={checked.indexOf(participantId) !== -1} inputProps={{ 'aria-labelledby': participantId }} color="default" />
                       </ListItemSecondaryAction>
                     </ListItem>
                   );
