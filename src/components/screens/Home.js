@@ -44,9 +44,9 @@ const Home = ({ navigateTo }) => {
         <TwoColumn>
           <LeftColumn>
             <Heading>Find a time that works <BlueHighlight>for all.</BlueHighlight></Heading>
-            <Paragraph><BlueHighlight>Fora</BlueHighlight> is a social calendar to plan group events.</Paragraph>
+            <Paragraph><BlueHighlight>Fora</BlueHighlight> is a free social calendar for scheduling group events.</Paragraph>
             <Actions>
-              <input value={inputId} onChange={handleInputChange} type="text" placeholder="Enter calendar ID" />
+              <input value={inputId} onChange={handleInputChange} type="text" placeholder="Enter calendar id" />
               <button onClick={handleJoinClick}>Join</button>
             </Actions>
           </LeftColumn>
