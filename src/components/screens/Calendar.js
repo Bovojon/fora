@@ -180,8 +180,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 	const [times, setTimes] = useState(initialTimes);
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
-	const handleSelectSlot = (selected) => {
-		let { start, end } = selected;
+	const handleSelectEventSlot = (event) => {
+		let { start, end } = event;
 		start = new Date(start);
 		end = new Date(end);
 		const newTime = { 
@@ -264,8 +264,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 								defaultView={Views.WEEK}
 								views={{ month: true, week: true }}
 								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
-								onSelectSlot={handleSelectSlot}
-								components = {{ 
+								onSelectSlot={handleSelectEventSlot}
+								onSelectEvent={handleSelectEventSlot}
+								components = {{
 									toolbar : CustomToolbar,
 									event: CustomEvent,
 									week: { header: CustomWeekHeader }
