@@ -166,9 +166,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
     setSnackBarIsOpen(true);
   };
   const handleSnackBarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setSnackBarIsOpen(false);
   };
 
