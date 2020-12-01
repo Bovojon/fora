@@ -63,7 +63,7 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, handleUserFormOpen, fullSc
         null
         :
         <Dialog open={dialogIsOpen} onBackdropClick={handleBackdropClick} fullWidth={fullScreen} maxWidth="sm">
-          <DialogTitle>Continue as</DialogTitle>
+          <DialogTitle>Continue as:</DialogTitle>
           <List>
             {participants.map((participant) => (
               <ListItem key={participant.id} onClick={() => handleSelectAccount(participant)} button>
@@ -81,7 +81,7 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, handleUserFormOpen, fullSc
                   <AddIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary="Continue as new user" />
+              <ListItemText primary="New user" />
             </ListItem>
           </List>
         </Dialog>
