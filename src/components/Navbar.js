@@ -37,9 +37,11 @@ const NavLinks = styled.div`
 `
 
 const PrimaryLink = styled.a`
-  ${tw`lg:mx-0 px-4 py-3 rounded bg-blue-500 ml-3 hover:bg-blue-700 
+  ${tw`lg:mx-0 px-4 py-3 bg-blue-500 ml-3 hover:bg-blue-700 
     hover:shadow-outline border-b-0 font-semibold cursor-pointer`}
   color: white !important;
+  font-size: 18px;
+  border-radius: 0.8rem;
 `
 
 const ModalContent = styled(Grid)`
@@ -143,13 +145,13 @@ const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => 
             {location.pathname === "/" ?
               <NavItem>
                 <NavLinks>
-                  <PrimaryLink onClick={handleFindTimeClick} css="rounded-full">Find a time</PrimaryLink>
+                  <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
                 </NavLinks>
               </NavItem>
               :
               <NavItem>
                 <NavLinks>
-                  <PrimaryLink onClick={handleShareClick} css="rounded-full">Share calendar</PrimaryLink>
+                  <PrimaryLink onClick={handleShareClick}>Share calendar</PrimaryLink>
                 </NavLinks>
               </NavItem>
             }

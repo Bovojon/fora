@@ -81,7 +81,7 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, handleUserFormOpen, fullSc
                   <AddIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary="Create new" />
+              <ListItemText primary="Continue as new user" />
             </ListItem>
           </List>
         </Dialog>
