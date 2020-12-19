@@ -32,6 +32,8 @@ import { addTimePending, removeTimePending } from '../../actions/timeActionCreat
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import '../animations/styles/loading.scss';
 
+import axios from 'axios';
+
 const localizer = momentLocalizer(moment);
 
 const Paper = styled(MuiPaper)`
@@ -165,7 +167,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fetchCalendarPending }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTime, fetchCalendarPending, navigateTo }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const theme = useTheme();
@@ -203,7 +205,23 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 	};
 	const handleUserLoginClose = () => {
     setUserLoginOpen(false);
-  };
+	};
+	const handleSelectEvent = () => {
+		
+		if (typeof auth?.code !== "undefined") {
+			navigateTo('/event');
+		} else {
+			axios({
+				method: 'post',
+				url: 'http://localhost:8000/auth/google/getUrl'
+			}).then(response => {
+				console.log(response.data);
+				window.location.replace(response.data.url);
+			}).catch(err =>{
+				console.log(err);
+			});
+		}
+	}
 
 	const CustomEvent = ({ event }) => {
 		let userName;
@@ -265,7 +283,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, addTime, removeTime, fe
 								views={{ month: true, week: true }}
 								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 								onSelectSlot={handleSelectEventSlot}
-								onSelectEvent={handleSelectEventSlot}
+								onSelectEvent={handleSelectEvent}
 								components = {{
 									toolbar : CustomToolbar,
 									event: CustomEvent,
@@ -313,7 +331,8 @@ const mapStateToProps = (state) => {
   return {
 		initialTimes: state.times,
 		calendar: state.calendar,
-		currentUser: state.user
+		currentUser: state.user,
+		auth: state.auth
   }
 }
 
@@ -321,7 +340,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		addTime: (timeObj) => { dispatch(addTimePending(timeObj)) },
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
-		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) }
+		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
+		navigateTo: (route) => dispatch(push(route))
 	}
 }
 
