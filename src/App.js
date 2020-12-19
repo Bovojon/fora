@@ -27,6 +27,7 @@ const App = () => {
             <Route exact path="/" component={Home} />
             <Route exact path="/creating_calendar" component={LoadingTransition} />
             <Route exact path="/:calendarId" component={Calendar} />
+            <Route exact path="/auth/google" component={LoadingTransition} />
             <Route component={NotFound} />
           </Switch>
         </ConnectedRouter>
