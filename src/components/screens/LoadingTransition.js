@@ -1,10 +1,25 @@
 import React, { useEffect } from "react";
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { useLocation } from "react-router-dom";
 
+import { addAuthCodeSuccess } from '../../actions/authActionCreators';
 import '../animations/styles/loading.scss';
 
-const LoadingTransition = ({ calendar, navigateTo }) => {
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+}
+
+const LoadingTransition = ({ calendar, navigateTo, addAuthCode }) => {
+  // const query = useQuery();
+  // const code = query.get("code");
+  const { code } = useQuery();
+
+  if (typeof code !== "undefined") {
+    addAuthCode(code);
+    navigateTo('/event');
+  }
+
 	useEffect(() => {
     if (calendar.status.isLoading === false) {
       navigateTo(`/${calendar.unique_id}`);
@@ -40,7 +55,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => dispatch(push(route))
+    navigateTo: (route) => { dispatch(push(route)) },
+    addAuthCode: (code) => { dispatch(addAuthCodeSuccess(code)) }
   }
 }
 
