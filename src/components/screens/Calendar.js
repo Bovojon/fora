@@ -6,7 +6,7 @@ import moment from "moment";
 import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
-import { 
+import {
 	Grid, 
 	Box as MuiBox, 
 	Paper as MuiPaper,
