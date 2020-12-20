@@ -7,7 +7,8 @@ import { history } from './store';
 import Navbar from "./components/Navbar";
 import Home from './components/screens/Home';
 import Calendar from './components/screens/Calendar';
-import LoadingTransition from './components/screens/LoadingTransition';
+import LoadingNewCalendar from './components/screens/LoadingScreens/LoadingNewCalendar';
+import LoadingAuth from './components/screens/LoadingScreens/LoadingAuth';
 import EventForm from './components/forms/EventForm';
 import NotFound from './components/screens/NotFound';
 
@@ -27,8 +28,8 @@ const App = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/event" component={EventForm} />
-            <Route exact path="/auth/google" component={LoadingTransition} />
-            <Route exact path="/creating_calendar" component={LoadingTransition} />
+            <Route exact path="/auth/google" component={LoadingAuth} />
+            <Route exact path="/creating_calendar" component={LoadingNewCalendar} />
             <Route exact path="/:calendarId" component={Calendar} />
             <Route component={NotFound} />
           </Switch>
