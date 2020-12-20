@@ -134,7 +134,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
                         {moment(time.start).format('ddd, MMM D')}
                       </Row>
                       <Row>
-                        {moment(time.start).format('h:mm a') + " – " + moment(time.end).format('h:mm a')} 
+                        {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
                       </Row>
                     </CardBody>
                   </Card>

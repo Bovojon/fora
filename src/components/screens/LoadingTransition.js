@@ -11,19 +11,19 @@ const useQuery = () => {
 }
 
 const LoadingTransition = ({ calendar, navigateTo, addAuthCode }) => {
-  // const query = useQuery();
-  // const code = query.get("code");
-  const { code } = useQuery();
+  const query = useQuery();
+  const code = query.get("code");
+  // const { code } = useQuery();
 
-  if (typeof code !== "undefined") {
-    addAuthCode(code);
-    navigateTo('/event');
-  }
+  useEffect(() => {
+    if (code !== null) {
+      addAuthCode(code);
+      navigateTo("/event");
+    }
+  }, [code]);
 
 	useEffect(() => {
-    if (calendar.status.isLoading === false) {
-      navigateTo(`/${calendar.unique_id}`);
-    }
+    if (calendar.status.isLoading === false && code === null) navigateTo(`/${calendar.unique_id}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendar]);
 

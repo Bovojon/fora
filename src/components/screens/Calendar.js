@@ -171,16 +171,16 @@ const CustomWeekHeader = ({ label }) => {
 const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTime, fetchCalendarPending, navigateTo }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
+	const [times, setTimes] = useState(initialTimes);
+	const { calendarId } = useParams();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-	const { calendarId } = useParams();
 	useEffect(() => {
 		fetchCalendarPending(calendarId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-	
-	const [times, setTimes] = useState(initialTimes);
+
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
 	const handleSelectEventSlot = (event) => {
@@ -208,9 +208,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTi
     setUserLoginOpen(false);
 	};
 	const handleSelectEvent = () => {
-		
-		if (typeof auth?.code !== "undefined") {
-			navigateTo('/event');
+		if (auth.code !== false) {
+			navigateTo("/event");
 		} else {
 			axios({
 				method: 'post',
@@ -244,7 +243,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTi
 					{canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
 				</NameArea>
 				<TimeText>
-					{moment(event.start).format('h:mm a') + " – " + moment(event.end).format('h:mm a')} 
+					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 				</TimeText>
 				{canEdit && <ClearIcon onClick={() => handleDelete(event.id)} />}
 			</Grid>
