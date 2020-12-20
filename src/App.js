@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Home from './components/screens/Home';
 import Calendar from './components/screens/Calendar';
 import LoadingTransition from './components/screens/LoadingTransition';
+import EventForm from './components/forms/EventForm';
 import NotFound from './components/screens/NotFound';
 
 import "tailwindcss/dist/base.css";
@@ -25,9 +26,10 @@ const App = () => {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route exact path="/event" component={EventForm} />
+            <Route exact path="/auth/google" component={LoadingTransition} />
             <Route exact path="/creating_calendar" component={LoadingTransition} />
             <Route exact path="/:calendarId" component={Calendar} />
-            <Route exact path="/auth/google" component={LoadingTransition} />
             <Route component={NotFound} />
           </Switch>
         </ConnectedRouter>
