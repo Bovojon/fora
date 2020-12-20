@@ -6,11 +6,11 @@ import {
   USER_UPDATED_SUCCESS
 } from "../actions/constants";
 
-const initialCalendarObj = {
+const initialUserObj = {
   status: { isLoading: false }
 }
 
-const userReducer = (state=initialCalendarObj, { type, payload }) => {
+const userReducer = (state=initialUserObj, { type, payload }) => {
   switch(type) {
     case USER_CREATED_PENDING: {
       const status = { isLoading: true }
