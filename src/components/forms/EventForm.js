@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker";
+import moment from "moment-timezone";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
+
+import { addEventPending } from '../../actions/eventActionCreators';
 
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-5xl mx-auto py-20 lg:py-24`;
@@ -27,32 +30,74 @@ const CustomDatePicker = styled(DatePicker)`
   width: 80%
 `
 
-const EventForm = ({ event }) => {
-  const [title, setTitle] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+const EventForm = ({ event, addEvent }) => {
+  const [summary, setSummary] = useState("");
+  const [startDateTime, setStartDateTime] = useState(new Date(event.start));
+  const [endDateTime, setEndDateTime] = useState(new Date(event.end));
   const [attendees, setAttendees] = useState([]);
 
-  const handleTitleChange = (event) => { setTitle(event.target.value) }
+  useEffect(() => {
+    const event = {
+      'summary': 'Google I/O 2015',
+      'location': '800 Howard St., San Francisco, CA 94103',
+      'description': 'A chance to hear more about Google\'s developer products.',
+      'start': {
+        'dateTime': '2020-12-14T09:00:00-07:00',
+        'timeZone': 'America/Los_Angeles',
+      },
+      'end': {
+        'dateTime': '2020-12-14T17:00:00-07:00',
+        'timeZone': 'America/Los_Angeles',
+      },
+      'recurrence': [
+        'RRULE:FREQ=DAILY;COUNT=2'
+      ],
+      'attendees': [
+        {'email': 'bovojon@gmail.com'},
+        {'email': 'jon.nadabot@gmail.com'}
+      ],
+      'reminders': {
+        'useDefault': false,
+        'overrides': [
+          {'method': 'email', 'minutes': 24 * 60},
+          {'method': 'popup', 'minutes': 10},
+        ],
+      },
+    }
+    const tizn = moment.tz.guess();
+    console.log(summary, startDateTime, endDateTime, attendees, tizn);
+    const eventObj = {
+      summary,
+      start: {
+        dateTime: startDateTime,
+        timeZone: tizn,
+      },
+      end: {
+        dateTime: endDateTime,
+        timeZone: tizn,
+      }
+    };
+    addEvent(eventObj);
+  }, [summary, startDateTime, endDateTime, attendees]);
+
+  const handleSummaryChange = (event) => { setSummary(event.target.value) }
   const handleAttendeesChange = (event) => { setAttendees(event.target.value) }
 
   return (
     <Container>
       <Content>
         <FormContainer>
-          <TextField value={title} onChange={handleTitleChange} placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
+          <TextField value={summary} onChange={handleSummaryChange} placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
           <TwoColumn>
             <Text>Start:</Text>
             <RowButton>
               <InputContainer>
-                <CustomDatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
               </InputContainer>
               <InputContainer>
                 <CustomDatePicker
-                  selected={startTime}
-                  onChange={time => setStartTime(time)}
+                  selected={startDateTime}
+                  onChange={time => setStartDateTime(time)}
                   showTimeSelect
                   showTimeSelectOnly
                   timeIntervals={15}
@@ -64,12 +109,12 @@ const EventForm = ({ event }) => {
             <Text>End:</Text>
             <RowButton>
               <InputContainer>
-                <CustomDatePicker selected={endDate} onChange={date => setEndDate(date)} />
+                <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
               </InputContainer>
               <InputContainer>
                 <CustomDatePicker
-                  selected={endTime}
-                  onChange={time => setEndTime(time)}
+                  selected={endDateTime}
+                  onChange={time => setEndDateTime(time)}
                   showTimeSelect
                   showTimeSelectOnly
                   timeIntervals={15}
@@ -86,34 +131,6 @@ const EventForm = ({ event }) => {
   );
 }
 
-// const event = {
-//   'summary': 'Google I/O 2015',
-//   'location': '800 Howard St., San Francisco, CA 94103',
-//   'description': 'A chance to hear more about Google\'s developer products.',
-//   'start': {
-//     'dateTime': '2020-12-14T09:00:00-07:00',
-//     'timeZone': 'America/Los_Angeles',
-//   },
-//   'end': {
-//     'dateTime': '2020-12-14T17:00:00-07:00',
-//     'timeZone': 'America/Los_Angeles',
-//   },
-//   'recurrence': [
-//     'RRULE:FREQ=DAILY;COUNT=2'
-//   ],
-//   'attendees': [
-//     {'email': 'bovojon@gmail.com'},
-//     {'email': 'jon.nadabot@gmail.com'}
-//   ],
-//   'reminders': {
-//     'useDefault': false,
-//     'overrides': [
-//       {'method': 'email', 'minutes': 24 * 60},
-//       {'method': 'popup', 'minutes': 10},
-//     ],
-//   },
-// };
-
 const mapStateToProps = (state) => {
   return {
 		event: state.event
@@ -122,7 +139,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => { dispatch(push(route)) }
+    navigateTo: (route) => { dispatch(push(route)) },
+    addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) }
   }
 }
 
