@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker";
 import moment from "moment-timezone";
@@ -65,7 +64,6 @@ const EventForm = ({ event, addEvent }) => {
       },
     }
     const tizn = moment.tz.guess();
-    console.log(summary, startDateTime, endDateTime, attendees, tizn);
     const eventObj = {
       summary,
       start: {
@@ -139,7 +137,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => { dispatch(push(route)) },
     addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) }
   }
 }
