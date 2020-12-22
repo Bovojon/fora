@@ -51,7 +51,7 @@ const CopyArea = styled(Grid)`
   border-radius: 10px;
   color: #5f6368;
   display: flex;
-  padding: 3px 15px;
+  padding: 3px 12px;
 `
 
 const LinkText = styled.span`
