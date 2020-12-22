@@ -24,6 +24,7 @@
     "feather-icons": "^4.28.0",
     "framer-motion": "^2.7.2",
     "moment": "^2.29.0",
+    "moment-timezone": "^0.5.32",
     "node-sass": "4.14.1",
     "react": "^16.13.1",
     "react-big-calendar": "^0.28.0",
