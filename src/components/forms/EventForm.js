@@ -1,73 +1,97 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import MomentUtils from '@date-io/moment';
-import {
-  TextField,
-  Grid
-} from '@material-ui/core';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+import { TextField, Grid } from '@material-ui/core';
+import DatePicker from "react-datepicker";
 
-const EventForm = () => {
+import styled from "styled-components";
+import tw from "twin.macro";
+import { css } from "styled-components/macro"; //eslint-disable-line
+
+const Container = tw.div`relative`;
+const Content = tw.div`max-w-5xl mx-auto py-20 lg:py-24`;
+const FormContainer = tw.div`p-10 sm:p-12 md:p-16 relative`;
+const TwoColumn = tw.div`flex flex-col sm:flex-row justify-center`;
+const Column = tw.div`sm:w-5/12 flex flex-col justify-center`;
+const InputContainer = tw.div`relative py-5 mt-6 mx-auto`;
+const Label = tw.label`absolute top-0 left-0 tracking-wide font-semibold text-sm`;
+const CustomDatePicker = styled(DatePicker)`
+  padding: 8px;
+  margin-right: 8px;
+  color: #3c4043;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  background-color: #f1f3f4;
+  border-radius: 4px;
+  text-align: center;
+  width: 60%
+`
+
+const EventForm = ({ event }) => {
   const [title, setTitle] = useState("");
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
-  const [attendees, SetAttendees] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date('2014-08-18T21:11:54'));
+  const [startDate, setStartDate] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [attendees, setAttendees] = useState([]);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  const handleTitleChange = () => {
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  }
+  const handleAttendeesChange = (event) => {
+    setAttendees(event.target.value);
   }
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <TextField value={title} onChange={handleTitleChange} id="title" placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <Grid container justify="space-around">
-          <KeyboardDatePicker
-            disableToolbar
-            variant="inline"
-            format="MM/dd/yyyy"
-            margin="normal"
-            id="date-picker-inline"
-            label="Date picker inline"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
-          <KeyboardDatePicker
-            margin="normal"
-            id="date-picker-dialog"
-            label="Date picker dialog"
-            format="MM/dd/yyyy"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
-          <KeyboardTimePicker
-            margin="normal"
-            id="time-picker"
-            label="Time picker"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change time',
-            }}
-          />
-        </Grid>
-      </MuiPickersUtilsProvider>
-    </Grid>
+    <Container>
+      <Content>
+        <FormContainer>
+          <TextField value={title} onChange={handleTitleChange} id="title" placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
+          <TwoColumn>
+            <Column>
+              <InputContainer>
+                <Label htmlFor="name-input">Start date</Label>
+                <CustomDatePicker id="name-input" selected={startDate} onChange={date => setStartDate(date)} />
+              </InputContainer>
+              <InputContainer>
+                <Label htmlFor="name-input1">End date</Label>
+                <CustomDatePicker id="name-input1" selected={endDate} onChange={date => setEndDate(date)} />
+              </InputContainer>
+            </Column>
+            <Column>
+              <InputContainer>
+                <Label htmlFor="email-input">Start time</Label>
+                <CustomDatePicker
+                  id="email-input"
+                  selected={startTime}
+                  onChange={time => setStartTime(time)}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={15}
+                  timeCaption="Time"
+                  dateFormat="h:mm aa"
+                />
+              </InputContainer>
+              <InputContainer>
+                <Label htmlFor="email-input1">End time</Label>
+                <CustomDatePicker
+                  id="email-input1"
+                  selected={endTime}
+                  onChange={time => setEndTime(time)}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={15}
+                  timeCaption="Time"
+                  dateFormat="h:mm aa"
+                />
+              </InputContainer>
+            </Column>
+          </TwoColumn>
+          <TextField value={attendees} onChange={handleAttendeesChange} placeholder="Add guest emails" multiline rows={4} fullWidth margin="normal" variant="outlined" />
+        </FormContainer>
+      </Content>
+    </Container>
   );
 }
 
@@ -107,8 +131,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => { dispatch(push(route)) },
-    // addTime: (eventObj) => { dispatch(addEventPending(eventObj)) },
+    navigateTo: (route) => { dispatch(push(route)) }
   }
 }
 

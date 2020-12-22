@@ -4,18 +4,23 @@ import { push } from 'connected-react-router';
 import { useLocation } from "react-router-dom";
 
 import { addAuthCodeSuccess } from '../../../actions/authActionCreators';
+import { fetchCalendarSuccess } from '../../../actions/calendarActionCreators';
 import '../../animations/styles/loading.scss';
 
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-}
+const useQuery = () => { return new URLSearchParams(useLocation().search) }
 
-const LoadingAuth = ({ navigateTo, addAuthCode }) => {
+const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar }) => {
   const query = useQuery();
   const code = query.get("code");
+
+  const { calendar, currentUser, eventObj } = JSON.parse(localStorage.getItem('fora'));
+  addCalendar(calendar);
+
   if (code !== null) {
     addAuthCode(code);
     navigateTo("/event");
+  } else {
+    navigateTo(`/${calendar.unique_id}`);
   }
 
 	return (
@@ -41,7 +46,8 @@ const LoadingAuth = ({ navigateTo, addAuthCode }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => { dispatch(push(route)) },
-    addAuthCode: (code) => { dispatch(addAuthCodeSuccess(code)) }
+    addAuthCode: (code) => { dispatch(addAuthCodeSuccess(code)) },
+    addCalendar: (calendarObj) => { dispatch(fetchCalendarSuccess(calendarObj)) }
   }
 }
 
