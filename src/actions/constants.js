@@ -46,3 +46,8 @@ export const USER_SET_CURRENT_PENDING = "USER_SET_CURRENT_PENDING";
  * Auth
  */
 export const AUTH_CODE_ADDED_SUCCESS = "AUTH_CODE_ADDED_SUCCESS";
+
+/**
+ * Event
+ */
+export const EVENT_ADDED_PENDING = "EVENT_ADDED_PENDING";
