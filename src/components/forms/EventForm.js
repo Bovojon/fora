@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { TextField, Grid } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker";
 
 import styled from "styled-components";
@@ -25,7 +25,7 @@ const CustomDatePicker = styled(DatePicker)`
   background-color: #f1f3f4;
   border-radius: 4px;
   text-align: center;
-  width: 60%
+  width: 80%
 `
 
 const EventForm = ({ event }) => {

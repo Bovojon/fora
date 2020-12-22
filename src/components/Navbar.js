@@ -96,11 +96,39 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const RightButton = ({ handleFindTimeClick, handleScheduleClick, handleShareClick }) => {
+  const location = useLocation();
+  if (location.pathname === "/") {
+    return (
+      <NavItem>
+        <NavLinks>
+          <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
+        </NavLinks>
+      </NavItem>
+    );
+  } else if (location.pathname === "/event") {
+    return (
+      <NavItem>
+        <NavLinks>
+          <PrimaryLink onClick={handleScheduleClick}>Schedule Event</PrimaryLink>
+        </NavLinks>
+      </NavItem>
+    )
+  } else {
+    return (
+      <NavItem>
+        <NavLinks>
+          <PrimaryLink onClick={handleShareClick}>Share calendar</PrimaryLink>
+        </NavLinks>
+      </NavItem>   
+    )
+  }
+}
+
 const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
-  const location = useLocation();
   const classes = useStyles();
 
   const handleBrandClick = (e) => {
@@ -114,11 +142,13 @@ const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => 
     setCollapseIsOpen(false);
     navigateTo("/creating_calendar");
   }
-  const toggleNavbar = () => {
-    setCollapseIsOpen(!collapseIsOpen);
-  };
   const handleShareClick = () => {
     setModalIsOpen(true);
+  };
+  const handleScheduleClick = () => {
+  };
+  const toggleNavbar = () => {
+    setCollapseIsOpen(!collapseIsOpen);
   };
   const handleModalClose = () => {
     setModalIsOpen(false);
@@ -142,19 +172,7 @@ const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => 
         <NavbarToggler onClick={toggleNavbar} />
         <Collapse isOpen={collapseIsOpen} navbar>
           <Nav className="ml-auto" navbar>
-            {location.pathname === "/" ?
-              <NavItem>
-                <NavLinks>
-                  <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
-                </NavLinks>
-              </NavItem>
-              :
-              <NavItem>
-                <NavLinks>
-                  <PrimaryLink onClick={handleShareClick}>Share calendar</PrimaryLink>
-                </NavLinks>
-              </NavItem>
-            }
+            <RightButton handleFindTimeClick={handleFindTimeClick} handleScheduleClick={handleScheduleClick} handleShareClick={handleShareClick} />
           </Nav>
         </Collapse>
       </Navbar>
