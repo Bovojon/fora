@@ -5,16 +5,20 @@ import { useLocation } from "react-router-dom";
 
 import { addAuthCodeSuccess } from '../../../actions/authActionCreators';
 import { fetchCalendarSuccess } from '../../../actions/calendarActionCreators';
+import { setCurrentUserPending } from '../../../actions/userActionCreators';
+import { addEventPending } from '../../../actions/eventActionCreators';
 import '../../animations/styles/loading.scss';
 
 const useQuery = () => { return new URLSearchParams(useLocation().search) }
 
-const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar }) => {
+const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, addEvent }) => {
   const query = useQuery();
   const code = query.get("code");
 
   const { calendar, currentUser, eventObj } = JSON.parse(localStorage.getItem('fora'));
   addCalendar(calendar);
+  setCurrentUser(currentUser);
+  addEvent(eventObj);
 
   if (code !== null) {
     addAuthCode(code);
@@ -47,7 +51,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => { dispatch(push(route)) },
     addAuthCode: (code) => { dispatch(addAuthCodeSuccess(code)) },
-    addCalendar: (calendarObj) => { dispatch(fetchCalendarSuccess(calendarObj)) }
+    addCalendar: (calendarObj) => { dispatch(fetchCalendarSuccess(calendarObj)) },
+    setCurrentUser: (userObj) => { dispatch(setCurrentUserPending(userObj)) },
+    addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) }
   }
 }
 
