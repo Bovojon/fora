@@ -5,11 +5,13 @@ import calendarReducer from './calendarReducer';
 import userReducer from './userReducer';
 import timeReducer from './timeReducer';
 import authReducer from './authReducer';
+import eventReducer from './eventReducer';
 
 export default (history) => combineReducers({
     router: connectRouter(history),
     calendar: calendarReducer,
     user: userReducer,
     times: timeReducer,
-    auth: authReducer
+    auth: authReducer,
+    event: eventReducer
 })
