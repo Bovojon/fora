@@ -31,6 +31,7 @@ import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
+import { addEventPending } from '../../actions/eventActionCreators';
 import '../animations/styles/loading.scss';
 
 import axios from 'axios';
@@ -168,7 +169,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTime, fetchCalendarPending, navigateTo }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTime, removeTime, fetchCalendarPending, addEventPending }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [times, setTimes] = useState(initialTimes);
@@ -183,18 +184,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTi
 
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
-	const handleSelectEventSlot = (event) => {
-		let { start, end } = event;
-		start = new Date(start);
-		end = new Date(end);
-		const newTime = { 
-			start, 
-			end, 
-			calendar_id: calendar.id, 
-			user_id: currentUser.id 
-		}
-		addTime(newTime);
-	}
 	const handleDelete = (timeId) => {
 		removeTime(timeId);
 	}
@@ -207,18 +196,32 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTi
 	const handleUserLoginClose = () => {
     setUserLoginOpen(false);
 	};
-	const handleSelectEvent = () => {
+	const handleSelectSlot = (event) => {
+		let { start, end } = event;
+		start = new Date(start);
+		end = new Date(end);
+		const newTime = { 
+			start, 
+			end, 
+			calendar_id: calendar.id, 
+			user_id: currentUser.id 
+		}
+		addTime(newTime);
+	}
+	const handleSelectEvent = (event) => {
+		const eventObj = { ...event, calendar_id: calendar.id, user_id: currentUser.id }
+		addEventPending(eventObj);
 		if (auth.code !== false) {
 			navigateTo("/event");
 		} else {
+			localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObj }));
 			axios({
 				method: 'post',
 				url: 'http://localhost:8000/auth/google/getUrl'
 			}).then(response => {
-				console.log(response.data);
 				window.location.replace(response.data.url);
 			}).catch(err =>{
-				console.log(err);
+				console.error(err);
 			});
 		}
 	}
@@ -282,7 +285,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, addTime, removeTi
 								defaultView={Views.WEEK}
 								views={{ month: true, week: true }}
 								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
-								onSelectSlot={handleSelectEventSlot}
+								onSelectSlot={handleSelectSlot}
 								onSelectEvent={handleSelectEvent}
 								components = {{
 									toolbar : CustomToolbar,
@@ -338,10 +341,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		navigateTo: (route) => { dispatch(push(route)) },
 		addTime: (timeObj) => { dispatch(addTimePending(timeObj)) },
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
-		navigateTo: (route) => dispatch(push(route))
+		addEventPending: (eventObj) => { dispatch(addEventPending(eventObj)) }
 	}
 }
 
