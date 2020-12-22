@@ -169,7 +169,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTime, removeTime, fetchCalendarPending, addEventPending }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [times, setTimes] = useState(initialTimes);
@@ -210,8 +210,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTi
 	}
 	const handleSelectEvent = (event) => {
 		const eventObj = { ...event, calendar_id: calendar.id, user_id: currentUser.id }
-		addEventPending(eventObj);
 		if (auth.code !== false) {
+			addEvent(eventObj);
 			navigateTo("/event");
 		} else {
 			localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObj }));
@@ -345,7 +345,7 @@ const mapDispatchToProps = (dispatch) => {
 		addTime: (timeObj) => { dispatch(addTimePending(timeObj)) },
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
-		addEventPending: (eventObj) => { dispatch(addEventPending(eventObj)) }
+		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) }
 	}
 }
 
