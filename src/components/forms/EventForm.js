@@ -11,9 +11,9 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-5xl mx-auto py-20 lg:py-24`;
 const FormContainer = tw.div`p-10 sm:p-12 md:p-16 relative`;
-const TwoColumn = tw.div`flex flex-col sm:flex-row justify-center`;
-const Column = tw.div`sm:w-5/12 flex flex-col justify-center`;
-const InputContainer = tw.div`relative py-5 mt-6 mx-auto`;
+const TwoColumn = tw.div`flex flex-col sm:flex-row justify-center mt-6`;
+const Column = tw.div`md:w-1/4 sm:w-5/12 flex flex-col justify-center`;
+const InputContainer = tw.div`relative py-5 mx-auto`;
 const Label = tw.label`absolute top-0 left-0 tracking-wide font-semibold text-sm`;
 const CustomDatePicker = styled(DatePicker)`
   padding: 8px;
