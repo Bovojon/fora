@@ -11,9 +11,9 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-5xl mx-auto py-20 lg:py-24`;
 const FormContainer = tw.div`p-10 sm:p-12 md:p-16 relative`;
-const TwoColumn = tw.div`flex flex-col sm:flex-row justify-center mt-6`;
-const Column = tw.div`md:w-1/4 sm:w-5/12 flex flex-col justify-center`;
-const InputContainer = tw.div`relative py-5 mx-auto`;
+const TwoColumn = tw.div`flex flex-col lg:flex-row justify-center mt-6`;
+const Row = tw.div`md:w-1/3 sm:w-5/12 flex justify-center`;
+const InputContainer = tw.div`relative py-5 justify-center`;
 const Label = tw.label`absolute top-0 left-0 tracking-wide font-semibold text-sm`;
 const CustomDatePicker = styled(DatePicker)`
   padding: 8px;
@@ -49,17 +49,13 @@ const EventForm = ({ event }) => {
         <FormContainer>
           <TextField value={title} onChange={handleTitleChange} id="title" placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
           <TwoColumn>
-            <Column>
+            <Row>
+              Start
+            </Row>
+            <Row>
               <InputContainer>
-                <Label htmlFor="name-input">Start date</Label>
                 <CustomDatePicker id="name-input" selected={startDate} onChange={date => setStartDate(date)} />
               </InputContainer>
-              <InputContainer>
-                <Label htmlFor="name-input1">End date</Label>
-                <CustomDatePicker id="name-input1" selected={endDate} onChange={date => setEndDate(date)} />
-              </InputContainer>
-            </Column>
-            <Column>
               <InputContainer>
                 <Label htmlFor="email-input">Start time</Label>
                 <CustomDatePicker
@@ -73,6 +69,11 @@ const EventForm = ({ event }) => {
                   dateFormat="h:mm aa"
                 />
               </InputContainer>
+            </Row>
+            <Row>
+              End
+            </Row>
+            <Row>
               <InputContainer>
                 <Label htmlFor="email-input1">End time</Label>
                 <CustomDatePicker
@@ -86,7 +87,11 @@ const EventForm = ({ event }) => {
                   dateFormat="h:mm aa"
                 />
               </InputContainer>
-            </Column>
+              <InputContainer>
+                <Label htmlFor="name-input1">End date</Label>
+                <CustomDatePicker id="name-input1" selected={endDate} onChange={date => setEndDate(date)} />
+              </InputContainer>
+            </Row>
           </TwoColumn>
           <TextField value={attendees} onChange={handleAttendeesChange} placeholder="Add guest emails" multiline rows={4} fullWidth margin="normal" variant="outlined" />
         </FormContainer>
