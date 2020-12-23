@@ -19,6 +19,7 @@ const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, add
   addCalendar(calendar);
   setCurrentUser(currentUser);
   addEvent(eventObj);
+  localStorage.removeItem('fora');
 
   if (code !== null) {
     addAuthCode(code);
