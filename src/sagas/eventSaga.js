@@ -1,15 +1,25 @@
-import { call, takeLatest, all } from 'redux-saga/effects';
+import { call, takeLatest, all, select } from 'redux-saga/effects';
 
 import { EventService } from '../services';
 import { EVENT_SUBMITTED_PENDING } from '../actions/constants';
+import { history } from '../store/index.js';
+import { CalendarSelector } from '../selectors';
+
+function navigateTo(route) {
+  history.push(route);
+ }
 
 function* submitEvent(action) {
   try {
     const { event, code } = action.payload;
     const result = yield call(EventService.submitEvent, { event, code });
-    const data = yield result.data;
-    console.log(data);
+    const status = yield result.status;
+    if (status === 200) {
+      const calendarUniqueId = yield select(CalendarSelector.getCalendarUniqueId);
+      yield call(navigateTo, `/${calendarUniqueId}`);
+    }
   } catch(error) {
+    // Handle error here
     console.error("Error in submitting event: ", error);
   }
 }
