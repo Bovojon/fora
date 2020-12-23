@@ -209,7 +209,12 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTi
 		addTime(newTime);
 	}
 	const handleSelectEvent = (event) => {
-		const eventObj = { ...event, calendar_id: calendar.id, user_id: currentUser.id }
+		const { start, end } = event;
+		const eventObj = {
+			details: { start, end },
+			calendar_id: calendar.id,
+			user_id: currentUser.id
+		}
 		if (auth.code !== false) {
 			addEvent(eventObj);
 			navigateTo("/event");

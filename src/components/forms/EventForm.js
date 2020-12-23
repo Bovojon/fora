@@ -31,8 +31,8 @@ const CustomDatePicker = styled(DatePicker)`
 
 const EventForm = ({ event, addEvent }) => {
   const [summary, setSummary] = useState("");
-  const [startDateTime, setStartDateTime] = useState(new Date(event.start));
-  const [endDateTime, setEndDateTime] = useState(new Date(event.end));
+  const [startDateTime, setStartDateTime] = useState(new Date(event.details.start));
+  const [endDateTime, setEndDateTime] = useState(new Date(event.details.end));
   const [attendees, setAttendees] = useState([]);
 
   useEffect(() => {
@@ -65,16 +65,18 @@ const EventForm = ({ event, addEvent }) => {
     }
     const tizn = moment.tz.guess();
     const eventObj = {
-      summary,
-      start: {
-        dateTime: startDateTime,
-        timeZone: tizn,
-      },
-      end: {
-        dateTime: endDateTime,
-        timeZone: tizn,
+      details: {
+        summary,
+        start: {
+          dateTime: startDateTime,
+          timeZone: tizn,
+        },
+        end: {
+          dateTime: endDateTime,
+          timeZone: tizn,
+        }
       }
-    };
+    }
     addEvent(eventObj);
   }, [summary, startDateTime, endDateTime, attendees]);
 

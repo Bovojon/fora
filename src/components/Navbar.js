@@ -25,6 +25,7 @@ import {
 } from '@material-ui/core';
 
 import { createCalendarPending } from '../actions/calendarActionCreators';
+import { submitEventPending } from '../actions/eventActionCreators';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -125,7 +126,7 @@ const RightButton = ({ handleFindTimeClick, handleScheduleClick, handleShareClic
   }
 }
 
-const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => {
+const MainNavbar = ({ navigateTo, createCalendar, submitEvent, calendarUniqueId, eventObj, code }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -138,21 +139,17 @@ const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => 
   }
   const handleFindTimeClick = (e) => {
     e.preventDefault();
-    createCalendarPending();
+    createCalendar();
     setCollapseIsOpen(false);
     navigateTo("/creating_calendar");
   }
-  const handleShareClick = () => {
-    setModalIsOpen(true);
-  };
+  const handleShareClick = () => { setModalIsOpen(true) };
   const handleScheduleClick = () => {
+    const event = eventObj.details;
+    submitEvent({ event, code });
   };
-  const toggleNavbar = () => {
-    setCollapseIsOpen(!collapseIsOpen);
-  };
-  const handleModalClose = () => {
-    setModalIsOpen(false);
-  };
+  const toggleNavbar = () => { setCollapseIsOpen(!collapseIsOpen) };
+  const handleModalClose = () => { setModalIsOpen(false) };
   const handleCopyClick = (textToCopy) => {
     copy(textToCopy);
     setSnackBarIsOpen(true);
@@ -212,14 +209,17 @@ const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => 
 
 const mapStateToProps = (state) => {
   return {
-    calendarUniqueId: state.calendar.unique_id
+    calendarUniqueId: state.calendar.unique_id,
+    eventObj: state.event,
+    code: state.auth.code
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => dispatch(push(route)),
-    createCalendarPending: () => dispatch(createCalendarPending())
+    navigateTo: (route) => { dispatch(push(route)) },
+    createCalendar: () => { dispatch(createCalendarPending()) },
+    submitEvent: (eventCodeObj) => { dispatch(submitEventPending(eventCodeObj)) }
   }
 }
 
