@@ -78,6 +78,7 @@ const EventForm = ({ event, addEvent }) => {
       }
     }
     addEvent(eventObj);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [summary, startDateTime, endDateTime, attendees]);
 
   const handleSummaryChange = (event) => { setSummary(event.target.value) }
