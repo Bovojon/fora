@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from "styled-components";
 import { 
   Grid,
@@ -12,7 +13,8 @@ const DialogContent = styled(MuiDialogContent)`
   min-width: 320px;
 `
 
-const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleScheduleEventClick, handleSelectTimeClick }) => {
+const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleScheduleEventClick, handleSelectTimeClick, eventObject }) => {
+  const handleScheduleClick = () => { handleScheduleEventClick(eventObject) }
 
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
@@ -22,11 +24,17 @@ const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleSch
       <DialogActions>
         <Grid container direction="row" justify="flex-end" alignItems="center">
           <Button onClick={handleSelectTimeClick} color="primary">Add to selected times</Button>
-          <Button onClick={handleScheduleEventClick} color="primary">Schedule new event</Button>
+          <Button onClick={handleScheduleClick} color="primary">Schedule new event</Button>
         </Grid>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default EventClickForm;
+const mapStateToProps = (state) => {
+  return {
+		eventObject: state.event
+  }
+}
+
+export default connect(mapStateToProps)(EventClickForm);

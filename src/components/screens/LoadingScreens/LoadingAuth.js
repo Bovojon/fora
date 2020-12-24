@@ -15,10 +15,10 @@ const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, add
   const query = useQuery();
   const code = query.get("code");
 
-  const { calendar, currentUser, eventObj } = JSON.parse(localStorage.getItem('fora'));
+  const { calendar, currentUser, eventObject } = JSON.parse(localStorage.getItem('fora'));
   addCalendar(calendar);
   setCurrentUser(currentUser);
-  addEvent(eventObj);
+  addEvent(eventObject);
   localStorage.removeItem('fora');
   if (code !== null) {
     addAuthCode(code);

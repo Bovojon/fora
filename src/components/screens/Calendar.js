@@ -29,9 +29,11 @@ import ParticipantsList from '../ParticipantsList';
 import TimesList from '../TimesList';
 import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
+import EventClickForm from '../forms/EventClickForm';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
+import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
 import '../animations/styles/loading.scss';
 
 import axios from 'axios';
@@ -169,9 +171,10 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
+	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [times, setTimes] = useState(initialTimes);
 	const { calendarId } = useParams();
 	const theme = useTheme();
@@ -184,51 +187,45 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTi
 
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
-	const handleDelete = (timeId) => {
-		removeTime(timeId);
-	}
-	const handleEditUserName = () => {
-    setUserFormOpen(true);
-  };
-  const handleUserFormClose = () => {
-    setUserFormOpen(false);
-	};
-	const handleUserLoginClose = () => {
-    setUserLoginOpen(false);
-	};
+	const handleDelete = (timeId) => { removeTime(timeId) }
+	const handleEditUserName = () => { setUserFormOpen(true) }
+  const handleUserFormClose = () => { setUserFormOpen(false) }
+	const handleUserLoginClose = () => { setUserLoginOpen(false) }
+	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
 		start = new Date(start);
 		end = new Date(end);
-		const newTime = { 
-			start, 
-			end, 
-			calendar_id: calendar.id, 
-			user_id: currentUser.id 
+		const newTime = {
+			start,
+			end,
+			calendar_id: calendar.id,
+			user_id: currentUser.id
 		}
 		addTime(newTime);
 	}
 	const handleSelectEvent = (event) => {
 		const { start, end } = event;
-		const eventObj = {
+		const newEventObj = {
 			details: { start, end },
 			calendar_id: calendar.id,
 			user_id: currentUser.id
 		}
-		if (auth.code !== false) {
-			addEvent(eventObj);
-			navigateTo("/event");
-		} else {
-			localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObj }));
-			axios({
-				method: 'post',
-				url: 'http://localhost:8000/auth/google/getUrl'
-			}).then(response => {
-				window.location.replace(response.data.url);
-			}).catch(err =>{
-				console.error(err);
-			});
-		}
+		addEvent(newEventObj);
+		currentUser.id === event.user_id ? handleScheduleEventClick(newEventObj) : setEventClickFormOpen(true);
+	}
+	const handleSelectTimeClick = () => { handleSelectSlot(eventObj.details) }
+	const handleScheduleEventClick = (eventObject) => {
+		if (auth.code !== false) removeAuthCode();
+		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObject }));
+		axios({
+			method: 'post',
+			url: 'http://localhost:8000/auth/google/getUrl'
+		}).then(response => {
+			window.location.replace(response.data.url);
+		}).catch(err =>{
+			console.error(err);
+		});
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -331,6 +328,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, navigateTo, addTi
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
 			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} handleUserFormOpen={setUserFormOpen} />
+			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} 
+				handleSelectTimeClick={handleSelectTimeClick} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} />
 		</Fragment>
 	);
 }
@@ -340,7 +339,8 @@ const mapStateToProps = (state) => {
 		initialTimes: state.times,
 		calendar: state.calendar,
 		currentUser: state.user,
-		auth: state.auth
+		auth: state.auth,
+		eventObj: state.event
   }
 }
 
@@ -350,7 +350,8 @@ const mapDispatchToProps = (dispatch) => {
 		addTime: (timeObj) => { dispatch(addTimePending(timeObj)) },
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
-		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) }
+		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
+		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) }
 	}
 }
 
