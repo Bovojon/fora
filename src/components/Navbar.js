@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { useLocation } from 'react-router-dom';
+import moment from "moment";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { Clear, FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
@@ -89,6 +90,10 @@ const IconButton = styled(MuiIconButton)`
   cursor: pointer;
 `
 
+const startBeforeEnd = (start, end) => {
+  return moment(end).diff(moment(start)) > 0;
+}
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -146,7 +151,11 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, calendarUniqueId,
   const handleShareClick = () => { setModalIsOpen(true) };
   const handleScheduleClick = () => {
     const event = eventObj.details;
-    submitEvent({ event, code });
+    if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
+      submitEvent({ event, code });
+    } else {
+      console.log("**************************")
+    }
   };
   const toggleNavbar = () => { setCollapseIsOpen(!collapseIsOpen) };
   const handleModalClose = () => { setModalIsOpen(false) };
