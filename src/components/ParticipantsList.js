@@ -39,7 +39,7 @@ const ListItem = styled(MuiListItem)`
 const PencilIcon = styled(Create)`
   cursor: pointer;
 	display: none;
-  width: 5%;
+  width: 10%;
 `
 
 const NameArea = styled(Grid)`
