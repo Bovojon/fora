@@ -17,6 +17,12 @@ const DialogContent = styled(MuiDialogContent)`
   min-width: 320px;
 `
 
+const LightText = styled.span`
+  color: #5f6368;
+  font: 400 16px / 20px Roboto, sans-serif;
+  margin-bottom: 15px;
+`
+
 const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUser, updateUser }) => {
   let initialName = user?.name;
   let initialEmail = user?.email;
@@ -32,12 +38,8 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
     if (initialEmail !== null && typeof initialEmail !== "undefined") setEmail(initialEmail);
   }, [initialName, initialEmail]);
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
+  const handleNameChange = (event) => { setName(event.target.value) };
+  const handleEmailChange = (event) => { setEmail(event.target.value) };
   const handleSubmitClick = () => {
     const userObj = { email, name };
     const userId = user?.id;
@@ -47,18 +49,14 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
     }
     handleDialogClose();
   };
-  const handleNameKeyPress = (e) => {
-    if(e.keyCode === 13) inputRef.current.focus();
-  }
-  const handleEmailKeyPress = (e) => {
-    if(e.keyCode === 13) handleSubmitClick()
-  }
+  const handleNameKeyPress = (e) => { if(e.keyCode === 13) inputRef.current.focus() };
+  const handleEmailKeyPress = (e) => { if(e.keyCode === 13) handleSubmitClick() };
 
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
       <DialogContent>
         <Grid container direction="column" justify="center" alignItems="center">
-          <p>Add your name and email to receive calendar invites from other users.</p>
+          <LightText>Add your name and email to receive calendar invites from other users.</LightText>
           <TextField value={name.includes("Person") ? "" : name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" placeholder="Name" type="text" fullWidth margin="normal" autoFocus />
           <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" placeholder="Email" type="email" fullWidth margin="normal" />
         </Grid>
