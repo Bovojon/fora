@@ -29,60 +29,90 @@ const CustomDatePicker = styled(DatePicker)`
   width: 80%
 `
 
-const EventForm = ({ event, addEvent }) => {
+// const createAttendeesList = (participants) => {
+//   const attendeesList = [];
+//   participants.forEach(participant => {
+//     let emailAddresss = participant.email;
+//     if (emailAddresss !== null) attendeesList.push({ email: emailAddresss })
+//   });
+//   return attendeesList;
+// }
+
+// const event = {
+//   'summary': 'Google I/O 2015',
+//   'location': '800 Howard St., San Francisco, CA 94103',
+//   'description': 'A chance to hear more about Google\'s developer products.',
+//   'start': {
+//     'dateTime': '2020-12-14T09:00:00-07:00',
+//     'timeZone': 'America/Los_Angeles',
+//   },
+//   'end': {
+//     'dateTime': '2020-12-14T17:00:00-07:00',
+//     'timeZone': 'America/Los_Angeles',
+//   },
+//   'recurrence': [
+//     'RRULE:FREQ=DAILY;COUNT=2'
+//   ],
+//   'attendees': [
+//     {'email': 'bovojon@gmail.com'},
+//     {'email': 'jon.nadabot@gmail.com'}
+//   ],
+//   'reminders': {
+//     'useDefault': false,
+//     'overrides': [
+//       {'method': 'email', 'minutes': 24 * 60},
+//       {'method': 'popup', 'minutes': 10},
+//     ],
+//   },
+// }
+
+const EventForm = ({ event, participants, addEvent }) => {
   const [summary, setSummary] = useState("");
   const [startDateTime, setStartDateTime] = useState(new Date(event.details.start));
   const [endDateTime, setEndDateTime] = useState(new Date(event.details.end));
-  const [attendees, setAttendees] = useState([]);
+  const [attendeesList, setAttendeesList] = useState();
+  const [attendeesStr, setAttendeesStr] = useState("");
 
   useEffect(() => {
-    const event = {
-      'summary': 'Google I/O 2015',
-      'location': '800 Howard St., San Francisco, CA 94103',
-      'description': 'A chance to hear more about Google\'s developer products.',
-      'start': {
-        'dateTime': '2020-12-14T09:00:00-07:00',
-        'timeZone': 'America/Los_Angeles',
-      },
-      'end': {
-        'dateTime': '2020-12-14T17:00:00-07:00',
-        'timeZone': 'America/Los_Angeles',
-      },
-      'recurrence': [
-        'RRULE:FREQ=DAILY;COUNT=2'
-      ],
-      'attendees': [
-        {'email': 'bovojon@gmail.com'},
-        {'email': 'jon.nadabot@gmail.com'}
-      ],
-      'reminders': {
-        'useDefault': false,
-        'overrides': [
-          {'method': 'email', 'minutes': 24 * 60},
-          {'method': 'popup', 'minutes': 10},
-        ],
-      },
-    }
     const tizn = moment.tz.guess();
     const eventObj = {
       details: {
         summary,
-        start: {
-          dateTime: startDateTime,
-          timeZone: tizn,
-        },
-        end: {
-          dateTime: endDateTime,
-          timeZone: tizn,
-        }
+        start: { dateTime: startDateTime, timeZone: tizn },
+        end: { dateTime: endDateTime, timeZone: tizn },
+        attendees: attendeesList
       }
     }
     addEvent(eventObj);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [summary, startDateTime, endDateTime, attendees]);
+  }, [summary, startDateTime, endDateTime, attendeesStr]);
+
+  useEffect(() => {
+    if (typeof participants !== "undefined") {
+      const attendeeObjectList = [];
+      const attendeesList = [];
+      participants.forEach(participant => {
+        const emailAddresss = participant.email;
+        if (emailAddresss !== null) {
+          attendeeObjectList.push({ email: emailAddresss });
+          attendeesList.push(emailAddresss);
+        }
+      });
+      setAttendeesList(attendeeObjectList);
+      setAttendeesStr(attendeesList.length === 0 ? "" : attendeesList.join(", "));
+    }
+  }, [participants]);
 
   const handleSummaryChange = (event) => { setSummary(event.target.value) }
-  const handleAttendeesChange = (event) => { setAttendees(event.target.value) }
+  const handleAttendeesChange = (event) => {
+    const emails = event.target.value;
+    setAttendeesStr(emails);
+    const attendeesList = [];
+    emails.split(",").forEach(emailAddresss => {
+      attendeesList.push({ email: emailAddresss.trim() })
+    });
+    setAttendeesList(attendeesList);
+  }
 
   return (
     <Container>
@@ -125,7 +155,7 @@ const EventForm = ({ event, addEvent }) => {
               </InputContainer>
             </RowButton>
           </TwoColumn>
-          <TextField value={attendees} onChange={handleAttendeesChange} placeholder="Add guest emails" multiline rows={4} fullWidth margin="normal" variant="outlined" />
+          <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guest emails" multiline rows={4} fullWidth margin="normal" variant="outlined" />
         </FormContainer>
       </Content>
     </Container>
@@ -134,7 +164,8 @@ const EventForm = ({ event, addEvent }) => {
 
 const mapStateToProps = (state) => {
   return {
-		event: state.event
+    event: state.event,
+    participants: state.calendar?.participants
   }
 }
 
