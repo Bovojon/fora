@@ -196,6 +196,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
   const handleUserFormClose = () => { setUserFormOpen(false) }
 	const handleUserLoginClose = () => { setUserLoginOpen(false) }
 	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
+	const handleInitialDateRender = () => { if (times.length > 0) return new Date(times[0].start) }
+	const handleScrollToTime = () => {
+		if (times.length === 0) return new Date(0, 0, 0, 7, 0, 0);
+		return new Date(moment(times[0].start).subtract(2, 'hours'));
+	}
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
 		start = new Date(start);
@@ -208,15 +213,17 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		}
 		addTime(newTime);
 	}
-	const handleSelectEvent = (event) => {
-		const { start, end } = event;
-		const newEventObj = {
-			details: { start, end },
-			calendar_id: calendar.id,
-			user_id: currentUser.id
+	const handleSelectEvent = (event, e) => {
+		if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
+			const { start, end } = event;
+			const newEventObj = {
+				details: { start, end },
+				calendar_id: calendar.id,
+				user_id: currentUser.id
+			}
+			addEvent(newEventObj);
+			currentUser.id === event.user_id ? handleScheduleEventClick(newEventObj) : setEventClickFormOpen(true);
 		}
-		addEvent(newEventObj);
-		currentUser.id === event.user_id ? handleScheduleEventClick(newEventObj) : setEventClickFormOpen(true);
 	}
 	const handleSelectTimeClick = () => { handleSelectSlot(eventObj.details) }
 	const handleScheduleEventClick = (eventObject) => {
@@ -249,12 +256,12 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
 					<Header>{userName}</Header>
-					{canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
+					{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 				</TimeText>
-				{canEdit && <ClearIcon onClick={() => handleDelete(event.id)} />}
+				{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
 			</Grid>
 		);
 	}
@@ -287,12 +294,13 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								startAccessor="start"
 								endAccessor="end"
 								selectable
+								defaultDate={handleInitialDateRender()}
 								style={{height: "85vh"}}
 								defaultView={Views.WEEK}
 								views={{ month: true, week: true }}
-								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
+								scrollToTime={handleScrollToTime()}
 								onSelectSlot={handleSelectSlot}
-								onSelectEvent={handleSelectEvent}
+								onDoubleClickEvent={handleSelectEvent}
 								components = {{
 									toolbar : CustomToolbar,
 									event: CustomEvent,
