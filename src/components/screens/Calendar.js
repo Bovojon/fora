@@ -187,6 +187,10 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
+	useEffect(() => {
+		setUserFormOpen(typeof currentUser?.name === "undefined" ? false : currentUser.name.includes("Person"));
+	}, [currentUser]);
+
 	const handleDelete = (timeId) => { removeTime(timeId) }
 	const handleEditUserName = () => { setUserFormOpen(true) }
   const handleUserFormClose = () => { setUserFormOpen(false) }
