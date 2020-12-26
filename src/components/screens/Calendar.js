@@ -196,10 +196,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
   const handleUserFormClose = () => { setUserFormOpen(false) }
 	const handleUserLoginClose = () => { setUserLoginOpen(false) }
 	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
-	const handleScrollToTime = () => {
-		if (times.length === 0) return new Date(0, 0, 0, 7, 0, 0);
-		return new Date(moment(times[0].start).subtract(2, 'hours'));
-	}
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
 		start = new Date(start);
@@ -296,7 +292,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								style={{height: "85vh"}}
 								defaultView={Views.WEEK}
 								views={{ month: true, week: true }}
-								scrollToTime={handleScrollToTime()}
+								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 								onSelectSlot={handleSelectSlot}
 								onDoubleClickEvent={handleSelectEvent}
 								components = {{
