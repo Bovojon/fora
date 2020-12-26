@@ -5,12 +5,25 @@ import {
   Grid,
   Button,
   Dialog,
-  DialogActions,
-  DialogContent as MuiDialogContent
+  DialogActions as MuiDialogActions,
+  DialogContent as MuiDialogContent,
+  DialogContentText as MuiDialogContentText
 } from '@material-ui/core';
 
 const DialogContent = styled(MuiDialogContent)`
   min-width: 320px;
+  padding: 0px 30px;
+`
+
+const DialogContentText = styled(MuiDialogContentText)`
+  color: #5f6368;
+  font: 500 17px / 20px Roboto, sans-serif;
+  margin-bottom: 10px;
+  margin-top: 15px;
+`
+
+const DialogActions = styled(MuiDialogActions)`
+  padding: 18px 20px;
 `
 
 const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleScheduleEventClick, handleSelectTimeClick, eventObject }) => {
@@ -19,12 +32,12 @@ const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleSch
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
       <DialogContent>
-        <p>Would you like to add this slot to the list of selected times or proceed with scheduling a new event?</p>
+        <DialogContentText>Add this slot to the list of selected times or schedule a new event?</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Grid container direction="row" justify="flex-end" alignItems="center">
-          <Button onClick={handleSelectTimeClick} color="primary">Add to selected times</Button>
-          <Button onClick={handleScheduleClick} color="primary">Schedule new event</Button>
+        <Grid container direction="row" justify="space-evenly" alignItems="center">
+          <Button onClick={handleSelectTimeClick} variant="contained" disableElevation>Add to selected times</Button>
+          <Button onClick={handleScheduleClick} variant="contained" disableElevation>Schedule new event</Button>
         </Grid>
       </DialogActions>
     </Dialog>

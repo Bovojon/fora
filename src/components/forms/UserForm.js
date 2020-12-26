@@ -6,8 +6,9 @@ import {
   TextField,
   Button,
   Dialog,
-  DialogActions,
+  DialogActions as MuiDialogActions,
   DialogContent as MuiDialogContent,
+  DialogContentText as MuiDialogContentText,
   CircularProgress
 } from '@material-ui/core';
 
@@ -15,12 +16,18 @@ import { updateUserPending } from '../../actions/userActionCreators';
 
 const DialogContent = styled(MuiDialogContent)`
   min-width: 320px;
+  padding: 0px 30px;
 `
 
-const LightText = styled.span`
+const DialogContentText = styled(MuiDialogContentText)`
   color: #5f6368;
-  font: 400 16px / 20px Roboto, sans-serif;
-  margin-bottom: 15px;
+  font: 500 17px / 20px Roboto, sans-serif;
+  margin-bottom: 10px;
+  margin-top: 15px;
+`
+
+const DialogActions = styled(MuiDialogActions)`
+  padding: 18px 20px;
 `
 
 const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUser, updateUser }) => {
@@ -55,15 +62,15 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
       <DialogContent>
+        <DialogContentText>Add your name and email to receive calendar invites from other users.</DialogContentText>
         <Grid container direction="column" justify="center" alignItems="center">
-          <LightText>Add your name and email to receive calendar invites from other users.</LightText>
-          <TextField value={name.includes("Person") ? "" : name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" placeholder="Name" type="text" fullWidth margin="normal" autoFocus />
-          <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" placeholder="Email" type="email" fullWidth margin="normal" />
+          <TextField value={name.includes("Person") ? "" : name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" label="Name" type="text" fullWidth margin="normal" autoFocus />
+          <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" label="Email" type="email" fullWidth margin="normal" />
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmitClick} disabled={user.status.isLoading} color="primary">
-          { user.status.isLoading ? <CircularProgress size={24} /> : "Done" }
+        <Button onClick={handleSubmitClick} disabled={user.status.isLoading} variant="contained" disableElevation>
+          { user.status.isLoading ? <CircularProgress size={24} /> : "Submit" }
         </Button>
       </DialogActions>
     </Dialog>
