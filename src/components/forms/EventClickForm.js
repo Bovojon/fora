@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from "styled-components";
 import { 
   Grid,
-  Button,
+  Button as MuiButton,
   Dialog,
   DialogActions as MuiDialogActions,
   DialogContent as MuiDialogContent,
@@ -24,6 +24,10 @@ const DialogContentText = styled(MuiDialogContentText)`
 
 const DialogActions = styled(MuiDialogActions)`
   padding: 18px 20px;
+`
+
+const Button = styled(MuiButton)`
+  margin: 5px 0px;
 `
 
 const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleScheduleEventClick, handleSelectTimeClick, eventObject }) => {
