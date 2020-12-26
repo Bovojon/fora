@@ -176,6 +176,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [times, setTimes] = useState(initialTimes);
+	const [isOwner, setIsOwner] = useState(false);
+	const [timeSelectedObj, setTimeSelectedObj] = useState({});
 	const { calendarId } = useParams();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -210,6 +212,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}
 	const handleSelectEvent = (event, e) => {
 		if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
+			setIsOwner(currentUser.id === event.user_id);
+			setTimeSelectedObj(event);
 			const { start, end } = event;
 			const newEventObj = {
 				details: { start, end },
@@ -217,10 +221,10 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				user_id: currentUser.id
 			}
 			addEvent(newEventObj);
-			currentUser.id === event.user_id ? handleScheduleEventClick(newEventObj) : setEventClickFormOpen(true);
+			setEventClickFormOpen(true);
 		}
 	}
-	const handleSelectTimeClick = () => { handleSelectSlot(eventObj.details) }
+	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
 		if (auth.code !== false) removeAuthCode();
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObject }));
@@ -294,7 +298,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								views={{ month: true, week: true }}
 								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 								onSelectSlot={handleSelectSlot}
-								onDoubleClickEvent={handleSelectEvent}
+								onSelectEvent={handleSelectEvent}
 								components = {{
 									toolbar : CustomToolbar,
 									event: CustomEvent,
@@ -334,8 +338,10 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
 			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} handleUserFormOpen={setUserFormOpen} />
-			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} 
-				handleSelectTimeClick={handleSelectTimeClick} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} />
+			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} isOwner={isOwner} 
+				eventObj={eventObj} handleAddTime={handleAddTime} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} 
+				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj}
+			/>
 		</Fragment>
 	);
 }
