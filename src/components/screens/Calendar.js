@@ -196,7 +196,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
   const handleUserFormClose = () => { setUserFormOpen(false) }
 	const handleUserLoginClose = () => { setUserLoginOpen(false) }
 	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
-	const handleInitialDateRender = () => { if (times.length > 0) return new Date(times[0].start) }
 	const handleScrollToTime = () => {
 		if (times.length === 0) return new Date(0, 0, 0, 7, 0, 0);
 		return new Date(moment(times[0].start).subtract(2, 'hours'));
@@ -294,7 +293,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								startAccessor="start"
 								endAccessor="end"
 								selectable
-								defaultDate={handleInitialDateRender()}
 								style={{height: "85vh"}}
 								defaultView={Views.WEEK}
 								views={{ month: true, week: true }}
