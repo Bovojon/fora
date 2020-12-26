@@ -36,7 +36,7 @@ const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleSch
           {isOwner ?
             <Button onClick={handleDeleteClick} variant="contained" disableElevation>Remove Time</Button>
             :
-            <Button onClick={handleAddTimeClick} variant="contained" disableElevation>Add to selected times</Button>
+            <Button onClick={handleAddTimeClick} variant="contained" disableElevation>Select same time</Button>
           }
           <Button onClick={handleScheduleClick} variant="contained" disableElevation>Schedule new event</Button>
         </Grid>

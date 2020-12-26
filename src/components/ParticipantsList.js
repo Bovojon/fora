@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
 import { Create } from '@material-ui/icons';
@@ -37,7 +37,6 @@ const ListItem = styled(MuiListItem)`
 `
 
 const PencilIcon = styled(Create)`
-  cursor: pointer;
 	display: none;
   width: 10%;
 `
@@ -134,10 +133,18 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
               name = currentUser.name
             }
             const nameAndEditIcon = (
-              <NameArea container direction="row" justify="flex-start" alignItems="center">
-                <Name>{name}</Name>
-                {canEditName && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
-              </NameArea>
+              <Fragment>
+                {canEditName ?
+                  <NameArea onClick={handleEditUserName} container direction="row" justify="flex-start" alignItems="center" style={{ cursor: "pointer" }}>
+                    <Name>{name}</Name>
+                    <PencilIcon fontSize="small" />
+                  </NameArea>
+                  :
+                  <NameArea container direction="row" justify="flex-start" alignItems="center">
+                    <Name>{name}</Name>
+                  </NameArea>
+                }
+              </Fragment>
             );
             return (
               <ListItem key={participantId}>
