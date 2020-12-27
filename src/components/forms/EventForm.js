@@ -8,6 +8,7 @@ import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
 
 import { addEventPending } from '../../actions/eventActionCreators';
+import ErrorNotification from '../notifications/ErrorNotification';
 
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-5xl mx-auto py-20 lg:py-24`;
@@ -158,6 +159,7 @@ const EventForm = ({ event, participants, addEvent }) => {
           <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guest emails" multiline rows={4} fullWidth margin="normal" variant="outlined" />
         </FormContainer>
       </Content>
+      <ErrorNotification />
     </Container>
   );
 }

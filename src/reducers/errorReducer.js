@@ -1,7 +1,8 @@
-import { ERROR_ADDED } from '../actions/constants';
+import { ERROR_ADDED, ERROR_REMOVED } from '../actions/constants';
 
 const initialErrorObj = {
-  isError: false
+  isError: false,
+  errorMessage: ""
 }
 
 const errorReducer = (state=initialErrorObj, { type, payload }) => {
@@ -10,6 +11,9 @@ const errorReducer = (state=initialErrorObj, { type, payload }) => {
       const errorMessage = payload;
       const newState = { isError: true, errorMessage };
       return {...newState};
+    }
+    case ERROR_REMOVED: {
+      return initialErrorObj;
     }
     default:
       return state;

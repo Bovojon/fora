@@ -5,6 +5,7 @@ import { EVENT_SUBMITTED_PENDING } from '../actions/constants';
 import { history } from '../store/index.js';
 import { CalendarSelector } from '../selectors';
 import { removeAuthCodeSuccess } from '../actions/authActionCreators';
+import { addError } from '../actions/errorActionCreators';
 
 function navigateTo(route) {
   history.push(route);
@@ -21,7 +22,8 @@ function* submitEvent(action) {
       yield put(removeAuthCodeSuccess());
     }
   } catch(error) {
-    // Handle error here
+    const errorMessage = "Sorry, something went wrong and we couldn't schedule your event."
+    yield put(addError(errorMessage));
     console.error("Error in submitting event: ", error);
   }
 }
