@@ -10,10 +10,7 @@ import {
   DialogTitle as MuiDialogTitle,
   Dialog,
 } from '@material-ui/core';
-import {
-  Person as PersonIcon,
-  Add as AddIcon
-} from '@material-ui/icons';
+import { Add as AddIcon } from '@material-ui/icons';
 
 import { createUserPending, setCurrentUserPending } from '../../actions/userActionCreators';
 
