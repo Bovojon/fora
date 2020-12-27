@@ -149,7 +149,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
             return (
               <ListItem key={participantId}>
                 <ListItemAvatar>
-                  <Avatar background={background}>{name.charAt(0)}</Avatar>
+                  <Avatar background={background}>{name.charAt(0).toUpperCase()}</Avatar>
                 </ListItemAvatar>
                 <ListItemText id={participantId} primary={nameAndEditIcon} />
                 <ListItemSecondaryAction>
