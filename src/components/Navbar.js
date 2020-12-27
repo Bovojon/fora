@@ -27,6 +27,7 @@ import {
 
 import { createCalendarPending } from '../actions/calendarActionCreators';
 import { submitEventPending } from '../actions/eventActionCreators';
+import { addError } from '../actions/errorActionCreators';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -131,7 +132,7 @@ const RightButton = ({ handleFindTimeClick, handleScheduleClick, handleShareClic
   }
 }
 
-const MainNavbar = ({ navigateTo, createCalendar, submitEvent, calendarUniqueId, eventObj, code }) => {
+const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calendarUniqueId, eventObj, code }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -154,7 +155,8 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, calendarUniqueId,
     if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
       submitEvent({ event, code });
     } else {
-      console.log("**************************")
+      const errorMessage = "Please select a start time that is before the end time."
+      addError(errorMessage);
     }
   };
   const toggleNavbar = () => { setCollapseIsOpen(!collapseIsOpen) };
@@ -228,7 +230,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => { dispatch(push(route)) },
     createCalendar: () => { dispatch(createCalendarPending()) },
-    submitEvent: (eventCodeObj) => { dispatch(submitEventPending(eventCodeObj)) }
+    submitEvent: (eventCodeObj) => { dispatch(submitEventPending(eventCodeObj)) },
+    addError: (errorMessage) => { dispatch(addError(errorMessage)) }
   }
 }
 
