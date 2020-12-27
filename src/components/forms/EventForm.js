@@ -30,48 +30,11 @@ const CustomDatePicker = styled(DatePicker)`
   width: 80%
 `
 
-// const createAttendeesList = (participants) => {
-//   const attendeesList = [];
-//   participants.forEach(participant => {
-//     let emailAddresss = participant.email;
-//     if (emailAddresss !== null) attendeesList.push({ email: emailAddresss })
-//   });
-//   return attendeesList;
-// }
-
-// const event = {
-//   'summary': 'Google I/O 2015',
-//   'location': '800 Howard St., San Francisco, CA 94103',
-//   'description': 'A chance to hear more about Google\'s developer products.',
-//   'start': {
-//     'dateTime': '2020-12-14T09:00:00-07:00',
-//     'timeZone': 'America/Los_Angeles',
-//   },
-//   'end': {
-//     'dateTime': '2020-12-14T17:00:00-07:00',
-//     'timeZone': 'America/Los_Angeles',
-//   },
-//   'recurrence': [
-//     'RRULE:FREQ=DAILY;COUNT=2'
-//   ],
-//   'attendees': [
-//     {'email': 'bovojon@gmail.com'},
-//     {'email': 'jon.nadabot@gmail.com'}
-//   ],
-//   'reminders': {
-//     'useDefault': false,
-//     'overrides': [
-//       {'method': 'email', 'minutes': 24 * 60},
-//       {'method': 'popup', 'minutes': 10},
-//     ],
-//   },
-// }
-
 const EventForm = ({ event, participants, addEvent }) => {
   const [summary, setSummary] = useState("");
   const [startDateTime, setStartDateTime] = useState(new Date(event.details.start));
   const [endDateTime, setEndDateTime] = useState(new Date(event.details.end));
-  const [attendeesList, setAttendeesList] = useState();
+  const [attendeesList, setAttendeesList] = useState([]);
   const [attendeesStr, setAttendeesStr] = useState("");
 
   useEffect(() => {
