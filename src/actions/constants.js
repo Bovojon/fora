@@ -61,3 +61,4 @@ export const EVENT_SUBMITTED_ERROR = "EVENT_SUBMITTED_ERROR";
  * Error
  */
 export const ERROR_ADDED = "ERROR_ADDED";
+export const ERROR_REMOVED = "ERROR_REMOVED";
