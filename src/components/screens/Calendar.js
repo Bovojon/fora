@@ -41,9 +41,8 @@ import axios from 'axios';
 const localizer = momentLocalizer(moment);
 
 const Paper = styled(MuiPaper)`
-	height: 80vh;
+	height: 100%;
 	margin-top: 5vh;
-	padding: 14px;
 	width: 95%;
 `
 
@@ -313,7 +312,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						</Grid>
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
-								<Paper variant="outlined">
+								<Paper elevation={0}>
 									<ParticipantsList
 										participants={calendar.participants}
 										calendarUniqueId={calendar.unique_id}

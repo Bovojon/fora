@@ -39,11 +39,11 @@ const ClearIcon = styled(Clear)`
 `
 
 const Box = styled(MuiBox)`
-  height: 51vh;
+  height: 50vh;
 `
 
 const ListArea = styled(Grid)`
-  height: 46vh;
+  height: 45vh;
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 15px;
