@@ -166,9 +166,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
     setSnackBarIsOpen(true);
   };
   const handleSnackBarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setSnackBarIsOpen(false);
   };
   const shareLink = `letsfora.com/${calendarUniqueId}`

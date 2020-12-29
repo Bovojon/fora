@@ -6,16 +6,18 @@ import moment from "moment";
 import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
+import { Alert } from '@material-ui/lab';
 import {
 	Grid, 
-	Box as MuiBox, 
+	Box as MuiBox,
 	Paper as MuiPaper,
 	Button,
 	Select as MuiSelect,
 	MenuItem,
 	Tooltip,
 	Divider,
-	useMediaQuery
+	useMediaQuery,
+	Snackbar
 } from '@material-ui/core';
 import {
 	ArrowRight as ArrowRightIcon,
@@ -177,6 +179,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [times, setTimes] = useState(initialTimes);
 	const [isOwner, setIsOwner] = useState(false);
 	const [timeSelectedObj, setTimeSelectedObj] = useState({});
+	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
 	const { calendarId } = useParams();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -236,6 +239,10 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			console.error(err);
 		});
 	}
+	const handleScrollToBottom = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setScrollToBottomOpen(false);
+	};
 
 	const CustomEvent = ({ event }) => {
 		let userName;
@@ -341,6 +348,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				eventObj={eventObj} handleAddTime={handleAddTime} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} 
 				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj}
 			/>
+			<Box display={{ xs: 'block', md: 'none' }} m={1}>
+				<Snackbar open={scrollToBottomOpen} autoHideDuration={6000} onClose={handleScrollToBottom}>
+					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below to view times selected.</Alert>
+				</Snackbar>
+      </Box>
 		</Fragment>
 	);
 }
