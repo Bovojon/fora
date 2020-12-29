@@ -127,9 +127,10 @@ const CustomToolbar = (toolbar) => {
 	const handleBackClick = () => { toolbar.onNavigate('PREV'); };
 	const handleNextClick = () => { toolbar.onNavigate('NEXT'); };
 	const handleTodayClick = () => { toolbar.onNavigate('TODAY'); };
-	const monthYearLabel = () => {
+	const dateLabel = () => {
 		const toolbarDate = moment(toolbar.date);
-		return toolbarDate.format('MMM') + ' ' + toolbarDate.format('YYYY')
+		if (calendarView === "day") return toolbarDate.format('MMM D, YYYY');
+		return toolbarDate.format('MMM YYYY');
   };
 
 	return (
@@ -143,14 +144,15 @@ const CustomToolbar = (toolbar) => {
 				<Grid item md={4} xs={12}>
 					<Grid container direction="row" justify="space-between" alignItems="center">
 						<Button onClick={handleBackClick}><ArrowLeftIcon /></Button>
-						<span>{monthYearLabel()}</span>
+						<span>{dateLabel()}</span>
 						<Button onClick={handleNextClick}><ArrowRightIcon /></Button>
 					</Grid>
 				</Grid>
 				<Grid item md={1} xs={12}>
 					<Select value={calendarView} onChange={handleCalendarViewChange}>
-						<MenuItem value={'week'}>Week</MenuItem>
 						<MenuItem value={'month'}>Month</MenuItem>
+						<MenuItem value={'week'}>Week</MenuItem>
+						<MenuItem value={'day'}>Day</MenuItem>
 					</Select>
 				</Grid>
 			</Grid>
@@ -301,7 +303,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								selectable
 								style={{height: "85vh"}}
 								defaultView={Views.WEEK}
-								views={{ month: true, week: true }}
+								views={{ month: true, week: true, day: true }}
 								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
 								onSelectSlot={handleSelectSlot}
 								onSelectEvent={handleSelectEvent}
@@ -350,7 +352,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			/>
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={10000} onClose={handleScrollToBottom}>
-					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view the times selected.</Alert>
+					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view the selected times.</Alert>
 				</Snackbar>
       </Box>
 		</Fragment>
