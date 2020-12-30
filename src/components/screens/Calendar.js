@@ -352,7 +352,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			/>
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={10000} onClose={handleScrollToBottom}>
-					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view the selected times.</Alert>
+					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view others on this calendar and the selected times.</Alert>
 				</Snackbar>
       </Box>
 		</Fragment>

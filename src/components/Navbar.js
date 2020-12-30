@@ -142,7 +142,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
 }
 
 const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calendarUniqueId, eventObj, code }) => {
-  const [collapseIsOpen, setCollapseIsOpen] = useState(false);
+  const [collapseIsOpen, setCollapseIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
   const [aboutIsOpen, setAboutIsOpen] = useState(false);
@@ -150,13 +150,11 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
 
   const handleBrandClick = (e) => {
     e.preventDefault();
-    setCollapseIsOpen(false);
     navigateTo("/");
   }
   const handleFindTimeClick = (e) => {
     e.preventDefault();
     createCalendar();
-    setCollapseIsOpen(false);
     navigateTo("/creating_calendar");
   }
   const handleShareClick = () => { setModalIsOpen(true) };
