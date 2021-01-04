@@ -11,6 +11,7 @@ import LoadingNewCalendar from './components/screens/LoadingScreens/LoadingNewCa
 import LoadingAuth from './components/screens/LoadingScreens/LoadingAuth';
 import EventForm from './components/forms/EventForm';
 import NotFound from './components/screens/NotFound';
+import Privacy from './components/screens/Privacy';
 
 import "tailwindcss/dist/base.css";
 
@@ -30,6 +31,7 @@ const App = () => {
             <Route exact path="/event" component={EventForm} />
             <Route exact path="/auth/google" component={LoadingAuth} />
             <Route exact path="/creating_calendar" component={LoadingNewCalendar} />
+            <Route exact path="/privacy_policy" component={Privacy} />
             <Route exact path="/:calendarId" component={Calendar} />
             <Route component={NotFound} />
           </Switch>

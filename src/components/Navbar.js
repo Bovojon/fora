@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
 
 const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareClick, handleAboutClick }) => {
   const location = useLocation();
-  if (location.pathname === "/") {
+  if (location.pathname === "/" || location.pathname === "/privacy_policy") {
     return (
       <NavItem>
         <NavLinks>
