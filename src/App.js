@@ -7,7 +7,9 @@ import { history } from './store';
 import Navbar from "./components/Navbar";
 import Home from './components/screens/Home';
 import Calendar from './components/screens/Calendar';
-import LoadingTransition from './components/screens/LoadingTransition';
+import LoadingNewCalendar from './components/screens/LoadingScreens/LoadingNewCalendar';
+import LoadingAuth from './components/screens/LoadingScreens/LoadingAuth';
+import EventForm from './components/forms/EventForm';
 import NotFound from './components/screens/NotFound';
 import Privacy from './components/screens/Privacy';
 

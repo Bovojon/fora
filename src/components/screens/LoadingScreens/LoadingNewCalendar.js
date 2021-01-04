@@ -2,13 +2,11 @@ import React, { useEffect } from "react";
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
-import '../animations/styles/loading.scss';
+import '../../animations/styles/loading.scss';
 
-const LoadingTransition = ({ calendar, navigateTo }) => {
+const LoadingNewCalendar = ({ calendar, navigateTo }) => {
 	useEffect(() => {
-    if (calendar.status.isLoading === false) {
-      navigateTo(`/${calendar.unique_id}`);
-    }
+    if (calendar.status.isLoading === false) navigateTo(`/${calendar.unique_id}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendar]);
 
@@ -18,12 +16,10 @@ const LoadingTransition = ({ calendar, navigateTo }) => {
         <div className="roller"></div>
         <div className="roller"></div>
       </div>
-      
       <div id="loader2" className="loader">
         <div className="roller"></div>
         <div className="roller"></div>
       </div>
-      
       <div id="loader3" className="loader">
         <div className="roller"></div>
         <div className="roller"></div>
@@ -44,4 +40,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoadingTransition);
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingNewCalendar);

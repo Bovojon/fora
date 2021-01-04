@@ -39,11 +39,11 @@ const ClearIcon = styled(Clear)`
 `
 
 const Box = styled(MuiBox)`
-  height: 51vh;
+  height: 50vh;
 `
 
 const ListArea = styled(Grid)`
-  height: 46vh;
+  height: 45vh;
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 15px;
@@ -134,7 +134,7 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
                         {moment(time.start).format('ddd, MMM D')}
                       </Row>
                       <Row>
-                        {moment(time.start).format('h:mm a') + " – " + moment(time.end).format('h:mm a')} 
+                        {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
                       </Row>
                     </CardBody>
                   </Card>

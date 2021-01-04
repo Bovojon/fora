@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { useLocation } from 'react-router-dom';
+import moment from "moment";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { Clear, FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
@@ -24,7 +25,10 @@ import {
   Snackbar
 } from '@material-ui/core';
 
+import AboutDialog from './AboutDialog';
 import { createCalendarPending } from '../actions/calendarActionCreators';
+import { submitEventPending } from '../actions/eventActionCreators';
+import { addError } from '../actions/errorActionCreators';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -34,6 +38,13 @@ const NavbarBrand = styled(BootNavbarBrand)`
 const NavLinks = styled.div`
   ${tw`inline-block my-5`};
   a { ${tw`no-underline`} }
+`
+
+const NavLink = styled.a`
+  ${tw`text-lg my-2 lg:mx-6 lg:my-0 font-semibold tracking-wide transition
+  duration-300 pb-1 border-b-2 border-transparent hover:border-blue-500
+  hocus:text-blue-500 no-underline cursor-pointer`}
+  color: #4299e1 !important;
 `
 
 const PrimaryLink = styled.a`
@@ -88,6 +99,10 @@ const IconButton = styled(MuiIconButton)`
   cursor: pointer;
 `
 
+const startBeforeEnd = (start, end) => {
+  return moment(end).diff(moment(start)) > 0;
+}
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -130,61 +145,50 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
   const [collapseIsOpen, setCollapseIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
-  const location = useLocation();
+  const [aboutIsOpen, setAboutIsOpen] = useState(false);
   const classes = useStyles();
 
   const handleBrandClick = (e) => {
     e.preventDefault();
-    setCollapseIsOpen(false);
     navigateTo("/");
   }
   const handleFindTimeClick = (e) => {
     e.preventDefault();
-    createCalendarPending();
-    setCollapseIsOpen(false);
+    createCalendar();
     navigateTo("/creating_calendar");
   }
-  const toggleNavbar = () => {
-    setCollapseIsOpen(!collapseIsOpen);
+  const handleShareClick = () => { setModalIsOpen(true) };
+  const handleScheduleClick = () => {
+    const event = eventObj.details;
+    if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
+      submitEvent({ event, code });
+    } else {
+      const errorMessage = "Please select a start time that is before the end time."
+      addError(errorMessage);
+    }
   };
-  const handleShareClick = () => {
-    setModalIsOpen(true);
-  };
-  const handleModalClose = () => {
-    setModalIsOpen(false);
-  };
+  const toggleNavbar = () => { setCollapseIsOpen(!collapseIsOpen) };
+  const handleModalClose = () => { setModalIsOpen(false) };
   const handleCopyClick = (textToCopy) => {
     copy(textToCopy);
     setSnackBarIsOpen(true);
   };
   const handleSnackBarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setSnackBarIsOpen(false);
   };
+  const handleAboutClick = () => { setAboutIsOpen(true) }
+  const handleAboutClose = () => { setAboutIsOpen(false) }
   const shareLink = `letsfora.com/${calendarUniqueId}`
 
   return (
-    <>
+    <Fragment>
       <Navbar light expand="md" className="pl-md-5 pr-md-5">
         <NavbarBrand onClick={handleBrandClick} href="/">Fora</NavbarBrand>
         <NavbarToggler onClick={toggleNavbar} />
         <Collapse isOpen={collapseIsOpen} navbar>
           <Nav className="ml-auto" navbar>
-            {location.pathname === "/" ?
-              <NavItem>
-                <NavLinks>
-                  <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
-                </NavLinks>
-              </NavItem>
-              :
-              <NavItem>
-                <NavLinks>
-                  <PrimaryLink onClick={handleShareClick}>Share calendar</PrimaryLink>
-                </NavLinks>
-              </NavItem>
-            }
+            <RightSection handleFindTimeClick={handleFindTimeClick} handleScheduleClick={handleScheduleClick} handleShareClick={handleShareClick} handleAboutClick={handleAboutClick} />
           </Nav>
         </Collapse>
       </Navbar>
@@ -218,20 +222,25 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
         onClose={handleSnackBarClose}
         message="Copied calendar link"
       />
-    </>
+      <AboutDialog aboutIsOpen={aboutIsOpen} handleAboutClose={handleAboutClose} />
+    </Fragment>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
-    calendarUniqueId: state.calendar.unique_id
+    calendarUniqueId: state.calendar.unique_id,
+    eventObj: state.event,
+    code: state.auth.code
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => dispatch(push(route)),
-    createCalendarPending: () => dispatch(createCalendarPending())
+    navigateTo: (route) => { dispatch(push(route)) },
+    createCalendar: () => { dispatch(createCalendarPending()) },
+    submitEvent: (eventCodeObj) => { dispatch(submitEventPending(eventCodeObj)) },
+    addError: (errorMessage) => { dispatch(addError(errorMessage)) }
   }
 }
 
