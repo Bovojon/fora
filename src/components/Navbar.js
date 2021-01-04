@@ -96,8 +96,38 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MainNavbar = ({ navigateTo, createCalendarPending, calendarUniqueId }) => {
-  const [collapseIsOpen, setCollapseIsOpen] = useState(false);
+const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareClick, handleAboutClick }) => {
+  const location = useLocation();
+  if (location.pathname === "/" || location.pathname === "/privacy_policy") {
+    return (
+      <NavItem>
+        <NavLinks>
+          <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
+        </NavLinks>
+      </NavItem>
+    );
+  } else if (location.pathname === "/event") {
+    return (
+      <NavItem>
+        <NavLinks>
+          <PrimaryLink onClick={handleScheduleClick}>Schedule Event</PrimaryLink>
+        </NavLinks>
+      </NavItem>
+    )
+  } else {
+    return (
+      <NavItem>
+        <NavLinks>
+          <NavLink onClick={handleAboutClick}>About</NavLink>
+          <PrimaryLink onClick={handleShareClick}>Share calendar</PrimaryLink>
+        </NavLinks>
+      </NavItem>   
+    )
+  }
+}
+
+const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calendarUniqueId, eventObj, code }) => {
+  const [collapseIsOpen, setCollapseIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
   const location = useLocation();
