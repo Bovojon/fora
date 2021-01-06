@@ -111,12 +111,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareClick, handleAboutClick }) => {
+const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareClick, handleAboutClick, handlePrivacyClick }) => {
   const location = useLocation();
   if (location.pathname === "/" || location.pathname === "/privacy_policy") {
     return (
       <NavItem>
         <NavLinks>
+          <NavLink onClick={handlePrivacyClick}>Privacy Policy</NavLink>
           <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
         </NavLinks>
       </NavItem>
@@ -179,6 +180,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
   };
   const handleAboutClick = () => { setAboutIsOpen(true) }
   const handleAboutClose = () => { setAboutIsOpen(false) }
+  const handlePrivacyClick = () => { navigateTo("/privacy_policy") }
   const shareLink = `letsfora.com/${calendarUniqueId}`
 
   return (
@@ -188,7 +190,13 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
         <NavbarToggler onClick={toggleNavbar} />
         <Collapse isOpen={collapseIsOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <RightSection handleFindTimeClick={handleFindTimeClick} handleScheduleClick={handleScheduleClick} handleShareClick={handleShareClick} handleAboutClick={handleAboutClick} />
+            <RightSection 
+              handleFindTimeClick={handleFindTimeClick}
+              handleScheduleClick={handleScheduleClick}
+              handleShareClick={handleShareClick}
+              handleAboutClick={handleAboutClick}
+              handlePrivacyClick={handlePrivacyClick}
+            />
           </Nav>
         </Collapse>
       </Navbar>
