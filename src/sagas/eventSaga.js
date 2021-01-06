@@ -6,6 +6,7 @@ import { history } from '../store/index.js';
 import { CalendarSelector } from '../selectors';
 import { removeAuthCodeSuccess } from '../actions/authActionCreators';
 import { addError } from '../actions/errorActionCreators';
+import { addSuccess } from '../actions/successActionCreators';
 
 function navigateTo(route) {
   history.push(route);
@@ -18,6 +19,8 @@ function* submitEvent(action) {
     const status = yield result.status;
     if (status === 200) {
       const calendarUniqueId = yield select(CalendarSelector.getCalendarUniqueId);
+      const successMessage = "Successfully scheduled event!"
+      yield put(addSuccess(successMessage));
       yield call(navigateTo, `/${calendarUniqueId}`);
       yield put(removeAuthCodeSuccess());
     }

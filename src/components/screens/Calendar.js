@@ -32,6 +32,7 @@ import TimesList from '../TimesList';
 import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
+import SuccessNotification from '../notifications/SuccessNotification';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
@@ -355,6 +356,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view others on this calendar and the selected times.</Alert>
 				</Snackbar>
       </Box>
+			<SuccessNotification />
 		</Fragment>
 	);
 }
