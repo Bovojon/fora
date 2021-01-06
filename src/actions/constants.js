@@ -62,3 +62,9 @@ export const EVENT_SUBMITTED_ERROR = "EVENT_SUBMITTED_ERROR";
  */
 export const ERROR_ADDED = "ERROR_ADDED";
 export const ERROR_REMOVED = "ERROR_REMOVED";
+
+/**
+ * Success
+ */
+export const SUCCESS_ADDED = "SUCCESS_ADDED";
+export const SUCCESS_REMOVED = "SUCCESS_REMOVED";
