@@ -235,7 +235,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObject }));
 		axios({
 			method: 'post',
-			url: 'http://localhost:8000/auth/google/getUrl'
+			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
 		}).then(response => {
 			window.location.replace(response.data.url);
 		}).catch(err =>{
