@@ -33,6 +33,7 @@ import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
 import SuccessNotification from '../notifications/SuccessNotification';
+import ImportCalendar from '../ImportCalendar';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
@@ -323,6 +324,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
+									<ImportCalendar />
+									<Divider />
 									<ParticipantsList
 										participants={calendar.participants}
 										calendarUniqueId={calendar.unique_id}
