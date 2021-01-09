@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from "styled-components";
-import { 
+import {
   Grid,
   TextField,
   Button,
@@ -62,7 +62,7 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
       <DialogContent>
-        <DialogContentText>Add your name and email to receive calendar invites from other users.</DialogContentText>
+        <DialogContentText>Add your name and email if you wish to receive calendar invites from other users.</DialogContentText>
         <Grid container direction="column" justify="center" alignItems="center">
           <TextField value={name.includes("Person") ? "" : name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" label="Name" type="text" fullWidth margin="normal" autoFocus />
           <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" label="Email" type="email" fullWidth margin="normal" />
