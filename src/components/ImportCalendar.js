@@ -10,7 +10,7 @@ const Grid = styled(MuiGrid)`
 `
 
 const Button = styled(MuiButton)`
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   background-color: #4299e1;
   text-transform: none;
   font: 400 16px / 20px Roboto, sans-serif;
