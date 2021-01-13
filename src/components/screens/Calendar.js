@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import momentTimezone from "moment-timezone";
 import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
@@ -37,7 +36,8 @@ import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
-import { addEventPending, importEventsPending } from '../../actions/eventActionCreators';
+import { addEventPending } from '../../actions/eventActionCreators';
+import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
 import '../animations/styles/loading.scss';
 
 import axios from 'axios';
@@ -176,7 +176,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, importEvents }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
@@ -232,6 +232,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
+		if (auth.code !== false) removeAuthCode();
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObject }));
 		axios({
 			method: 'post',
@@ -242,86 +243,49 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			console.error(err);
 		});
 	}
-	const handleImportCalendarClick = () => {
-		if (auth.tokens !== false) {
-			if (tokens.expiry_date is expired) {
-				
-			}
-			if (localStorage.getItem('fora-token') === null || localStorage.getItem('fora-token') === "undefined" || ) no_access_token = false
-		}
-
-		
-		
-		const timeMin = moment(new Date()).subtract(1, 'day').toISOString();
-		const timeMax = moment(new Date()).add(1, 'month').toISOString();
-		const timeZone = momentTimezone.tz.guess();
-
-		
-		
-		importEvents({ timeMin, timeMax, timeZone });
-	}
 	const handleScrollToBottom = (event, reason) => {
     if (reason === 'clickaway') return;
     setScrollToBottomOpen(false);
 	};
 
 	const CustomEvent = ({ event }) => {
-		if (typeof event?.summary === "undefined") {
-			let userName;
-			let canEdit = false;
-			if (typeof event.creator?.name === "undefined") {
+		let userName;
+		let canEdit = false;
+		if (typeof event.creator?.name === "undefined") {
+			userName = currentUser.name;
+			canEdit = true;
+		} else {
+			userName = event.creator.name;
+			if (currentUser.id === event.creator.id) {
 				userName = currentUser.name;
 				canEdit = true;
-			} else {
-				userName = event.creator.name;
-				if (currentUser.id === event.creator.id) {
-					userName = currentUser.name;
-					canEdit = true;
-				}
 			}
-			return (
-				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
-					<NameArea container direction="row" justify="flex-start" alignItems="center">
-						<Header>{userName}</Header>
-						{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
-					</NameArea>
-					<TimeText>
-						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
-					</TimeText>
-					{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
-				</Grid>
-			);
 		}
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
-					<Header>{event.summary}</Header>
+					<Header>{userName}</Header>
+					{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 				</TimeText>
+				{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
 			</Grid>
 		);
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
 		if (typeof background === "undefined") background = currentUser.color;
-		const selectedStyle = {
+		const style = {
 			backgroundColor: background,
 			borderRadius: '3px',
 			opacity: 0.8,
 			border: '0px',
 			display: 'block'
 		};
-		const importedStyle = {
-			backgroundColor: 'black',
-			borderRadius: '3px',
-			opacity: 0.7,
-			border: '0px',
-			display: 'block'
-		}
 		return {
-				style: importedStyle
+				style: style
 		};
 	};
 
@@ -360,7 +324,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
-									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} />
+									<ImportCalendar />
 									<Divider />
 									<ParticipantsList
 										participants={calendar.participants}
@@ -417,7 +381,7 @@ const mapDispatchToProps = (dispatch) => {
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
 		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
-		importEvents: (calendarDetails) => { dispatch(importEventsPending(calendarDetails)) }
+		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) }
 	}
 }
 

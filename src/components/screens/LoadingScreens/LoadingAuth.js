@@ -3,30 +3,29 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { useLocation } from "react-router-dom";
 
-import { fetchAccessTokenPending } from '../../../actions/authActionCreators';
+import { addAuthCodeSuccess } from '../../../actions/authActionCreators';
 import { fetchCalendarSuccess } from '../../../actions/calendarActionCreators';
 import { setCurrentUserPending } from '../../../actions/userActionCreators';
-import { addEventPending, importEventsPending } from '../../../actions/eventActionCreators';
+import { addEventPending } from '../../../actions/eventActionCreators';
 import '../../animations/styles/loading.scss';
 
 const useQuery = () => { return new URLSearchParams(useLocation().search) }
 
-const LoadingAuth = ({ navigateTo, addCalendar, setCurrentUser, addEvent, fetchAccessToken, importEvents }) => {
-  if (localStorage.getItem('fora-token') !== null) {
-    console.log(localStorage.getItem('fora-token'))
-  }
-  
+const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, addEvent }) => {
   const query = useQuery();
   const code = query.get("code");
-  fetchAccessToken(code);
-  const localStorageFora = JSON.parse(localStorage.getItem('fora'));
-  const { calendar, currentUser, redirectUrl, calDetails } = localStorageFora;
+
+  const { calendar, currentUser, eventObject } = JSON.parse(localStorage.getItem('fora'));
   addCalendar(calendar);
   setCurrentUser(currentUser);
-  if (typeof localStorageFora?.eventObject !== "undefined") addEvent(localStorageFora.eventObject);
+  addEvent(eventObject);
   localStorage.removeItem('fora');
-  if (redirectUrl !== "/event") importEvents(calDetails);
-  navigateTo(redirectUrl);
+  if (code !== null) {
+    addAuthCode(code);
+    navigateTo("/event");
+  } else {
+    navigateTo(`/${calendar.unique_id}`);
+  }
 
 	return (
 		<div className="loader-wrapper">
@@ -49,11 +48,10 @@ const LoadingAuth = ({ navigateTo, addCalendar, setCurrentUser, addEvent, fetchA
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => { dispatch(push(route)) },
+    addAuthCode: (code) => { dispatch(addAuthCodeSuccess(code)) },
     addCalendar: (calendarObj) => { dispatch(fetchCalendarSuccess(calendarObj)) },
     setCurrentUser: (userObj) => { dispatch(setCurrentUserPending(userObj)) },
-    addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
-    fetchAccessToken: (code) => { dispatch(fetchAccessTokenPending(code)) },
-    importEvents: (calDetails) => { dispatch(importEventsPending(calDetails)) }
+    addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) }
   }
 }
 

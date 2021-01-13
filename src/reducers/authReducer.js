@@ -1,10 +1,17 @@
-import { ACCESS_TOKEN_FETCHED_SUCCESS } from '../actions/constants';
+import { AUTH_CODE_ADDED_SUCCESS, AUTH_CODE_REMOVE_SUCCESS } from '../actions/constants';
 
-const authReducer = (state={}, { type, payload }) => {
+const initialAuthObj = {
+  code: false
+}
+
+const authReducer = (state=initialAuthObj, { type, payload }) => {
   switch(type) {
-    case ACCESS_TOKEN_FETCHED_SUCCESS: {
-      const access_token = payload;
-      return {...state, access_token}
+    case AUTH_CODE_ADDED_SUCCESS: {
+      const code = payload;
+      return {...state, code};
+    }
+    case AUTH_CODE_REMOVE_SUCCESS: {
+      return initialAuthObj;
     }
     default:
       return state;
