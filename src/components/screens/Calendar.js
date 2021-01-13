@@ -181,6 +181,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [times, setTimes] = useState(initialTimes);
+	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
 	const [timeSelectedObj, setTimeSelectedObj] = useState({});
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
@@ -198,6 +199,25 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	useEffect(() => {
 		setUserFormOpen(typeof currentUser?.name === "undefined" ? false : currentUser.name.includes("Person"));
 	}, [currentUser]);
+
+	useEffect(() => {
+		const importedEvents = calendar.importedEvents;
+		if (typeof importedEvents === "undefined") {
+			setEvents(times);
+		} else {
+			const newImportedEvents = importedEvents.map(event => {
+				return {
+					start: new Date(event.start.dateTime),
+					end: new Date(event.end.dateTime),
+					summary: event.summary,
+					description: event.description,
+					location: event.location
+				}
+			})
+			setEvents([...times, ...newImportedEvents])
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [times, calendar.importedEvents]);
 
 	const handleDelete = (timeId) => { removeTime(timeId) }
 	const handleEditUserName = () => { setUserFormOpen(true) }
@@ -267,44 +287,62 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}
 
 	const CustomEvent = ({ event }) => {
-		let userName;
-		let canEdit = false;
-		if (typeof event.creator?.name === "undefined") {
-			userName = currentUser.name;
-			canEdit = true;
-		} else {
-			userName = event.creator.name;
-			if (currentUser.id === event.creator.id) {
+		if (typeof event?.summary === "undefined") {
+			let userName;
+			let canEdit = false;
+			if (typeof event.creator?.name === "undefined") {
 				userName = currentUser.name;
 				canEdit = true;
+			} else {
+				userName = event.creator.name;
+				if (currentUser.id === event.creator.id) {
+					userName = currentUser.name;
+					canEdit = true;
+				}
 			}
+			return (
+				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
+					<NameArea container direction="row" justify="flex-start" alignItems="center">
+						<Header>{userName}</Header>
+						{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
+					</NameArea>
+					<TimeText>
+						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
+					</TimeText>
+					{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
+				</Grid>
+			);
 		}
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
-					<Header>{userName}</Header>
-					{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
+					<Header>{event.summary}</Header>
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 				</TimeText>
-				{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
 			</Grid>
 		);
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
 		if (typeof background === "undefined") background = currentUser.color;
-		const style = {
+		const selectedStyle = {
 			backgroundColor: background,
 			borderRadius: '3px',
 			opacity: 0.8,
 			border: '0px',
 			display: 'block'
 		};
-		return {
-				style: style
-		};
+		const importedStyle = {
+			backgroundColor: 'black',
+			borderRadius: '3px',
+			opacity: 1,
+			border: `2px solid ${background}`,
+			display: 'block'
+		}
+		if (typeof event?.summary === "undefined") return { style: selectedStyle }
+		return { style: importedStyle }
 	};
 
 	return (
@@ -317,7 +355,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={8} xs={12}>
 							<BigCalendar
 								localizer={localizer}
-								events={times}
+								events={events}
 								startAccessor="start"
 								endAccessor="end"
 								selectable
