@@ -26,10 +26,10 @@ const LightText = styled.span`
   text-align: center
 `
 
-const ImportCalendar = () => {
+const ImportCalendar = ({ handleImportCalendarClick }) => {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Button variant="contained" color="primary" disableElevation>Import Calendar</Button>
+      <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
       <LightText>(Your calendar will not be visible to others.)</LightText>
     </Grid>
   );

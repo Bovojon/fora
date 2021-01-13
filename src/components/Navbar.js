@@ -142,7 +142,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
   }
 }
 
-const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calendarUniqueId, eventObj, code }) => {
+const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calendarUniqueId, eventObj }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
@@ -162,7 +162,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
   const handleScheduleClick = () => {
     const event = eventObj.details;
     if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
-      submitEvent({ event, code });
+      submitEvent({ event });
     } else {
       const errorMessage = "Please select a start time that is before the end time."
       addError(errorMessage);
@@ -238,8 +238,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
 const mapStateToProps = (state) => {
   return {
     calendarUniqueId: state.calendar.unique_id,
-    eventObj: state.event,
-    code: state.auth.code
+    eventObj: state.event
   }
 }
 
@@ -247,7 +246,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => { dispatch(push(route)) },
     createCalendar: () => { dispatch(createCalendarPending()) },
-    submitEvent: (eventCodeObj) => { dispatch(submitEventPending(eventCodeObj)) },
+    submitEvent: (eventObj) => { dispatch(submitEventPending(eventObj)) },
     addError: (errorMessage) => { dispatch(addError(errorMessage)) }
   }
 }
