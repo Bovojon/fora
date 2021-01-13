@@ -1,8 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import axios from 'axios';
 import { useParams } from "react-router-dom";
 import moment from "moment";
+import momentTimezone from "moment-timezone";
 import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
@@ -39,8 +41,6 @@ import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
 import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
 import '../animations/styles/loading.scss';
-
-import axios from 'axios';
 
 const localizer = momentLocalizer(moment);
 
@@ -233,7 +233,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
 		if (auth.code !== false) removeAuthCode();
-		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObject }));
+		const redirectUrl = '/event';
+		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, eventObject }));
 		axios({
 			method: 'post',
 			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
@@ -246,7 +247,24 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleScrollToBottom = (event, reason) => {
     if (reason === 'clickaway') return;
     setScrollToBottomOpen(false);
-	};
+	}
+	const handleImportCalendarClick = () => {
+		if (auth.code !== false) removeAuthCode();
+		const timeMin = moment(new Date()).subtract(1, 'day').toISOString();
+		const timeMax = moment(new Date()).add(1, 'month').toISOString();
+		const timeZone = momentTimezone.tz.guess();
+		const calendarDetails = { timeMin, timeMax, timeZone }
+		const redirectUrl = `/${calendar.unique_id}`
+		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, calendarDetails }));
+		axios({
+			method: 'post',
+			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
+		}).then(response => {
+			window.location.replace(response.data.url);
+		}).catch(err =>{
+			console.error(err);
+		});
+	}
 
 	const CustomEvent = ({ event }) => {
 		let userName;
@@ -324,7 +342,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
-									<ImportCalendar />
+									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} />
 									<Divider />
 									<ParticipantsList
 										participants={calendar.participants}

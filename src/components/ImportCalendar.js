@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 
 const Grid = styled(MuiGrid)`
-  margin-bottom: 10px;
+  margin-bottom: 25px;
 `
 
 const Button = styled(MuiButton)`
@@ -22,15 +22,15 @@ const Button = styled(MuiButton)`
 const LightText = styled.span`
   color: #5f6368;
   font: 400 15px / 20px Roboto, sans-serif;
-  margin-bottom: 15px;
   text-align: center
 `
 
-const ImportCalendar = () => {
+const ImportCalendar = ({ handleImportCalendarClick }) => {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Button variant="contained" color="primary" disableElevation>Import Calendar</Button>
-      <LightText>Import calendar to check available times. Your calendar will not be visible to others.</LightText>
+      <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
+      <LightText>Check when you're available.</LightText>
+      <LightText>Your calendar will not be visible to others.</LightText>
     </Grid>
   );
 }
