@@ -1,9 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import {
-  ACCESS_TOKEN_FETCHED_PENDING,
-  ACCESS_TOKEN_FETCHED_SUCCESS
-} from './constants';
+import { AUTH_CODE_ADDED_SUCCESS, AUTH_CODE_REMOVE_SUCCESS } from './constants';
 
-export const fetchAccessTokenPending = createAction(ACCESS_TOKEN_FETCHED_PENDING);
-export const fetchAccessTokenSuccess = createAction(ACCESS_TOKEN_FETCHED_SUCCESS);
+export const addAuthCodeSuccess = createAction(AUTH_CODE_ADDED_SUCCESS);
+export const removeAuthCodeSuccess = createAction(AUTH_CODE_REMOVE_SUCCESS);
