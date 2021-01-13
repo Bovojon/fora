@@ -30,7 +30,7 @@ const ImportCalendar = () => {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       <Button variant="contained" color="primary" disableElevation>Import Calendar</Button>
-      <LightText>(Your calendar will not be visible to others.)</LightText>
+      <LightText>Import calendar to check available times. Your calendar will not be visible to others.</LightText>
     </Grid>
   );
 }
