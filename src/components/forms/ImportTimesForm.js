@@ -68,7 +68,7 @@ const ImportTimesForm = ({ dialogIsOpen, handleDialogClose, handleImportClick, s
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm" classes={{ paper: classes.paper}}>
       <DialogTitle>
-        <span>Import from:</span>
+        <span>Date range</span>
         <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>
       </DialogTitle>
       <DialogContent>
