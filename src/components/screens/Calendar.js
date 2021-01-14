@@ -354,7 +354,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			backgroundColor: 'black',
 			borderRadius: '3px',
 			opacity: 1,
-			border: `2px solid ${background}`,
+			border: `3px solid ${background}`,
 			display: 'block'
 		}
 		if (typeof event?.summary === "undefined") return { style: selectedStyle }
