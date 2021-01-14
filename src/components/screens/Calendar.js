@@ -35,6 +35,7 @@ import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
 import ImportTimesForm from '../forms/ImportTimesForm';
+import EventDetails from '../EventDetails';
 import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
@@ -182,6 +183,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
+	const [eventDetailsOpen, setEventDetailsOpen] = useState(false);
+
 	const [times, setTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
@@ -189,6 +192,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
 	const [importStartTime, setImportStartTime] = useState(new Date(moment(new Date()).subtract(1, 'day')));
 	const [importEndTime, setImportEndTime] = useState(new Date(moment(new Date()).add(1, 'month')));
+	const [importedEventDetails, setImportedEventDetails] = useState({})
+	
 	const { calendarId } = useParams();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -255,7 +260,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				setEventClickFormOpen(true);
 			}
 		} else {
-			console.log("Opened imported event!")
+			setImportedEventDetails(event);
+			setEventDetailsOpen(true);
 		}
 	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
@@ -278,6 +284,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}
 	const handleImportCalendarClick = () => { setImportDialogOpen(true) }
 	const handleImportDialogClose = () => { setImportDialogOpen(false) }
+	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
 	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
 		const timeZone = momentTimezone.tz.guess();
@@ -418,8 +425,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} isOwner={isOwner} 
 				eventObj={eventObj} handleAddTime={handleAddTime} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} 
 				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj} />
-			<ImportTimesForm handleImportClick={handleImportClick} dialogIsOpen={importDialogOpen} handleDialogClose={handleImportDialogClose} 
+			<ImportTimesForm handleImportClick={handleImportClick} dialogIsOpen={importDialogOpen} handleDialogClose={handleImportDialogClose}
 				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} fullScreen={fullScreen} />
+			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={10000} onClose={handleScrollToBottom}>
 					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view others on this calendar and the selected times.</Alert>
