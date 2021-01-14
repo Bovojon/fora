@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import {
   Grid as MuiGrid,
-  Button as MuiButton
+  Button as MuiButton,
+  Divider
 } from '@material-ui/core';
 
 const Grid = styled(MuiGrid)`
@@ -25,13 +26,22 @@ const LightText = styled.span`
   text-align: center
 `
 
-const ImportCalendar = ({ handleImportCalendarClick }) => {
+const ImportCalendar = ({ handleImportCalendarClick, calendar }) => {
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
-      <LightText>Check when you're available.</LightText>
-      <LightText>Your calendar will not be visible to others.</LightText>
-    </Grid>
+    <Fragment>
+      {typeof calendar?.importedEvents === "undefined" ?
+        <Fragment>
+          <Grid container direction="column" justify="center" alignItems="center">
+            <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
+            <LightText>Check when you're available.</LightText>
+            <LightText>Your calendar will not be visible to others.</LightText>
+          </Grid>
+          <Divider />
+        </Fragment>
+        :
+        null
+      }
+    </Fragment>
   );
 }
 

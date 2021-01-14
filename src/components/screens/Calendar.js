@@ -34,6 +34,7 @@ import TimesList from '../TimesList';
 import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
+import ImportTimesForm from '../forms/ImportTimesForm';
 import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
@@ -180,11 +181,14 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
+	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [times, setTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
 	const [timeSelectedObj, setTimeSelectedObj] = useState({});
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
+	const [importStartTime, setImportStartTime] = useState(new Date(moment(new Date()).subtract(1, 'day')));
+	const [importEndTime, setImportEndTime] = useState(new Date(moment(new Date()).add(1, 'month')));
 	const { calendarId } = useParams();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -237,17 +241,21 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		addTime(newTime);
 	}
 	const handleSelectEvent = (event, e) => {
-		if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
-			setIsOwner(currentUser.id === event.user_id);
-			setTimeSelectedObj(event);
-			const { start, end } = event;
-			const newEventObj = {
-				details: { start, end },
-				calendar_id: calendar.id,
-				user_id: currentUser.id
+		if (typeof event?.summary === "undefined") {
+			if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
+				setIsOwner(currentUser.id === event.user_id);
+				setTimeSelectedObj(event);
+				const { start, end } = event;
+				const newEventObj = {
+					details: { start, end },
+					calendar_id: calendar.id,
+					user_id: currentUser.id
+				}
+				addEvent(newEventObj);
+				setEventClickFormOpen(true);
 			}
-			addEvent(newEventObj);
-			setEventClickFormOpen(true);
+		} else {
+			console.log("Opened imported event!")
 		}
 	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
@@ -268,11 +276,13 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
     if (reason === 'clickaway') return;
     setScrollToBottomOpen(false);
 	}
-	const handleImportCalendarClick = () => {
+	const handleImportCalendarClick = () => { setImportDialogOpen(true) }
+	const handleImportDialogClose = () => { setImportDialogOpen(false) }
+	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
-		const timeMin = moment(new Date()).subtract(1, 'day').toISOString();
-		const timeMax = moment(new Date()).add(1, 'month').toISOString();
 		const timeZone = momentTimezone.tz.guess();
+		const timeMin = importStartTime.toISOString();
+		const timeMax = importEndTime.toISOString();
 		const calendarDetails = { timeMin, timeMax, timeZone }
 		const redirectUrl = `/${calendar.unique_id}`
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, calendarDetails }));
@@ -380,8 +390,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
-									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} />
-									<Divider />
+									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} calendar={calendar} />
 									<ParticipantsList
 										participants={calendar.participants}
 										calendarUniqueId={calendar.unique_id}
@@ -408,8 +417,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} handleUserFormOpen={setUserFormOpen} />
 			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} isOwner={isOwner} 
 				eventObj={eventObj} handleAddTime={handleAddTime} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} 
-				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj}
-			/>
+				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj} />
+			<ImportTimesForm handleImportClick={handleImportClick} dialogIsOpen={importDialogOpen} handleDialogClose={handleImportDialogClose} 
+				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} fullScreen={fullScreen} />
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={10000} onClose={handleScrollToBottom}>
 					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view others on this calendar and the selected times.</Alert>
