@@ -64,7 +64,7 @@ const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
             <SmallTitle>Getting more details on imported events</SmallTitle>
             <LightText>If you import your calendar, you can click on the imported events on this calendar to view their details.</LightText>
             <SmallTitle>Removing imported events</SmallTitle>
-            <LightText>Just refresh the page to remove imported events.</LightText>
+            <LightText>Refresh the page to remove imported events.</LightText>
           </Grid>
         </DialogContent>
         <DialogActions>      
