@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, Fragment } from 'react';
 import moment from "moment";
 import styled from "styled-components";
 import { Close as CloseIcon } from '@material-ui/icons';
@@ -58,22 +58,34 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, eventObj }) => {
           </GridItem>
           <GridItem container direction="row" justify="flex-start" alignItems="center">
             <SmallTitle>Start: </SmallTitle>
-            <LightText>{moment(eventObj.start).format('ddd, MMM D, h:mma')}</LightText>
+            <LightText>{moment(eventObj.start).format('h:mma, ddd, MMM D')}</LightText>
           </GridItem>
           <GridItem container direction="row" justify="flex-start" alignItems="center">
             <SmallTitle>End: </SmallTitle>
-            <LightText>{moment(eventObj.end).format('ddd, MMM D, h:mma')}</LightText>
+            <LightText>{moment(eventObj.end).format('h:mma, ddd, MMM D')}</LightText>
           </GridItem>
           <GridItem container direction="row" justify="flex-start" alignItems="center">
-            <SmallTitle>Description: </SmallTitle>
-            <LightText>
-              {typeof eventObj?.description === "undefined" ? null : 
-              eventObj?.description.substring(0,50).trim().replace(/<\/?[^>]+(>|$)/g, "") + "..."}
-            </LightText>
+            {typeof eventObj?.description === "undefined" ?
+              null
+              :
+              <Fragment>
+                <SmallTitle>Description: </SmallTitle>
+                <LightText>
+                  {typeof eventObj?.description === "undefined" ? null :
+                  eventObj?.description.substring(0,50).trim().replace(/<\/?[^>]+(>|$)/g, "") + "..."}
+                </LightText>
+              </Fragment>
+            }
           </GridItem>
           <GridItem container direction="row" justify="flex-start" alignItems="center">
-            <SmallTitle>Location: </SmallTitle>
-            <LightText>{eventObj.location}</LightText>
+            {typeof eventObj?.location === "undefined" ?
+              null
+              :
+              <Fragment>
+                <SmallTitle>Location: </SmallTitle>
+                <LightText>{eventObj.location}</LightText>
+              </Fragment>
+            }
           </GridItem>
         </Grid>
       </DialogContent>
