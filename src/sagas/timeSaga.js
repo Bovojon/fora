@@ -3,6 +3,7 @@ import { call, takeLatest, all, put } from 'redux-saga/effects';
 import { TimeService } from '../services';
 import { TIME_ADDED_PENDING, TIME_REMOVED_PENDING} from '../actions/constants';
 import { addTimeSuccess, removeTimeSuccess } from '../actions/timeActionCreators';
+import { addError } from '../actions/errorActionCreators';
 
 function* createTime(action) {
   try {
@@ -13,6 +14,7 @@ function* createTime(action) {
     time.end = timeObj.end;
     yield put(addTimeSuccess(time));
   } catch(error) {
+    yield put(addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com."));
     console.error("Error in adding new time: ", error);
   }
 }
@@ -24,6 +26,7 @@ function* removeTime(action) {
     const { time_id } = yield timeResponse.data;
     yield put(removeTimeSuccess(time_id));
   } catch(error) {
+    yield put(addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com."));
     console.error("Error in removing time: ", error);
   }
 }
