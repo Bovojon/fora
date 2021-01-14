@@ -8,11 +8,13 @@ import { addAuthCodeSuccess } from '../../../actions/authActionCreators';
 import { fetchCalendarSuccess, importCalendarSuccess } from '../../../actions/calendarActionCreators';
 import { setCurrentUserPending } from '../../../actions/userActionCreators';
 import { addEventPending } from '../../../actions/eventActionCreators';
+import { addError } from '../../../actions/errorActionCreators';
+import { addSuccess } from '../../../actions/successActionCreators';
 import '../../animations/styles/loading.scss';
 
 const useQuery = () => { return new URLSearchParams(useLocation().search) }
 
-const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, addEvent, addImportedEvents }) => {
+const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, addEvent, addImportedEvents, addError, addSuccess }) => {
   const code = useQuery().get("code");
   const localStorageContent = JSON.parse(localStorage.getItem('fora'));
   const { calendar, currentUser, redirectUrl } = localStorageContent;
@@ -26,7 +28,9 @@ const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, add
       data: { ...calendarDetails, code }
 		}).then(response => {
       addImportedEvents(response.data.events.data.items)
-		}).catch(err =>{
+      addSuccess("Successfully imported calendar!")
+		}).catch(err => {
+      addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com.");
 			console.error(err);
 		});
   } else {
@@ -35,6 +39,7 @@ const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, add
       const { eventObject } = localStorageContent;
       addEvent(eventObject);
     } else {
+      addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com.");
       navigateTo(`/${calendar.unique_id}`);
       return
     }
@@ -67,7 +72,9 @@ const mapDispatchToProps = (dispatch) => {
     addCalendar: (calendarObj) => { dispatch(fetchCalendarSuccess(calendarObj)) },
     setCurrentUser: (userObj) => { dispatch(setCurrentUserPending(userObj)) },
     addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
-    addImportedEvents: (events) => { dispatch(importCalendarSuccess(events)) }
+    addImportedEvents: (events) => { dispatch(importCalendarSuccess(events)) },
+    addError: (errorMessage) => { dispatch(addError(errorMessage)) },
+    addSuccess: (successMessage) => { dispatch(addSuccess(successMessage)) }
   }
 }
 

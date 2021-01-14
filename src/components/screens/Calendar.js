@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
+import { addError } from '../../actions/errorActionCreators';
 import {
 	Grid, 
 	Box as MuiBox,
@@ -178,7 +179,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
@@ -228,6 +229,18 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [times, calendar.importedEvents]);
 
+	const getUrlAndRedirect = () => {
+		axios({
+			method: 'post',
+			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
+		}).then(response => {
+			window.location.replace(response.data.url);
+		}).catch(err =>{
+			addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com.");
+			console.error(err);
+		});
+	}
+
 	const handleDelete = (timeId) => { removeTime(timeId) }
 	const handleEditUserName = () => { setUserFormOpen(true) }
   const handleUserFormClose = () => { setUserFormOpen(false) }
@@ -269,14 +282,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		if (auth.code !== false) removeAuthCode();
 		const redirectUrl = '/event';
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, eventObject }));
-		axios({
-			method: 'post',
-			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
-		}).then(response => {
-			window.location.replace(response.data.url);
-		}).catch(err =>{
-			console.error(err);
-		});
+		getUrlAndRedirect();
 	}
 	const handleScrollToBottom = (event, reason) => {
     if (reason === 'clickaway') return;
@@ -293,14 +299,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const calendarDetails = { timeMin, timeMax, timeZone }
 		const redirectUrl = `/${calendar.unique_id}`
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, calendarDetails }));
-		axios({
-			method: 'post',
-			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
-		}).then(response => {
-			window.location.replace(response.data.url);
-		}).catch(err =>{
-			console.error(err);
-		});
+		getUrlAndRedirect();
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -455,7 +454,8 @@ const mapDispatchToProps = (dispatch) => {
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
 		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
-		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) }
+		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) },
+		addError: (errorMessage) => { dispatch(addError(errorMessage)) }
 	}
 }
 
