@@ -61,6 +61,10 @@ const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
             <LightText>To edit your name or email, click on your name in the list of users.</LightText>
             <SmallTitle>Adding a time that is already on the calendar</SmallTitle>
             <LightText>To add the same time, click on the time on the calendar and choose "Select Same Time".</LightText>
+            <SmallTitle>Getting more details on imported events</SmallTitle>
+            <LightText>If you import your calendar, you can click on the imported events on this calendar to view their details.</LightText>
+            <SmallTitle>Removing imported events</SmallTitle>
+            <LightText>Just refresh the page to remove imported events.</LightText>
           </Grid>
         </DialogContent>
         <DialogActions>      
