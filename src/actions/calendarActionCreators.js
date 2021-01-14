@@ -9,7 +9,9 @@ import {
   CALENDAR_FETCHED_SUCCESS,
 
   CALENDAR_ADDED_USER_PENDING,
-  CALENDAR_ADDED_USER_SUCCESS
+  CALENDAR_ADDED_USER_SUCCESS,
+
+  CALENDAR_IMPORTED_SUCCESS
 } from './constants';
 
 export const createCalendarPending = createAction(CALENDAR_CREATED_PENDING);
@@ -21,3 +23,5 @@ export const fetchCalendarSuccess = createAction(CALENDAR_FETCHED_SUCCESS);
 
 export const addUserToCalendarPending = createAction(CALENDAR_ADDED_USER_PENDING);
 export const addUserToCalendarSuccess = createAction(CALENDAR_ADDED_USER_SUCCESS);
+
+export const importCalendarSuccess = createAction(CALENDAR_IMPORTED_SUCCESS);

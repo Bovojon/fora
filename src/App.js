@@ -12,6 +12,8 @@ import LoadingAuth from './components/screens/LoadingScreens/LoadingAuth';
 import EventForm from './components/forms/EventForm';
 import NotFound from './components/screens/NotFound';
 import Privacy from './components/screens/Privacy';
+import ErrorNotification from './components/notifications/ErrorNotification';
+import SuccessNotification from './components/notifications/SuccessNotification';
 
 import "tailwindcss/dist/base.css";
 
@@ -36,6 +38,8 @@ const App = () => {
             <Route component={NotFound} />
           </Switch>
         </ConnectedRouter>
+        <ErrorNotification />
+        <SuccessNotification />
       </StyledDiv>
   )
 }

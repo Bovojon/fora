@@ -1,12 +1,15 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import axios from 'axios';
 import { useParams } from "react-router-dom";
 import moment from "moment";
+import momentTimezone from "moment-timezone";
 import styled from 'styled-components';
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
+import { addError } from '../../actions/errorActionCreators';
 import {
 	Grid, 
 	Box as MuiBox,
@@ -32,14 +35,15 @@ import TimesList from '../TimesList';
 import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
+import ImportTimesForm from '../forms/ImportTimesForm';
+import EventDetails from '../EventDetails';
 import SuccessNotification from '../notifications/SuccessNotification';
+import ImportCalendar from '../ImportCalendar';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
 import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
 import '../animations/styles/loading.scss';
-
-import axios from 'axios';
 
 const localizer = momentLocalizer(moment);
 
@@ -175,14 +179,22 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
+	const [importDialogOpen, setImportDialogOpen] = useState(false);
+	const [eventDetailsOpen, setEventDetailsOpen] = useState(false);
+
 	const [times, setTimes] = useState(initialTimes);
+	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
 	const [timeSelectedObj, setTimeSelectedObj] = useState({});
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
+	const [importStartTime, setImportStartTime] = useState(new Date(moment(new Date()).subtract(1, 'day')));
+	const [importEndTime, setImportEndTime] = useState(new Date(moment(new Date()).add(1, 'month')));
+	const [importedEventDetails, setImportedEventDetails] = useState({})
+	
 	const { calendarId } = useParams();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -197,6 +209,37 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	useEffect(() => {
 		setUserFormOpen(typeof currentUser?.name === "undefined" ? false : currentUser.name.includes("Person"));
 	}, [currentUser]);
+
+	useEffect(() => {
+		const importedEvents = calendar.importedEvents;
+		if (typeof importedEvents === "undefined") {
+			setEvents(times);
+		} else {
+			const newImportedEvents = importedEvents.map(event => {
+				return {
+					start: new Date(event.start.dateTime),
+					end: new Date(event.end.dateTime),
+					summary: event.summary,
+					description: event.description,
+					location: event.location
+				}
+			})
+			setEvents([...times, ...newImportedEvents])
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [times, calendar.importedEvents]);
+
+	const getUrlAndRedirect = () => {
+		axios({
+			method: 'post',
+			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
+		}).then(response => {
+			window.location.replace(response.data.url);
+		}).catch(err =>{
+			addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com.");
+			console.error(err);
+		});
+	}
 
 	const handleDelete = (timeId) => { removeTime(timeId) }
 	const handleEditUserName = () => { setUserFormOpen(true) }
@@ -216,76 +259,106 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		addTime(newTime);
 	}
 	const handleSelectEvent = (event, e) => {
-		if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
-			setIsOwner(currentUser.id === event.user_id);
-			setTimeSelectedObj(event);
-			const { start, end } = event;
-			const newEventObj = {
-				details: { start, end },
-				calendar_id: calendar.id,
-				user_id: currentUser.id
+		if (typeof event?.summary === "undefined") {
+			if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
+				setIsOwner(currentUser.id === event.user_id);
+				setTimeSelectedObj(event);
+				const { start, end } = event;
+				const newEventObj = {
+					details: { start, end },
+					calendar_id: calendar.id,
+					user_id: currentUser.id
+				}
+				addEvent(newEventObj);
+				setEventClickFormOpen(true);
 			}
-			addEvent(newEventObj);
-			setEventClickFormOpen(true);
+		} else {
+			setImportedEventDetails(event);
+			setEventDetailsOpen(true);
 		}
 	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
 		if (auth.code !== false) removeAuthCode();
-		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, eventObject }));
-		axios({
-			method: 'post',
-			url: `${process.env.REACT_APP_URL}/auth/google/getUrl`
-		}).then(response => {
-			window.location.replace(response.data.url);
-		}).catch(err =>{
-			console.error(err);
-		});
+		const redirectUrl = '/event';
+		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, eventObject }));
+		getUrlAndRedirect();
 	}
 	const handleScrollToBottom = (event, reason) => {
     if (reason === 'clickaway') return;
     setScrollToBottomOpen(false);
-	};
+	}
+	const handleImportCalendarClick = () => { setImportDialogOpen(true) }
+	const handleImportDialogClose = () => { setImportDialogOpen(false) }
+	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
+	const handleImportClick = () => {
+		if (auth.code !== false) removeAuthCode();
+		const timeZone = momentTimezone.tz.guess();
+		const timeMin = importStartTime.toISOString();
+		const timeMax = importEndTime.toISOString();
+		const calendarDetails = { timeMin, timeMax, timeZone }
+		const redirectUrl = `/${calendar.unique_id}`
+		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, calendarDetails }));
+		getUrlAndRedirect();
+	}
 
 	const CustomEvent = ({ event }) => {
-		let userName;
-		let canEdit = false;
-		if (typeof event.creator?.name === "undefined") {
-			userName = currentUser.name;
-			canEdit = true;
-		} else {
-			userName = event.creator.name;
-			if (currentUser.id === event.creator.id) {
+		if (typeof event?.summary === "undefined") {
+			let userName;
+			let canEdit = false;
+			if (typeof event.creator?.name === "undefined") {
 				userName = currentUser.name;
 				canEdit = true;
+			} else {
+				userName = event.creator.name;
+				if (currentUser.id === event.creator.id) {
+					userName = currentUser.name;
+					canEdit = true;
+				}
 			}
+			return (
+				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
+					<NameArea container direction="row" justify="flex-start" alignItems="center">
+						<Header>{userName}</Header>
+						{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
+					</NameArea>
+					<TimeText>
+						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
+					</TimeText>
+					{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
+				</Grid>
+			);
 		}
 		return (
 			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 				<NameArea container direction="row" justify="flex-start" alignItems="center">
-					<Header>{userName}</Header>
-					{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
+					<Header>{event.summary}</Header>
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 				</TimeText>
-				{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
 			</Grid>
 		);
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
 		if (typeof background === "undefined") background = currentUser.color;
-		const style = {
+		const selectedStyle = {
 			backgroundColor: background,
 			borderRadius: '3px',
 			opacity: 0.8,
 			border: '0px',
 			display: 'block'
 		};
-		return {
-				style: style
-		};
+		const importedStyle = {
+			backgroundColor: 'black',
+			borderRadius: '3px',
+			opacity: 1,
+			border: `3px solid ${background}`,
+			display: 'block'
+		}
+		if (typeof event?.summary === "undefined") return { style: selectedStyle }
+		return { style: importedStyle }
 	};
 
 	return (
@@ -298,7 +371,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={8} xs={12}>
 							<BigCalendar
 								localizer={localizer}
-								events={times}
+								events={events}
 								startAccessor="start"
 								endAccessor="end"
 								selectable
@@ -323,6 +396,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
+									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} calendar={calendar} />
 									<ParticipantsList
 										participants={calendar.participants}
 										calendarUniqueId={calendar.unique_id}
@@ -349,8 +423,10 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} handleUserFormOpen={setUserFormOpen} />
 			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} isOwner={isOwner} 
 				eventObj={eventObj} handleAddTime={handleAddTime} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} 
-				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj}
-			/>
+				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj} />
+			<ImportTimesForm handleImportClick={handleImportClick} dialogIsOpen={importDialogOpen} handleDialogClose={handleImportDialogClose}
+				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} fullScreen={fullScreen} />
+			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={10000} onClose={handleScrollToBottom}>
 					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view others on this calendar and the selected times.</Alert>
@@ -378,7 +454,8 @@ const mapDispatchToProps = (dispatch) => {
 		removeTime: (timeId) => { dispatch(removeTimePending(timeId)) },
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
 		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
-		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) }
+		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) },
+		addError: (errorMessage) => { dispatch(addError(errorMessage)) }
 	}
 }
 

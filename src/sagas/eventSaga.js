@@ -19,14 +19,12 @@ function* submitEvent(action) {
     const status = yield result.status;
     if (status === 200) {
       const calendarUniqueId = yield select(CalendarSelector.getCalendarUniqueId);
-      const successMessage = "Successfully scheduled event!"
-      yield put(addSuccess(successMessage));
+      yield put(addSuccess("Successfully scheduled event!"));
       yield call(navigateTo, `/${calendarUniqueId}`);
       yield put(removeAuthCodeSuccess());
     }
   } catch(error) {
-    const errorMessage = "Sorry, something went wrong and we couldn't schedule your event."
-    yield put(addError(errorMessage));
+    yield put(addError("Sorry, something went wrong and we couldn't schedule your event."));
     console.error("Error in submitting event: ", error);
   }
 }

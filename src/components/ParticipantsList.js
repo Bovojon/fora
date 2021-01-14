@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 
 const Box = styled(MuiBox)`
-  height: 22vh;
+  height: 24vh;
   overflow: auto;
 `
 
@@ -117,52 +117,50 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   }, [participants]);
   
   return (
-    <Fragment>
+    <Box m={2}>
       <Header><h4>Others on this calendar:</h4></Header>
-      <Box my={2}>
-        {isLoading ? 
-          <LoadingListSkeleton />
-          :
-          <List>
-            {participants.map((participant) => {
-              const participantId = participant.id;
-              let canEditName = false;
-              let name = participant.name;
-              let background = participant?.color;
-              if (currentUser.id === participantId) {
-                canEditName = true;
-                name = currentUser.name
-              }
-              const nameAndEditIcon = (
-                <Fragment>
-                  {canEditName ?
-                    <NameArea onClick={handleEditUserName} container direction="row" justify="flex-start" alignItems="center" style={{ cursor: "pointer" }}>
-                      <Name>{name}</Name>
-                      <PencilIcon fontSize="small" />
-                    </NameArea>
-                    :
-                    <NameArea container direction="row" justify="flex-start" alignItems="center">
-                      <Name>{name}</Name>
-                    </NameArea>
-                  }
-                </Fragment>
-              );
-              return (
-                <ListItem key={participantId}>
-                  <ListItemAvatar>
-                    <Avatar background={background}>{name.charAt(0).toUpperCase()}</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText id={participantId} primary={nameAndEditIcon} />
-                  <ListItemSecondaryAction>
-                    <Checkbox edge="end" onChange={handleCheckBoxClick(participantId)} checked={checked.indexOf(participantId) !== -1} inputProps={{ 'aria-labelledby': participantId }} color="default" />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })}
-          </List>
-        }
-      </Box>
-    </Fragment>
+      {isLoading ? 
+        <LoadingListSkeleton />
+        :
+        <List>
+          {participants.map((participant) => {
+            const participantId = participant.id;
+            let canEditName = false;
+            let name = participant.name;
+            let background = participant?.color;
+            if (currentUser.id === participantId) {
+              canEditName = true;
+              name = currentUser.name
+            }
+            const nameAndEditIcon = (
+              <Fragment>
+                {canEditName ?
+                  <NameArea onClick={handleEditUserName} container direction="row" justify="flex-start" alignItems="center" style={{ cursor: "pointer" }}>
+                    <Name>{name}</Name>
+                    <PencilIcon fontSize="small" />
+                  </NameArea>
+                  :
+                  <NameArea container direction="row" justify="flex-start" alignItems="center">
+                    <Name>{name}</Name>
+                  </NameArea>
+                }
+              </Fragment>
+            );
+            return (
+              <ListItem key={participantId}>
+                <ListItemAvatar>
+                  <Avatar background={background}>{name.charAt(0).toUpperCase()}</Avatar>
+                </ListItemAvatar>
+                <ListItemText id={participantId} primary={nameAndEditIcon} />
+                <ListItemSecondaryAction>
+                  <Checkbox edge="end" onChange={handleCheckBoxClick(participantId)} checked={checked.indexOf(participantId) !== -1} inputProps={{ 'aria-labelledby': participantId }} color="default" />
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
+        </List>
+      }
+    </Box>
   );
 }
 

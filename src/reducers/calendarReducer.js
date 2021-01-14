@@ -3,7 +3,8 @@ import {
   CALENDAR_CREATED_PENDING,
   CALENDAR_CREATED_SUCCESS, 
   CALENDAR_ADDED_USER_SUCCESS,
-  CALENDAR_FETCHED_SUCCESS
+  CALENDAR_FETCHED_SUCCESS,
+  CALENDAR_IMPORTED_SUCCESS
 } from "../actions/constants";
 
 const initialCalendarObj = {
@@ -29,6 +30,10 @@ const calendarReducer = (state=initialCalendarObj, { type, payload }) => {
     case CALENDAR_ADDED_USER_SUCCESS: {
       const calendarObj = payload;
       return {...state, ...calendarObj}
+    }
+    case CALENDAR_IMPORTED_SUCCESS: {
+      const importedEvents = payload;
+      return {...state, importedEvents}
     }
     default:
       return state

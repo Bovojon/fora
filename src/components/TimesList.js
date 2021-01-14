@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import moment from "moment";
 import styled from 'styled-components';
 import { Clear, Create } from '@material-ui/icons';
@@ -76,73 +76,71 @@ const NameArea = styled(Grid)`
 
 const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initialTimes }) => {
   return (
-    <Box mt={4}>
+    <Box mt={2}>
       {initialTimes.length === 0 ?
         <Header><h4>Click and drag on the calendar to select times.</h4></Header>
         :
-        <Fragment>
+        <ListArea>
           <Header><h4>Selected times:</h4></Header>
-          <ListArea>
-            {times.map(time => {
-              let userName;
-              let canEdit = false;
-              let background = time.creator?.color;
-		          if (typeof background === "undefined") background = currentUser.color;
-              if (typeof time.creator?.name === "undefined") {
+          {times.map(time => {
+            let userName;
+            let canEdit = false;
+            let background = time.creator?.color;
+            if (typeof background === "undefined") background = currentUser.color;
+            if (typeof time.creator?.name === "undefined") {
+              userName = currentUser.name;
+              canEdit = true;
+            } else {
+              userName = time.creator.name;
+              if (currentUser.id === time.creator.id) {
                 userName = currentUser.name;
                 canEdit = true;
-              } else {
-                userName = time.creator.name;
-                if (currentUser.id === time.creator.id) {
-                  userName = currentUser.name;
-                  canEdit = true;
-                }
               }
-              if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
-                return (
-                  <Card key={time.id} body background={background}>
-                    <CardBody>
-                      <TopRightArea>
-                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
-                      </TopRightArea>
-                      <Row>
-                        <NameArea container direction="row" justify="flex-start" alignItems="center">
-                          <NameHeader>{userName}</NameHeader>
-                          {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
-                        </NameArea>
-                      </Row>
-                      <Row>
-                        {moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
-                      </Row>
-                    </CardBody>
-                  </Card>
-                );
-              } else {
-                return (
-                  <Card key={time.id} body background={background}>
-                    <CardBody>
-                      <TopRightArea>
-                        {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
-                      </TopRightArea>
-                      <Row>
-                        <NameArea container direction="row" justify="flex-start" alignItems="center">
-                          <NameHeader>{userName}</NameHeader>
-                          {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
-                        </NameArea>
-                      </Row>
-                      <Row>
-                        {moment(time.start).format('ddd, MMM D')}
-                      </Row>
-                      <Row>
-                        {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
-                      </Row>
-                    </CardBody>
-                  </Card>
-                );
-              }
-            })}
-          </ListArea>
-        </Fragment>
+            }
+            if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
+              return (
+                <Card key={time.id} body background={background}>
+                  <CardBody>
+                    <TopRightArea>
+                      {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
+                    </TopRightArea>
+                    <Row>
+                      <NameArea container direction="row" justify="flex-start" alignItems="center">
+                        <NameHeader>{userName}</NameHeader>
+                        {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
+                      </NameArea>
+                    </Row>
+                    <Row>
+                      {moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
+                    </Row>
+                  </CardBody>
+                </Card>
+              );
+            } else {
+              return (
+                <Card key={time.id} body background={background}>
+                  <CardBody>
+                    <TopRightArea>
+                      {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
+                    </TopRightArea>
+                    <Row>
+                      <NameArea container direction="row" justify="flex-start" alignItems="center">
+                        <NameHeader>{userName}</NameHeader>
+                        {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
+                      </NameArea>
+                    </Row>
+                    <Row>
+                      {moment(time.start).format('ddd, MMM D')}
+                    </Row>
+                    <Row>
+                      {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
+                    </Row>
+                  </CardBody>
+                </Card>
+              );
+            }
+          })}
+        </ListArea>
       }
     </Box>
   );

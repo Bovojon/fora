@@ -1,4 +1,4 @@
-import { AUTH_CODE_ADDED_SUCCESS, AUTH_CODE_REMOVE_SUCCESS } from '../actions/constants';
+import { AUTH_CODE_ADDED_SUCCESS, AUTH_CODE_REMOVED_SUCCESS } from '../actions/constants';
 
 const initialAuthObj = {
   code: false
@@ -10,7 +10,7 @@ const authReducer = (state=initialAuthObj, { type, payload }) => {
       const code = payload;
       return {...state, code};
     }
-    case AUTH_CODE_REMOVE_SUCCESS: {
+    case AUTH_CODE_REMOVED_SUCCESS: {
       return initialAuthObj;
     }
     default:
