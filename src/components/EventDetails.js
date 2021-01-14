@@ -58,11 +58,11 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, eventObj }) => {
           </GridItem>
           <GridItem container direction="row" justify="flex-start" alignItems="center">
             <SmallTitle>Start: </SmallTitle>
-            <LightText>{moment(eventObj.start).format('h:mma, ddd, MMM D')}</LightText>
+            <LightText>{moment(eventObj.start).format('h:mma, ddd, MMM D YYYY')}</LightText>
           </GridItem>
           <GridItem container direction="row" justify="flex-start" alignItems="center">
             <SmallTitle>End: </SmallTitle>
-            <LightText>{moment(eventObj.end).format('h:mma, ddd, MMM D')}</LightText>
+            <LightText>{moment(eventObj.end).format('h:mma, ddd, MMM D YYYY')}</LightText>
           </GridItem>
           <GridItem container direction="row" justify="flex-start" alignItems="center">
             {typeof eventObj?.description === "undefined" ?
