@@ -117,7 +117,6 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
     return (
       <NavItem>
         <NavLinks>
-          <NavLink onClick={handlePrivacyClick}>Privacy Policy</NavLink>
           <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
         </NavLinks>
       </NavItem>
@@ -190,7 +189,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
         <NavbarToggler onClick={toggleNavbar} />
         <Collapse isOpen={collapseIsOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <RightSection 
+            <RightSection
               handleFindTimeClick={handleFindTimeClick}
               handleScheduleClick={handleScheduleClick}
               handleShareClick={handleShareClick}
