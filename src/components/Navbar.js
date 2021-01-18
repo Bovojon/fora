@@ -13,7 +13,7 @@ import {
   NavbarToggler,
   Collapse,
   Nav,
-  NavItem
+  NavItem as BootNavItem
 } from 'reactstrap';
 import { 
   Grid,
@@ -41,18 +41,16 @@ const NavLinks = styled.div`
 `
 
 const NavLink = styled.a`
-  ${tw`text-lg my-2 lg:mx-6 lg:my-0 font-semibold tracking-wide transition
+  ${tw`text-base md:text-lg my-2 lg:mx-6 lg:my-0 font-semibold tracking-wide transition
   duration-300 pb-1 border-b-2 border-transparent hover:border-blue-500
   hocus:text-blue-500 no-underline cursor-pointer`}
   color: #4299e1 !important;
 `
 
 const PrimaryLink = styled.a`
-  ${tw`lg:mx-0 px-4 py-3 bg-blue-500 ml-3 hover:bg-blue-700 
-    hover:shadow-outline border-b-0 font-semibold cursor-pointer`}
+  ${tw`lg:mx-0 px-4 py-2 bg-blue-500 ml-3 hover:bg-blue-700 text-base md:text-lg
+    hover:shadow-outline border-b-0 font-semibold cursor-pointer rounded-lg`}
   color: white !important;
-  font-size: 18px;
-  border-radius: 0.8rem;
 `
 
 const ModalContent = styled(Grid)`
@@ -99,6 +97,12 @@ const IconButton = styled(MuiIconButton)`
   cursor: pointer;
 `
 
+const NavItem = styled(BootNavItem)`
+  ${NavLinks} {
+    ${tw`flex flex-col md:flex-row items-center`}
+  }
+`
+
 const startBeforeEnd = (start, end) => {
   return moment(end).diff(moment(start)) > 0;
 }
@@ -117,7 +121,8 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
     return (
       <NavItem>
         <NavLinks>
-          <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
+          <NavLink onClick={handlePrivacyClick}>Privacy</NavLink>
+          <PrimaryLink onClick={handleFindTimeClick}>Schedule event</PrimaryLink>
         </NavLinks>
       </NavItem>
     );
@@ -125,7 +130,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
     return (
       <NavItem>
         <NavLinks>
-          <PrimaryLink onClick={handleScheduleClick}>Schedule Event</PrimaryLink>
+          <PrimaryLink onClick={handleScheduleClick}>Schedule event</PrimaryLink>
         </NavLinks>
       </NavItem>
     )

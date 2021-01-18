@@ -5,19 +5,29 @@ import tw from "twin.macro";
 import styled from "styled-components";
 
 import Reveal from "../animations/Reveal";
-
 import TeamIllustration from "../../images/team-illustration-2.svg";
 
 const Container = tw.div`relative`;
-const TwoColumn = tw.div`flex flex-col lg:flex-row lg:items-center max-w-screen-xl mx-auto py-20 md:py-24 md:px-6`;
+const TwoColumn = tw.div`flex flex-col lg:flex-row lg:items-center max-w-screen-xl mx-auto py-8 md:px-6`;
 const LeftColumn = tw.div`relative lg:w-5/12 text-center max-w-lg mx-auto lg:max-w-none lg:text-left`;
 const RightColumn = tw.div`relative mt-12 lg:mt-0 flex-1 flex flex-col justify-center lg:self-end sm:ml-4 md:ml-20`;
-const Heading = tw.h1`font-bold text-3xl md:text-3xl lg:text-4xl xl:text-5xl text-gray-900 leading-tight`;
-const Paragraph = tw.p`my-5 lg:my-8 text-base xl:text-lg`;
+const ContentWithPaddingXl= tw.div`max-w-screen-xl mx-auto py-8`;
+const SingleColumn = tw.div`flex flex-col items-center`;
+const TextContent = tw.div`lg:py-8 text-center md:text-left`;
+const Paragraph = tw.p`my-5 lg:my-8 text-base xl:text-lg text-gray-700`;
 const Column = tw.div`w-full max-w-md mx-auto md:max-w-none md:mx-0`;
 const ImageColumn = tw(Column)`md:w-10/12 flex-shrink-0 h-full md:h-auto`;
 const BlueHighlight = tw.span`text-blue-500`;
-
+const Steps = tw.ul`mt-4`;
+const Step = tw.li`mt-8 flex flex-col md:flex-row items-center md:items-start`;
+const StepNumber = tw.div`font-semibold text-4xl leading-none text-gray-400`;
+const StepText = tw.div`mt-3 md:mt-0 md:ml-6`;
+const StepHeading = tw.h6`leading-none text-xl font-semibold`;
+const StepDescription = tw.p`mt-3 max-w-xs leading-loose text-sm text-gray-600 font-medium`;
+const Heading = styled.h1(props => [
+  tw`font-bold text-3xl md:text-3xl lg:text-4xl text-gray-800 leading-tight`,
+  props.textOnCenter ? tw`text-center` : tw`text-center md:text-left`
+]);
 const Actions = styled.div`
   ${tw`relative max-w-md text-center mx-auto lg:mx-0`}
   input {
@@ -31,20 +41,38 @@ const Actions = styled.div`
 const Home = ({ navigateTo }) => {
   const [inputId, setInputId] = useState('');
 
-  const handleInputChange = (event) => {
-    setInputId(event.target.value);
-  }
-  const handleJoinClick = () => {
-    navigateTo(`/${inputId}`);
-  }
+  const handleInputChange = (event) => { setInputId(event.target.value) }
+  const handleJoinClick = () => { navigateTo(`/${inputId}`) }
+
+  const steps = [
+    {
+      heading: "Create",
+      description: "Create a one-off calendar on Fora."
+    },
+    {
+      heading: "Pick",
+      description: "Pick some times that work for you by clicking and dragging on your Fora calendar."
+    },
+    {
+      heading: "Share",
+      description: "Share the link (or id) of your Fora calendar."
+    },
+    {
+      heading: "Schedule",
+      description: "They pick a time and the event is added to your personal calendar (Google, Apple, etc.)."
+    }
+  ];
 
   return (
     <Reveal>
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading>Find a time that works <BlueHighlight>for all.</BlueHighlight></Heading>
-            <Paragraph>Create a new calendar and share it with other people to schedule a time.</Paragraph>
+            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule group events</Heading>
+            <Paragraph>
+              Create a one-off calendar on <BlueHighlight>Fora</BlueHighlight> and share it with other people to 
+              <BlueHighlight> schedule an event.</BlueHighlight>
+            </Paragraph>
             <Actions>
               <input value={inputId} onChange={handleInputChange} type="text" placeholder="Enter calendar id" />
               <button onClick={handleJoinClick}>Join</button>
@@ -56,6 +84,24 @@ const Home = ({ navigateTo }) => {
             </ImageColumn>
           </RightColumn>
         </TwoColumn>
+        <ContentWithPaddingXl>
+          <SingleColumn>
+            <TextContent>
+              <Heading textOnCenter>How it works</Heading>
+              <Steps>
+                {steps.map((step, index) => (
+                  <Step key={index}>
+                    <StepNumber>{(index+1).toString().padStart(2,'0')}</StepNumber>
+                    <StepText>
+                      <StepHeading>{step.heading}</StepHeading>
+                      <StepDescription>{step.description}</StepDescription>
+                    </StepText>
+                  </Step>
+                ))}
+              </Steps>
+            </TextContent>
+          </SingleColumn>
+        </ContentWithPaddingXl>
       </Container>
     </Reveal>
   );
