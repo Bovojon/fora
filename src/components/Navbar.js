@@ -48,10 +48,9 @@ const NavLink = styled.a`
 `
 
 const PrimaryLink = styled.a`
-  ${tw`lg:mx-0 px-4 py-3 bg-blue-500 ml-3 hover:bg-blue-700 text-base md:text-lg
-    hover:shadow-outline border-b-0 font-semibold cursor-pointer`}
+  ${tw`lg:mx-0 px-4 py-2 bg-blue-500 ml-3 hover:bg-blue-700 text-base md:text-lg
+    hover:shadow-outline border-b-0 font-semibold cursor-pointer rounded-lg`}
   color: white !important;
-  border-radius: 0.8rem;
 `
 
 const ModalContent = styled(Grid)`
@@ -123,7 +122,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
       <NavItem>
         <NavLinks>
           <NavLink onClick={handlePrivacyClick}>Privacy</NavLink>
-          <PrimaryLink onClick={handleFindTimeClick}>Create new calendar</PrimaryLink>
+          <PrimaryLink onClick={handleFindTimeClick}>Schedule event</PrimaryLink>
         </NavLinks>
       </NavItem>
     );
@@ -131,7 +130,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
     return (
       <NavItem>
         <NavLinks>
-          <PrimaryLink onClick={handleScheduleClick}>Schedule Event</PrimaryLink>
+          <PrimaryLink onClick={handleScheduleClick}>Schedule event</PrimaryLink>
         </NavLinks>
       </NavItem>
     )
