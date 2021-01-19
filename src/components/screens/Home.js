@@ -68,7 +68,7 @@ const Home = ({ navigateTo }) => {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule group meetings</Heading>
+            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule meetings with friends and family</Heading>
             <Paragraph>
               Create a one-off calendar on <BlueHighlight>Fora</BlueHighlight> and share it with other people to 
               <BlueHighlight> schedule an event.</BlueHighlight>

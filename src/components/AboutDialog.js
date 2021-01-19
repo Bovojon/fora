@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import styled from "styled-components";
+import tw from "twin.macro";
 import { Close as CloseIcon } from '@material-ui/icons';
 import {
   Dialog,
@@ -31,6 +32,8 @@ const IconButton = styled(MuiIconButton)`
   color: theme.palette.grey[500]
 `
 
+const Heading = tw.h1`font-bold text-lg text-gray-800 leading-tight text-center mt-5 mb-4`
+
 const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
   const descriptionElementRef = useRef(null);
   
@@ -49,8 +52,18 @@ const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
       </DialogTitle>
       <DialogContent dividers={true}>
         <Grid container direction="column" justify="center" alignItems="flex-start">
+          <SmallTitle>What is Fora?</SmallTitle>
+          <LightText>
+            Fora is an easy-to-use group scheduling tool that easily integrates with your preferred/existing calendar apps (Google, Apple, etc.).
+          </LightText>
+          <SmallTitle>Why Fora?</SmallTitle>
+          <LightText>
+            Nothing builds friendships more than spending time together. Whether it’s a casual get-together or a big event, virtual or
+            in-person, Fora helps you easily schedule meetings with friends and family.
+          </LightText>
           <SmallTitle>Contact us</SmallTitle>
           <LightText>If you have any questions, reach out to us at letsfora@gmail.com.</LightText>
+          <Heading>How do I use Fora?</Heading>
           <SmallTitle>Selecting a new time</SmallTitle>
           <LightText>Click and drag on the calendar to select times.</LightText>
           <SmallTitle>Scheduling a new event and sending invites</SmallTitle>
