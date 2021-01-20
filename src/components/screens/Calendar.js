@@ -407,10 +407,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 									/>
 									<Divider />
 									<TimesList
-										times={times.sort(timeSorter)} 
-										handleDelete={handleDelete} 
-										currentUser={currentUser} 
-										handleEditUserName={handleEditUserName} 
+										times={times.sort(timeSorter)}
+										handleDelete={handleDelete}
+										handleSelectEvent={handleSelectEvent}
+										handleEditUserName={handleEditUserName}
+										currentUser={currentUser}
 										initialTimes={initialTimes}
 									/>
 								</Paper>
