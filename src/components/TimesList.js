@@ -1,8 +1,17 @@
-import React from "react";
+import React, { Fragment } from "react";
 import moment from "moment";
 import styled from 'styled-components';
 import { Clear, Create } from '@material-ui/icons';
-import { Box as MuiBox, Grid } from '@material-ui/core';
+import {
+  Box as MuiBox,
+  Grid,
+  Paper as MuiPaper,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Checkbox,
+} from '@material-ui/core';
 import { 
 	Card as ReactCard,
   CardBody as ReactCardBody,
@@ -51,10 +60,16 @@ const ListArea = styled(Grid)`
   padding: 0px 13px;
 `
 
-const Header = styled.span`
+const Header = styled.h4`
   font-size: 1.5em;
   text-align: center;
   color: #4299e1;
+`
+
+const LightText = styled.p`
+  color: #5f6368;
+  font: 400 15px / 20px Roboto, sans-serif;
+  text-align: center
 `
 
 const PencilIcon = styled(Create)`
@@ -75,14 +90,39 @@ const NameArea = styled(Grid)`
   }
 `
 
+const Paper = styled(MuiPaper)`
+  padding: 15px;
+  margin-bottom: 10px;
+`
+
 const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes }) => {
   return (
     <Box mt={2}>
+      <ListArea>
       {initialTimes.length === 0 ?
-        <Header><h4>Click and drag on the calendar to select times.</h4></Header>
+        <Fragment>
+          <Header>Welcome to your new Fora calendar!</Header>
+          <LightText>Here are some quick tips to get your started:</LightText>
+          <Paper variant="outlined">
+            <List>
+              <ListItem key={1}>
+                <ListItemAvatar>
+                  <Checkbox edge="end" checked={true} color="default" />
+                </ListItemAvatar>
+                <ListItemText primary={"Click and drag on the calendar to pick new times."} />
+              </ListItem>
+              <ListItem key={2}>
+                <ListItemAvatar>
+                  <Checkbox edge="end" checked={true} color="default" />
+                </ListItemAvatar>
+                <ListItemText primary={"Click on a selected time to remove it or to schedule a new event."} />
+              </ListItem>
+            </List>
+          </Paper>
+        </Fragment>
         :
-        <ListArea>
-          <Header><h4>Selected times:</h4></Header>
+        <Fragment>
+          <Header>Selected times:</Header>
           {times.map(time => {
             let userName;
             let canEdit = false;
@@ -141,8 +181,9 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
               );
             }
           })}
-        </ListArea>
+        </Fragment>
       }
+      </ListArea>
     </Box>
   );
 }
