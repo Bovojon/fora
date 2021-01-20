@@ -14,7 +14,8 @@ const Card = styled(ReactCard)`
   color: white;
   border: 0px;
 	padding: 0.7rem;
-	margin-bottom: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
 `;
 
 const CardBody = styled(ReactCardBody)`
@@ -74,7 +75,7 @@ const NameArea = styled(Grid)`
   }
 `
 
-const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initialTimes }) => {
+const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes }) => {
   return (
     <Box mt={2}>
       {initialTimes.length === 0 ?
@@ -99,15 +100,15 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
             }
             if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
               return (
-                <Card key={time.id} body background={background}>
+                <Card key={time.id} onClick={(event) => handleSelectEvent(time, event)} body background={background}>
                   <CardBody>
                     <TopRightArea>
-                      {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
+                      {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}
                     </TopRightArea>
                     <Row>
                       <NameArea container direction="row" justify="flex-start" alignItems="center">
                         <NameHeader>{userName}</NameHeader>
-                        {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
+                        {canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
                       </NameArea>
                     </Row>
                     <Row>
@@ -118,15 +119,15 @@ const TimesList = ({ times, handleDelete, currentUser, handleEditUserName, initi
               );
             } else {
               return (
-                <Card key={time.id} body background={background}>
+                <Card key={time.id} onClick={(event) => handleSelectEvent(time, event)} body background={background}>
                   <CardBody>
                     <TopRightArea>
-                      {canEdit && <ClearIcon onClick={() => handleDelete(time.id)} />}
+                      {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}
                     </TopRightArea>
                     <Row>
                       <NameArea container direction="row" justify="flex-start" alignItems="center">
                         <NameHeader>{userName}</NameHeader>
-                        {canEdit && <PencilIcon onClick={handleEditUserName} fontSize="small" />}
+                        {canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
                       </NameArea>
                     </Row>
                     <Row>
