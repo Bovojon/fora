@@ -102,7 +102,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
       {initialTimes.length === 0 ?
         <Fragment>
           <Header>Welcome to your new Fora calendar!</Header>
-          <LightText>Here are some quick tips to get your started:</LightText>
+          <LightText>Here are some quick tips to help you get started:</LightText>
           <Paper variant="outlined">
             <List>
               <ListItem key={1}>
