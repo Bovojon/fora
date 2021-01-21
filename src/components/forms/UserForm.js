@@ -16,7 +16,7 @@ import { updateUserPending } from '../../actions/userActionCreators';
 
 const DialogContent = styled(MuiDialogContent)`
   min-width: 320px;
-  padding: 0px 30px;
+  padding: 25px 35px 0px 35px !important;
 `
 
 const DialogContentText = styled(MuiDialogContentText)`
@@ -27,7 +27,7 @@ const DialogContentText = styled(MuiDialogContentText)`
 `
 
 const DialogActions = styled(MuiDialogActions)`
-  padding: 18px 20px;
+  padding: 30px 20px 30px 20px !important;
 `
 
 const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUser, updateUser }) => {

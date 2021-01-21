@@ -54,7 +54,7 @@ const PrimaryLink = styled.a`
 `
 
 const ModalContent = styled(Grid)`
-  padding: 0px 25px 0px 25px;
+  padding: 15px 35px 15px 35px;
   border-radius: 8px;
   background-color: #fff;
   max-width: 400px;
@@ -75,7 +75,7 @@ const CopyArea = styled(Grid)`
   border-radius: 10px;
   color: #5f6368;
   display: flex;
-  padding: 0px 15px;
+  padding: 5px 17px;
 `
 
 const LinkText = styled.span`
