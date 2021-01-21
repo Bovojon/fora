@@ -69,7 +69,6 @@ const Header = styled.h4`
 const LightText = styled.p`
   color: #5f6368;
   font: 400 15px / 20px Roboto, sans-serif;
-  text-align: center
 `
 
 const PencilIcon = styled(Create)`
@@ -91,7 +90,7 @@ const NameArea = styled(Grid)`
 `
 
 const Paper = styled(MuiPaper)`
-  padding: 15px;
+  padding: 5px;
   margin-bottom: 10px;
 `
 
