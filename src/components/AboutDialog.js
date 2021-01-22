@@ -68,6 +68,8 @@ const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
           <LightText>Click and drag on the calendar to select times.</LightText>
           <SmallTitle>Scheduling a new event and sending invites</SmallTitle>
           <LightText>To schedule a new event, click on a time on the calendar and select "Schedule New Event".</LightText>
+          <SmallTitle>Sharing your Fora calendar</SmallTitle>
+          <LightText>You can share the link (e.g. letsfora.com/1SY3L3Mf) or just the id (e.g. 1SY3L3Mf).</LightText>
           <SmallTitle>Filtering times by person</SmallTitle>
           <LightText>Click on the checkbox near a peron's name in the list of users to view their selected times.</LightText>
           <SmallTitle>Editing your details</SmallTitle>
