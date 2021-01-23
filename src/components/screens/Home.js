@@ -47,6 +47,7 @@ const LittleNote = styled.p`
 const Home = ({ navigateTo, addError }) => {
   const [inputLink, setInputLink] = useState('');
   const handleInputChange = (event) => { setInputLink(event.target.value) }
+  const handleJoinKeyPress = (e) => { if(e.keyCode === 13) handleJoinClick() };
   const handleJoinClick = () => {
     if (inputLink.includes("letsfora.com/")) {
       const calendar_id = inputLink.split(".com/")[1].trim()
@@ -86,7 +87,7 @@ const Home = ({ navigateTo, addError }) => {
               <BlueHighlight> schedule an event.</BlueHighlight>
             </Paragraph>
             <Actions>
-              <input value={inputLink} onChange={handleInputChange} type="text" placeholder="Enter link to calendar" />
+              <input value={inputLink} onChange={handleInputChange} onKeyDown={handleJoinKeyPress} type="text" placeholder="Enter link to calendar" />
               <button onClick={handleJoinClick}>Join</button>
             </Actions>
             <LittleNote>* For example: letsfora.com/1SY3L3Mf</LittleNote>
