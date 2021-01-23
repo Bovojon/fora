@@ -17,8 +17,14 @@ const Card = styled(ReactCard)`
   color: white;
   border: 0px;
 	padding: 0.7rem;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
   cursor: pointer;
+
+  &:hover {
+    transition: all 0.2s ease-out;
+    box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+    top: -3px;
+  }
 `;
 
 const CardBody = styled(ReactCardBody)`
@@ -92,7 +98,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
         <Header>Click and drag on the calendar to pick new times.</Header>
         :
         <Fragment>
-          <Header>Selected times:</Header>
+          <Header>Available times:</Header>
           <LightText>(Click on a selected time below to schedule a new event.)</LightText>
           {times.map(time => {
             let userName;

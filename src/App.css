@@ -40,6 +40,11 @@
   display: none !important;
 }
 
+.rbc-event:hover {
+  transition: all 0.2s ease-out !important;
+  box-shadow: 0px 5px 10px rgba(38, 38, 38, 0.2) !important;
+}
+
 .navbar-nav {
   text-align: right;
 }

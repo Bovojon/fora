@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from "styled-components";
+import { Close as CloseIcon } from '@material-ui/icons';
 import { 
   Grid,
   Button as MuiButton,
   Dialog,
-  DialogActions as MuiDialogActions
+  DialogActions as MuiDialogActions,
+  IconButton as MuiIconButton
 } from '@material-ui/core';
 
 const DialogActions = styled(MuiDialogActions)`
@@ -13,6 +15,13 @@ const DialogActions = styled(MuiDialogActions)`
 
 const Button = styled(MuiButton)`
   margin: 7px 0px;
+`
+
+const IconButton = styled(MuiIconButton)`
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  color: theme.palette.grey[500]
 `
 
 const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleScheduleEventClick, handleAddTime, handleDelete, eventObj, timeSelectedObj, isOwner }) => {
@@ -31,6 +40,7 @@ const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleSch
 
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
+      <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>
       <DialogActions>
         <Grid container direction="column" justify="space-around" alignItems="center">
           {isOwner ?
