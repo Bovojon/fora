@@ -4,6 +4,7 @@ import { push } from 'connected-react-router';
 import tw from "twin.macro";
 import styled from "styled-components";
 
+import { addError } from '../../actions/errorActionCreators';
 import Reveal from "../animations/Reveal";
 import TeamIllustration from "../../images/team-illustration-2.svg";
 
@@ -38,11 +39,22 @@ const Actions = styled.div`
   }
 `;
 
-const Home = ({ navigateTo }) => {
-  const [inputId, setInputId] = useState('');
+const LittleNote = styled.p`
+  font: 400 13px / 20px Roboto, sans-serif;
+  margin: 8px 10px;
+`
 
-  const handleInputChange = (event) => { setInputId(event.target.value) }
-  const handleJoinClick = () => { navigateTo(`/${inputId}`) }
+const Home = ({ navigateTo, addError }) => {
+  const [inputLink, setInputLink] = useState('');
+  const handleInputChange = (event) => { setInputLink(event.target.value) }
+  const handleJoinClick = () => {
+    if (inputLink.includes("letsfora.com/")) {
+      const calendar_id = inputLink.split(".com/")[1].trim()
+      navigateTo(`/${calendar_id}`)
+    } else {
+      addError("Sorry, we could not find your calendar.");
+    }
+  }
 
   const steps = [
     {
@@ -74,9 +86,10 @@ const Home = ({ navigateTo }) => {
               <BlueHighlight> schedule an event.</BlueHighlight>
             </Paragraph>
             <Actions>
-              <input value={inputId} onChange={handleInputChange} type="text" placeholder="Enter calendar id" />
+              <input value={inputLink} onChange={handleInputChange} type="text" placeholder="Enter link to calendar" />
               <button onClick={handleJoinClick}>Join</button>
             </Actions>
+            <LittleNote>* For example: letsfora.com/1SY3L3Mf</LittleNote>
           </LeftColumn>
           <RightColumn>
             <ImageColumn>
@@ -109,7 +122,8 @@ const Home = ({ navigateTo }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    navigateTo: (route) => dispatch(push(route))
+    navigateTo: (route) => dispatch(push(route)),
+    addError: (errorMessage) => { dispatch(addError(errorMessage)) }
   }
 }
 

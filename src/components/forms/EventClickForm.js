@@ -8,11 +8,11 @@ import {
 } from '@material-ui/core';
 
 const DialogActions = styled(MuiDialogActions)`
-  padding: 18px 20px;
+  padding: 30px 40px;
 `
 
 const Button = styled(MuiButton)`
-  margin: 5px 0px;
+  margin: 7px 0px;
 `
 
 const EventClickForm = ({ dialogIsOpen, handleDialogClose, fullScreen, handleScheduleEventClick, handleAddTime, handleDelete, eventObj, timeSelectedObj, isOwner }) => {

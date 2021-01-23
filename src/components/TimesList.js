@@ -4,13 +4,7 @@ import styled from 'styled-components';
 import { Clear, Create } from '@material-ui/icons';
 import {
   Box as MuiBox,
-  Grid,
-  Paper as MuiPaper,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Checkbox,
+  Grid
 } from '@material-ui/core';
 import { 
 	Card as ReactCard,
@@ -69,6 +63,7 @@ const Header = styled.h4`
 const LightText = styled.p`
   color: #5f6368;
   font: 400 15px / 20px Roboto, sans-serif;
+  text-align: center
 `
 
 const PencilIcon = styled(Create)`
@@ -89,39 +84,16 @@ const NameArea = styled(Grid)`
   }
 `
 
-const Paper = styled(MuiPaper)`
-  padding: 5px;
-  margin-bottom: 10px;
-`
-
 const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes }) => {
   return (
     <Box mt={2}>
       <ListArea>
       {initialTimes.length === 0 ?
-        <Fragment>
-          <Header>Welcome to your new Fora calendar!</Header>
-          <LightText>Here are some quick tips to help you get started:</LightText>
-          <Paper variant="outlined">
-            <List>
-              <ListItem key={1}>
-                <ListItemAvatar>
-                  <Checkbox edge="end" checked={true} color="default" />
-                </ListItemAvatar>
-                <ListItemText primary={"Click and drag on the calendar to pick new times."} />
-              </ListItem>
-              <ListItem key={2}>
-                <ListItemAvatar>
-                  <Checkbox edge="end" checked={true} color="default" />
-                </ListItemAvatar>
-                <ListItemText primary={"Click on a selected time to remove it or to schedule a new event."} />
-              </ListItem>
-            </List>
-          </Paper>
-        </Fragment>
+        <Header>Click and drag on the calendar to pick new times.</Header>
         :
         <Fragment>
           <Header>Selected times:</Header>
+          <LightText>(Click on a selected time below to schedule a new event.)</LightText>
           {times.map(time => {
             let userName;
             let canEdit = false;
