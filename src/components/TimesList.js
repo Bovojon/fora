@@ -95,11 +95,11 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
     <Box mt={2}>
       <ListArea>
       {initialTimes.length === 0 ?
-        <Header>Click and drag on the calendar to pick new times.</Header>
+        <Header>Click and drag on the calendar to add your available times.</Header>
         :
         <Fragment>
           <Header>Available times:</Header>
-          <LightText>(Click on a selected time below to schedule a new event.)</LightText>
+          <LightText>(Click on a selected time to schedule an event and send invites.)</LightText>
           {times.map(time => {
             let userName;
             let canEdit = false;
