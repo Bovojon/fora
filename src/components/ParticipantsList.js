@@ -28,7 +28,7 @@ const Header = styled.span`
 const List = styled(MuiList)`
   overflow-y: auto;
   overflow-x: hidden;
-  margin-top: 15px;
+  margin-top: 10px;
   padding: 0px 13px;
 `
 
@@ -53,6 +53,13 @@ const Avatar = styled(MuiAvatar)`
 
 const Name = styled.span`
   margin-right: 7px;
+`
+
+const LightText = styled.p`
+  color: #5f6368;
+  font: 400 15px / 20px Roboto, sans-serif;
+  text-align: center;
+  margin-bottom: 0px;
 `
 
 const LoadingListSkeleton = () => {
@@ -119,6 +126,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   return (
     <Box m={2}>
       <Header><h4>Others on this calendar:</h4></Header>
+      <LightText>(Click the checkboxes to filter available times by user.)</LightText>
       {isLoading ? 
         <LoadingListSkeleton />
         :
