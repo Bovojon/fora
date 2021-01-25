@@ -99,7 +99,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
         :
         <Fragment>
           <Header>Available times:</Header>
-          <LightText>(Click on a selected time to schedule an event and send invites.)</LightText>
+          <LightText>(Click an available time to schedule an event and send invites.)</LightText>
           {times.map(time => {
             let userName;
             let canEdit = false;
