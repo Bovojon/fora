@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { addError } from '../../actions/errorActionCreators';
 import Reveal from "../animations/Reveal";
 import TeamIllustration from "../../images/team-illustration-2.svg";
+import { createUserPending } from '../../actions/userActionCreators';
+import { createCalendarPending } from '../../actions/calendarActionCreators';
 
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col lg:flex-row lg:items-center max-w-screen-xl mx-auto py-8 md:px-6`;
@@ -39,24 +41,16 @@ const Actions = styled.div`
   }
 `;
 
-const LittleNote = styled.p`
-  font: 400 13px / 20px Roboto, sans-serif;
-  margin: 8px 10px;
-`
-
-const Home = ({ navigateTo, addError }) => {
-  const [inputLink, setInputLink] = useState('');
-  const handleInputChange = (event) => { setInputLink(event.target.value) }
-  const handleJoinKeyPress = (e) => { if(e.keyCode === 13) handleJoinClick() };
-  const handleJoinClick = () => {
-    if (inputLink.includes("letsfora.com/")) {
-      const calendar_id = inputLink.split(".com/")[1].trim()
-      navigateTo(`/${calendar_id}`)
-    } else {
-      addError("Sorry, we could not find your calendar.");
-    }
-  }
-
+const Home = ({ navigateTo, createUser, createCalendar, addError }) => {
+  const [email, setEmail] = useState('');
+  const handleEmailChange = (event) => { setEmail(event.target.value) };
+  const handleEnterEmail = (e) => { if(e.keyCode === 13) handleScheduleClick(e) };
+  const handleScheduleClick = (e) => {
+    e.preventDefault();
+    createCalendar();
+    if (email.trim() !== '') createUser({ email });
+    navigateTo("/creating_calendar");
+   }
   const steps = [
     {
       heading: "Create",
@@ -81,16 +75,15 @@ const Home = ({ navigateTo, addError }) => {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule meetings with friends and family</Heading>
+            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule events with family and friends</Heading>
             <Paragraph>
-              Create a one-off calendar on <BlueHighlight>Fora</BlueHighlight> and share it with other people to 
+              Create a one-off calendar on <BlueHighlight>Fora</BlueHighlight> and share it with others to
               <BlueHighlight> schedule an event.</BlueHighlight>
             </Paragraph>
             <Actions>
-              <input value={inputLink} onChange={handleInputChange} onKeyDown={handleJoinKeyPress} type="text" placeholder="Enter link to calendar" />
-              <button onClick={handleJoinClick}>Join</button>
+              <input value={email} onChange={handleEmailChange} onKeyDown={handleEnterEmail} type="email" placeholder="Enter your email" />
+              <button onClick={handleScheduleClick}>Create calendar</button>
             </Actions>
-            <LittleNote>* For example: letsfora.com/1SY3L3Mf</LittleNote>
           </LeftColumn>
           <RightColumn>
             <ImageColumn>
@@ -124,7 +117,9 @@ const Home = ({ navigateTo, addError }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => dispatch(push(route)),
-    addError: (errorMessage) => { dispatch(addError(errorMessage)) }
+    addError: (errorMessage) => { dispatch(addError(errorMessage)) },
+    createUser: (userObj) => { dispatch(createUserPending(userObj)) },
+    createCalendar: () => { dispatch(createCalendarPending()) }
   }
 }
 

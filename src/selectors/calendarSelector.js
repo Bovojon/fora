@@ -1,5 +1,5 @@
 const CalendarSelector = {
-  getTotalParticipants: (state) => { return state.calendar.participants.length },
+  getParticipants: (state) => { return state.calendar?.participants },
   getCalendarId: (state) => { return state.calendar.id },
   getCalendarUniqueId: (state) => { return state.calendar.unique_id }
 }
