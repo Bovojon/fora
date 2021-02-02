@@ -48,3 +48,8 @@
 .navbar-nav {
   text-align: right;
 }
+
+.MuiButton-label {
+  text-transform: none;
+  font-size: 16px;
+}
