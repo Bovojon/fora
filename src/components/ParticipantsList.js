@@ -36,15 +36,15 @@ const ListItem = styled(MuiListItem)`
   padding-left: 12px;
 `
 
-const PencilIcon = styled(Create)`
-	display: none;
-  width: 10%;
+const PencilButton = styled(MuiAvatar)`
+  width: 20px;
+  height: 20px;
 `
 
-const NameArea = styled(Grid)`
-	&:hover ${PencilIcon} {
-    display: block;
-  }
+const PencilIcon = styled(Create)`
+  display: block;
+  width: 0.7em;
+  height: 0.7em;
 `
 
 const Avatar = styled(MuiAvatar)`
@@ -52,7 +52,7 @@ const Avatar = styled(MuiAvatar)`
 `
 
 const Name = styled.span`
-  margin-right: 7px;
+  margin-right: 9px;
 `
 
 const LightText = styled.p`
@@ -143,14 +143,16 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
             const nameAndEditIcon = (
               <Fragment>
                 {canEditName ?
-                  <NameArea onClick={handleEditUserName} container direction="row" justify="flex-start" alignItems="center" style={{ cursor: "pointer" }}>
+                  <Grid onClick={handleEditUserName} container direction="row" justify="flex-start" alignItems="center" style={{ cursor: "pointer", overflow: "hidden" }}>
                     <Name>{name}</Name>
-                    <PencilIcon fontSize="small" />
-                  </NameArea>
+                    <PencilButton>
+                      <PencilIcon fontSize="small" />
+                    </PencilButton>
+                  </Grid>
                   :
-                  <NameArea container direction="row" justify="flex-start" alignItems="center">
+                  <Grid container direction="row" justify="flex-start" alignItems="center">
                     <Name>{name}</Name>
-                  </NameArea>
+                  </Grid>
                 }
               </Fragment>
             );
