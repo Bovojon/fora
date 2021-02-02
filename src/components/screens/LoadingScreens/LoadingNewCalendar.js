@@ -10,7 +10,7 @@ const LoadingNewCalendar = ({ calendar, navigateTo }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendar]);
 
-	return (<div class="loader"></div>)
+	return (<div className="loader"></div>)
 }
 
 const mapStateToProps = (state) => {

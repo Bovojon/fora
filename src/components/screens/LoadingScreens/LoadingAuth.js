@@ -47,7 +47,7 @@ const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, add
   localStorage.removeItem('fora');
   navigateTo(redirectUrl);
 
-	return (<div class="loader"></div>)
+	return (<div className="loader"></div>)
 }
 
 const mapDispatchToProps = (dispatch) => {

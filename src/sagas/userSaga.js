@@ -5,6 +5,7 @@ import { CalendarSelector } from '../selectors';
 import { USER_CREATED_PENDING, USER_UPDATED_PENDING } from '../actions/constants';
 import { createUserSuccess, updateUserSuccess } from '../actions/userActionCreators';
 import { addUserToCalendarPending } from '../actions/calendarActionCreators';
+import { addError } from '../actions/errorActionCreators';
 
 function* createUser(action) {
   try {
@@ -22,6 +23,7 @@ function* createUser(action) {
     yield put(createUserSuccess(user));
     yield put(addUserToCalendarPending());
   } catch(error) {
+    yield put(addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com."));
     console.error("Error creating new user: ", error);
   }
 }
@@ -33,6 +35,7 @@ function* updateUser(action) {
     const { user } = yield userResponse.data;
     yield put(updateUserSuccess(user));
   } catch(error) {
+    yield put(addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com."));
     console.error("Error updating user: ", error);
   }
 }
