@@ -64,7 +64,7 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
       <DialogContent>
         <DialogContentText>Add your name and email if you wish to receive calendar invites from other users.</DialogContentText>
         <Grid container direction="column" justify="center" alignItems="center">
-          <TextField value={name.includes("Person") ? "" : name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" label="Name" type="text" fullWidth margin="normal" autoFocus />
+          <TextField value={name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" label="Name" type="text" fullWidth margin="normal" autoFocus />
           <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" label="Email" type="email" fullWidth margin="normal" />
         </Grid>
       </DialogContent>
