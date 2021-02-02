@@ -207,10 +207,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
 
 	useEffect(() => {
-		setUserFormOpen(typeof currentUser?.name === "undefined" ? false : currentUser.name.includes("Person"));
-	}, [currentUser]);
-
-	useEffect(() => {
 		const importedEvents = calendar.importedEvents;
 		if (typeof importedEvents === "undefined") {
 			setEvents(times);
