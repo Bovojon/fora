@@ -17,8 +17,8 @@ import {
 } from 'reactstrap';
 import { 
   Grid,
-  Modal, 
-  Backdrop, 
+  Modal,
+  Backdrop,
   Fade,
   IconButton as MuiIconButton,
   makeStyles,
@@ -185,7 +185,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
   const handleAboutClick = () => { setAboutIsOpen(true) }
   const handleAboutClose = () => { setAboutIsOpen(false) }
   const handlePrivacyClick = () => { navigateTo("/privacy_policy") }
-  const shareLink = `letsfora.com/${calendarUniqueId}`
+  const shareLink = `https://letsfora.com/${calendarUniqueId}`
 
   return (
     <Fragment>
