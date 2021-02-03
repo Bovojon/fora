@@ -49,6 +49,7 @@ function* addUserToCalendar() {
     if (typeof calendarId !== "undefined" && typeof userId !== "undefined") {
       const calResponse = yield call(CalendarService.addUserToCalendar, { calendar_id: calendarId, user_id: userId });
       const { calendar } = yield calResponse.data;
+      calendar.participants.reverse();
       yield put(addUserToCalendarSuccess(calendar));
     }
   } catch (error) {
