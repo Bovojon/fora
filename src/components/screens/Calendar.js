@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import momentTimezone from "moment-timezone";
 import styled from 'styled-components';
+import tw from "twin.macro";
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
@@ -15,9 +16,9 @@ import {
 	Box as MuiBox,
 	Paper as MuiPaper,
 	Button,
+	IconButton as MuiIconButton,
 	Select as MuiSelect,
 	MenuItem,
-	Tooltip,
 	Divider,
 	useMediaQuery,
 	Snackbar
@@ -25,7 +26,6 @@ import {
 import {
 	ArrowRight as ArrowRightIcon,
 	ArrowLeft as ArrowLeftIcon,
-	Today as TodayIcon,
 	Clear,
 	Create
 } from '@material-ui/icons';
@@ -57,8 +57,20 @@ const Box = styled(MuiBox)`
 	margin-top: 25px;
 `
 
-const ToolbarBox = styled(MuiBox)`
-	margin-bottom: 10px;
+const ToolbarBox = tw.div`flex flex-row mb-3`;
+const ToolbarItemLeft = tw.div`flex flex-auto justify-start`;
+const ToolbarItemRight = tw.div`flex flex-auto justify-end`;
+const CalNavigation = tw.div`flex flex-auto justify-start items-center`;
+const DateLabel = styled.span`margin-left: 10px;`
+const TodayButton = styled(Button)`
+	margin-right: 12px;
+	padding: 5px 7px;
+`
+
+const IconButton = styled(MuiIconButton)`
+	width: 32px;
+	height: 32px;
+	padding: 0px;
 `
 
 const Select = styled(MuiSelect)`
@@ -140,27 +152,21 @@ const CustomToolbar = (toolbar) => {
 
 	return (
 		<ToolbarBox>
-			<Grid container direction="row" justify="space-between" alignItems="center">
-				<Grid item md={1} xs={12}>
-					<Tooltip title="Today">
-						<Button onClick={handleTodayClick}><TodayIcon alt="Today" /></Button>
-					</Tooltip>
-				</Grid>
-				<Grid item md={4} xs={12}>
-					<Grid container direction="row" justify="space-between" alignItems="center">
-						<Button onClick={handleBackClick}><ArrowLeftIcon /></Button>
-						<span>{dateLabel()}</span>
-						<Button onClick={handleNextClick}><ArrowRightIcon /></Button>
-					</Grid>
-				</Grid>
-				<Grid item md={1} xs={12}>
-					<Select value={calendarView} onChange={handleCalendarViewChange}>
-						<MenuItem value={'month'}>Month</MenuItem>
-						<MenuItem value={'week'}>Week</MenuItem>
-						<MenuItem value={'day'}>Day</MenuItem>
-					</Select>
-				</Grid>
-			</Grid>
+			<ToolbarItemLeft>
+				<TodayButton onClick={handleTodayClick} variant="outlined">Today</TodayButton>
+				<CalNavigation>
+					<IconButton onClick={handleBackClick}><ArrowLeftIcon /></IconButton>
+					<IconButton onClick={handleNextClick}><ArrowRightIcon /></IconButton>
+					<DateLabel>{dateLabel()}</DateLabel>
+				</CalNavigation>
+			</ToolbarItemLeft>
+			<ToolbarItemRight>
+				<Select value={calendarView} onChange={handleCalendarViewChange}>
+					<MenuItem value={'month'}>Month</MenuItem>
+					<MenuItem value={'week'}>Week</MenuItem>
+					<MenuItem value={'day'}>Day</MenuItem>
+				</Select>
+			</ToolbarItemRight>
 		</ToolbarBox>
 	)
 }
@@ -426,7 +432,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={10000} onClose={handleScrollToBottom}>
-					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below the calendar to view others on this calendar and the selected times.</Alert>
+					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below to view others on this calendar and available times.</Alert>
 				</Snackbar>
       </Box>
 			<SuccessNotification />
