@@ -120,7 +120,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
       <NavItem>
         <NavLinks>
           <NavLink onClick={handlePrivacyClick}>Privacy</NavLink>
-          <PrimaryLink onClick={handleFindTimeClick}>Schedule event</PrimaryLink>
+          <PrimaryLink onClick={handleFindTimeClick}>Schedule time</PrimaryLink>
         </NavLinks>
       </NavItem>
     );
@@ -128,7 +128,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
     return (
       <NavItem>
         <NavLinks>
-          <PrimaryLink onClick={handleScheduleClick}>Schedule event</PrimaryLink>
+          <PrimaryLink onClick={handleScheduleClick}>Schedule time</PrimaryLink>
         </NavLinks>
       </NavItem>
     )

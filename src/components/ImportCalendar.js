@@ -33,7 +33,7 @@ const ImportCalendar = ({ handleImportCalendarClick, calendar }) => {
         <Fragment>
           <Grid container direction="column" justify="center" alignItems="center">
             <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
-            <LightText>Check when you're available. Details about your calendar or events will not be visible to others.</LightText>
+            <LightText>Check when you're available. Details about your personal calendar will not be visible to others.</LightText>
           </Grid>
           <Divider />
         </Fragment>

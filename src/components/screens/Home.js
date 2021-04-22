@@ -60,15 +60,15 @@ const Home = ({ navigateTo, createUser, createCalendar, addError }) => {
     },
     {
       heading: "Pick",
-      description: "Pick some times that work for you by clicking and dragging on your Fora calendar."
+      description: "Pick times that work for you by clicking and dragging on your Fora calendar."
     },
     {
       heading: "Share",
-      description: "Share the link (or id) of your Fora calendar."
+      description: "Share the link to your Fora calendar."
     },
     {
       heading: "Schedule",
-      description: "They pick a time and the event is added to your personal calendar (Google, Apple, etc.)."
+      description: "Others pick a time and can schedule an event."
     }
   ];
 
@@ -77,10 +77,10 @@ const Home = ({ navigateTo, createUser, createCalendar, addError }) => {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule events with family and friends</Heading>
+            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule a time with family and friends</Heading>
             <Paragraph>
               Create a one-off calendar on <BlueHighlight>Fora</BlueHighlight> and share it with others to
-              <BlueHighlight> schedule an event.</BlueHighlight>
+              <BlueHighlight> schedule a time.</BlueHighlight>
             </Paragraph>
             <Actions>
               <input value={email} onChange={handleEmailChange} onKeyDown={handleEnterEmail} type="email" placeholder="Enter your email" />

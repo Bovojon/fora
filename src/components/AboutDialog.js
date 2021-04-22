@@ -59,7 +59,7 @@ const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
           <SmallTitle>Why Fora?</SmallTitle>
           <LightText>
             Nothing builds friendships more than spending time together. Whether it’s a casual get-together or a big event, virtual or
-            in-person, Fora helps you easily schedule meetings with friends and family.
+            in-person, Fora helps you easily schedule a time with friends and family.
           </LightText>
           <SmallTitle>Contact us</SmallTitle>
           <LightText>If you have any questions, reach out to us at letsfora@gmail.com.</LightText>
