@@ -25,7 +25,7 @@
 }
 
 .rbc-timeslot-group { 
-  height: 60px;
+  min-height: 55px !important;
 }
 
 .rbc-allday-cell {
