@@ -2,8 +2,7 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import {
   Grid as MuiGrid,
-  Button as MuiButton,
-  Divider
+  Button as MuiButton
 } from '@material-ui/core';
 
 const Grid = styled(MuiGrid)`
@@ -30,13 +29,10 @@ const ImportCalendar = ({ handleImportCalendarClick, calendar }) => {
   return (
     <Fragment>
       {typeof calendar?.importedEvents === "undefined" ?
-        <Fragment>
-          <Grid container direction="column" justify="center" alignItems="center">
-            <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
-            <LightText>Check when you're available. Details about your personal calendar will not be visible to others.</LightText>
-          </Grid>
-          <Divider />
-        </Fragment>
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
+          <LightText>Check when you're available. Details about your personal calendar will not be visible to others.</LightText>
+        </Grid>
         :
         null
       }
