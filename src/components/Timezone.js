@@ -11,10 +11,10 @@ const Grid = styled(MuiGrid)`
   margin-bottom: 25px;
 `
 
-const LightText = styled.span`
-  color: #5f6368;
-  font: 400 15px / 20px Roboto, sans-serif;
-  text-align: center
+const Header = styled.span`
+  font-size: 1.5em;
+  text-align: center;
+  color: #4299e1;
 `
 
 const Autocomplete = styled(MuiAutocomplete)`
@@ -616,19 +616,23 @@ const timezonesList = [
   "Zulu",
 ]
 
-const Timezone = ({ currentTimezone }) => {
+const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone }) => {
   return (
     <Box m={2}>
       <Grid container direction="column" justify="center" alignItems="center">
-        <LightText>Check calendar in different timezones.</LightText>
+        <Header>Timezone</Header>
         <Autocomplete
           options={timezonesList}
           renderOption={(timezone) => (<Fragment>{timezone}</Fragment>)}
+          value={calTimezone}
+          onChange={(event, timezoneVal) => {
+            setCalTimezone(timezoneVal)
+            handleTimezoneChange(timezoneVal);
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
               variant="outlined"
-              value={currentTimezone}
               inputProps={{
                 ...params.inputProps,
                 autoComplete: 'new-password', // disable autocomplete and autofill

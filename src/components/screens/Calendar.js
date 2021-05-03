@@ -12,7 +12,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 import { addError } from '../../actions/errorActionCreators';
 import {
-	Grid, 
+	Grid,
 	Box as MuiBox,
 	Paper as MuiPaper,
 	Button,
@@ -39,13 +39,14 @@ import ImportTimesForm from '../forms/ImportTimesForm';
 import EventDetails from '../EventDetails';
 import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
+import Timezone from '../Timezone';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
 import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
 import '../animations/styles/loading.scss';
 
-const localizer = momentLocalizer(moment);
+const browserTimezone = momentTimezone.tz.guess();
 
 const Paper = styled(MuiPaper)`
 	height: 100%;
@@ -191,7 +192,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [eventDetailsOpen, setEventDetailsOpen] = useState(false);
-
 	const [times, setTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
@@ -199,7 +199,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
 	const [importStartTime, setImportStartTime] = useState(new Date(moment(new Date()).subtract(1, 'day')));
 	const [importEndTime, setImportEndTime] = useState(new Date(moment(new Date()).add(1, 'month')));
-	const [importedEventDetails, setImportedEventDetails] = useState({})
+	const [importedEventDetails, setImportedEventDetails] = useState({});
+	const [localizer, setLocalizer] = useState(momentLocalizer(moment));
+	const [calTimezone, setCalTimezone] = useState(browserTimezone);
 	
 	const { calendarId } = useParams();
 	const theme = useTheme();
@@ -295,13 +297,16 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
 	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
-		const timeZone = momentTimezone.tz.guess();
 		const timeMin = importStartTime.toISOString();
 		const timeMax = importEndTime.toISOString();
-		const calendarDetails = { timeMin, timeMax, timeZone }
+		const calendarDetails = { timeMin, timeMax, timeZone: browserTimezone }
 		const redirectUrl = `/${calendar.unique_id}`
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, calendarDetails }));
 		getUrlAndRedirect();
+	}
+	const handleTimezoneChange = (calTimezone) => {
+		momentTimezone.tz.setDefault(calTimezone);
+		setLocalizer(momentLocalizer(momentTimezone));
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -399,6 +404,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
 									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} calendar={calendar} />
+									<Divider />
+									<Timezone handleTimezoneChange={handleTimezoneChange} calTimezone={calTimezone} setCalTimezone={setCalTimezone} />
+									<Divider />
 									<ParticipantsList
 										participants={calendar.participants}
 										calendarUniqueId={calendar.unique_id}
