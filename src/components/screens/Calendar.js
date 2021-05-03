@@ -27,7 +27,6 @@ import {
 import {
 	ArrowRight as ArrowRightIcon,
 	ArrowLeft as ArrowLeftIcon,
-	Clear,
 	Create
 } from '@material-ui/icons';
 
@@ -77,14 +76,6 @@ const IconButton = styled(MuiIconButton)`
 
 const Select = styled(MuiSelect)`
 	padding: 5px;
-`
-
-const ClearIcon = styled(Clear)`
-	position: absolute;
-	right: 0;
-	top: 0;
-	cursor: pointer;
-	color: white;
 `
 
 const PencilIcon = styled(Create)`
@@ -351,7 +342,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<TimeText>
 						({browserTimezone})
 					</TimeText>
-					{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
 				</Grid>
 			);
 		}
