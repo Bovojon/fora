@@ -11,8 +11,9 @@ import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calen
 import { useTheme } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 import { addError } from '../../actions/errorActionCreators';
+import { addSuccess } from '../../actions/successActionCreators';
 import {
-	Grid, 
+	Grid,
 	Box as MuiBox,
 	Paper as MuiPaper,
 	Button,
@@ -26,7 +27,6 @@ import {
 import {
 	ArrowRight as ArrowRightIcon,
 	ArrowLeft as ArrowLeftIcon,
-	Clear,
 	Create
 } from '@material-ui/icons';
 
@@ -39,13 +39,14 @@ import ImportTimesForm from '../forms/ImportTimesForm';
 import EventDetails from '../EventDetails';
 import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
+import Timezone from '../Timezone';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
 import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
 import '../animations/styles/loading.scss';
 
-const localizer = momentLocalizer(moment);
+const browserTimezone = momentTimezone.tz.guess();
 
 const Paper = styled(MuiPaper)`
 	height: 100%;
@@ -75,14 +76,6 @@ const IconButton = styled(MuiIconButton)`
 
 const Select = styled(MuiSelect)`
 	padding: 5px;
-`
-
-const ClearIcon = styled(Clear)`
-	position: absolute;
-	right: 0;
-	top: 0;
-	cursor: pointer;
-	color: white;
 `
 
 const PencilIcon = styled(Create)`
@@ -185,21 +178,25 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError, addSuccess }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [eventDetailsOpen, setEventDetailsOpen] = useState(false);
-
 	const [times, setTimes] = useState(initialTimes);
+	const [sortedTimes, setSortedTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
 	const [timeSelectedObj, setTimeSelectedObj] = useState({});
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
 	const [importStartTime, setImportStartTime] = useState(new Date(moment(new Date()).subtract(1, 'day')));
 	const [importEndTime, setImportEndTime] = useState(new Date(moment(new Date()).add(1, 'month')));
-	const [importedEventDetails, setImportedEventDetails] = useState({})
+	const [importedEventDetails, setImportedEventDetails] = useState({});
+	const [localizer, setLocalizer] = useState(momentLocalizer(moment));
+	const [calTimezone, setCalTimezone] = useState(browserTimezone);
+	const [startDate, setStartDate] = useState(new Date());
+	const [initialRender, setInitialRender] = useState(true);
 	
 	const { calendarId } = useParams();
 	const theme = useTheme();
@@ -210,7 +207,17 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
+	useEffect(() => {
+		setTimes(initialTimes);
+		const initialTimesCopy = [...initialTimes];
+		initialTimesCopy.sort(timeSorter);
+		setSortedTimes(initialTimesCopy);
+		if (initialTimesCopy.length > 0 && initialRender) {
+			setStartDate(initialTimesCopy[0]?.start)
+			setInitialRender(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialTimes]);
 
 	useEffect(() => {
 		const importedEvents = calendar.importedEvents;
@@ -279,6 +286,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			setEventDetailsOpen(true);
 		}
 	}
+	const handleNavigate = (eventObj) => { setStartDate(eventObj.start) }
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
 		if (auth.code !== false) removeAuthCode();
@@ -295,13 +303,17 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
 	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
-		const timeZone = momentTimezone.tz.guess();
 		const timeMin = importStartTime.toISOString();
 		const timeMax = importEndTime.toISOString();
-		const calendarDetails = { timeMin, timeMax, timeZone }
+		const calendarDetails = { timeMin, timeMax, timeZone: browserTimezone }
 		const redirectUrl = `/${calendar.unique_id}`
 		localStorage.setItem('fora', JSON.stringify({ calendar, currentUser, redirectUrl, calendarDetails }));
 		getUrlAndRedirect();
+	}
+	const handleTimezoneChange = (calTimezone) => {
+		momentTimezone.tz.setDefault(calTimezone);
+		setLocalizer(momentLocalizer(momentTimezone));
+		addSuccess(`Set calendar to ${calTimezone}`);
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -327,7 +339,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<TimeText>
 						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 					</TimeText>
-					{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
+					<TimeText>
+						({browserTimezone})
+					</TimeText>
 				</Grid>
 			);
 		}
@@ -338,6 +352,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
+				</TimeText>
+				<TimeText>
+					({browserTimezone})
 				</TimeText>
 			</Grid>
 		);
@@ -380,7 +397,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								style={{height: "85vh"}}
 								defaultView={Views.WEEK}
 								views={{ month: true, week: true, day: true }}
-								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
+								date={startDate}
+								onNavigate={date => { setStartDate(date) }}
+								scrollToTime={startDate}
 								onSelectSlot={handleSelectSlot}
 								onSelectEvent={handleSelectEvent}
 								components = {{
@@ -398,7 +417,10 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
-									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} calendar={calendar} />
+									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} />
+									<Divider />
+									<Timezone handleTimezoneChange={handleTimezoneChange} calTimezone={calTimezone} setCalTimezone={setCalTimezone} />
+									<Divider />
 									<ParticipantsList
 										participants={calendar.participants}
 										calendarUniqueId={calendar.unique_id}
@@ -409,12 +431,14 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 									/>
 									<Divider />
 									<TimesList
-										times={times.sort(timeSorter)}
+										times={sortedTimes}
 										handleDelete={handleDelete}
 										handleSelectEvent={handleSelectEvent}
 										handleEditUserName={handleEditUserName}
 										currentUser={currentUser}
 										initialTimes={initialTimes}
+										browserTimezone={browserTimezone}
+										handleNavigate={handleNavigate}
 									/>
 								</Paper>
 							</Grid>
@@ -458,7 +482,8 @@ const mapDispatchToProps = (dispatch) => {
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
 		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
 		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) },
-		addError: (errorMessage) => { dispatch(addError(errorMessage)) }
+		addError: (errorMessage) => { dispatch(addError(errorMessage)) },
+		addSuccess: (successMessage) => { dispatch(addSuccess(successMessage)) }
 	}
 }
 

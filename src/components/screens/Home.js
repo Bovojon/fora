@@ -77,7 +77,7 @@ const Home = ({ navigateTo, createUser, createCalendar, addError }) => {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule a time with family and friends</Heading>
+            <Heading><BlueHighlight>Fora </BlueHighlight>helps you easily schedule a time with others</Heading>
             <Paragraph>
               Create a one-off calendar on <BlueHighlight>Fora</BlueHighlight> and share it with others to
               <BlueHighlight> schedule a time.</BlueHighlight>

@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { Clear, Create } from '@material-ui/icons';
 import {
   Box as MuiBox,
-  Grid
+  Grid,
+  IconButton
 } from '@material-ui/core';
 import { 
 	Card as ReactCard,
@@ -90,7 +91,7 @@ const NameArea = styled(Grid)`
   }
 `
 
-const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes }) => {
+const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes, browserTimezone, handleNavigate }) => {
   return (
     <Box mt={2}>
       <ListArea>
@@ -98,7 +99,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
         <Header>Click and drag on the calendar to add your available times.</Header>
         :
         <Fragment>
-          <Header>Available times:</Header>
+          <Header>Available times</Header>
           <LightText>(Click an available time to schedule an event and send invites.)</LightText>
           {times.map(time => {
             let userName;
@@ -117,10 +118,10 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
             }
             if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
               return (
-                <Card key={time.id} onClick={(event) => handleSelectEvent(time, event)} body background={background}>
+                <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
                   <CardBody>
                     <TopRightArea>
-                      {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}
+                      {canEdit && <IconButton id="clearIcon" onClick={() => handleDelete(time.id)} disableFocusRipple disableRipple><ClearIcon /></IconButton>}
                     </TopRightArea>
                     <Row>
                       <NameArea container direction="row" justify="flex-start" alignItems="center">
@@ -131,15 +132,18 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                     <Row>
                       {moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
                     </Row>
+                    <Row>
+                      ({browserTimezone})
+                    </Row>
                   </CardBody>
                 </Card>
               );
             } else {
               return (
-                <Card key={time.id} onClick={(event) => handleSelectEvent(time, event)} body background={background}>
+                <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
                   <CardBody>
                     <TopRightArea>
-                      {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}
+                      {canEdit && <IconButton id="clearIcon" onClick={() => handleDelete(time.id)} disableFocusRipple disableRipple><ClearIcon /></IconButton>}
                     </TopRightArea>
                     <Row>
                       <NameArea container direction="row" justify="flex-start" alignItems="center">
@@ -152,6 +156,9 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                     </Row>
                     <Row>
                       {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
+                    </Row>
+                    <Row>
+                      ({browserTimezone})
                     </Row>
                   </CardBody>
                 </Card>
