@@ -98,7 +98,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
         <Header>Click and drag on the calendar to add your available times.</Header>
         :
         <Fragment>
-          <Header>Available times:</Header>
+          <Header>Available times</Header>
           <LightText>(Click an available time to schedule an event and send invites.)</LightText>
           {times.map(time => {
             let userName;
