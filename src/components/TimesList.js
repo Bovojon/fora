@@ -90,7 +90,7 @@ const NameArea = styled(Grid)`
   }
 `
 
-const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes, browserTimezone }) => {
+const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes, browserTimezone, handleNavigate }) => {
   return (
     <Box mt={2}>
       <ListArea>
@@ -117,7 +117,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
             }
             if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
               return (
-                <Card key={time.id} onClick={(event) => handleSelectEvent(time, event)} body background={background}>
+                <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
                   <CardBody>
                     <TopRightArea>
                       {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}
@@ -139,7 +139,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
               );
             } else {
               return (
-                <Card key={time.id} onClick={(event) => handleSelectEvent(time, event)} body background={background}>
+                <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
                   <CardBody>
                     <TopRightArea>
                       {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}

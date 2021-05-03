@@ -205,6 +205,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [localizer, setLocalizer] = useState(momentLocalizer(moment));
 	const [calTimezone, setCalTimezone] = useState(browserTimezone);
 	const [startDate, setStartDate] = useState(new Date());
+	const [initialRender, setInitialRender] = useState(true);
 	
 	const { calendarId } = useParams();
 	const theme = useTheme();
@@ -220,7 +221,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const initialTimesCopy = [...initialTimes];
 		initialTimesCopy.sort(timeSorter);
 		setSortedTimes(initialTimesCopy);
-		if (initialTimesCopy.length > 0) setStartDate(initialTimesCopy[0]?.start)
+		if (initialTimesCopy.length > 0 && initialRender) {
+			setStartDate(initialTimesCopy[0]?.start)
+			setInitialRender(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [initialTimes]);
 
 	useEffect(() => {
@@ -290,6 +295,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			setEventDetailsOpen(true);
 		}
 	}
+	const handleNavigate = (eventObj) => { setStartDate(eventObj.start) }
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
 		if (auth.code !== false) removeAuthCode();
@@ -442,6 +448,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										currentUser={currentUser}
 										initialTimes={initialTimes}
 										browserTimezone={browserTimezone}
+										handleNavigate={handleNavigate}
 									/>
 								</Paper>
 							</Grid>
