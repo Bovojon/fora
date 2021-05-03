@@ -411,7 +411,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
-									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} calendar={calendar} />
+									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} />
 									<Divider />
 									<Timezone handleTimezoneChange={handleTimezoneChange} calTimezone={calTimezone} setCalTimezone={setCalTimezone} />
 									<Divider />
