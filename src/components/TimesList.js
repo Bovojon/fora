@@ -90,7 +90,7 @@ const NameArea = styled(Grid)`
   }
 `
 
-const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes }) => {
+const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes, browserTimezone }) => {
   return (
     <Box mt={2}>
       <ListArea>
@@ -131,6 +131,9 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                     <Row>
                       {moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
                     </Row>
+                    <Row>
+                      ({browserTimezone})
+                    </Row>
                   </CardBody>
                 </Card>
               );
@@ -152,6 +155,9 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                     </Row>
                     <Row>
                       {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
+                    </Row>
+                    <Row>
+                      ({browserTimezone})
                     </Row>
                   </CardBody>
                 </Card>

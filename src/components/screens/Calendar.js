@@ -334,6 +334,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<TimeText>
 						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 					</TimeText>
+					<TimeText>
+						({browserTimezone})
+					</TimeText>
 					{canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(event.id)} />}
 				</Grid>
 			);
@@ -345,6 +348,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
+				</TimeText>
+				<TimeText>
+					({browserTimezone})
 				</TimeText>
 			</Grid>
 		);
@@ -425,6 +431,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										handleEditUserName={handleEditUserName}
 										currentUser={currentUser}
 										initialTimes={initialTimes}
+										browserTimezone={browserTimezone}
 									/>
 								</Paper>
 							</Grid>
