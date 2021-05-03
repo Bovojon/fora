@@ -11,6 +11,7 @@ import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calen
 import { useTheme } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
 import { addError } from '../../actions/errorActionCreators';
+import { addSuccess } from '../../actions/successActionCreators';
 import {
 	Grid,
 	Box as MuiBox,
@@ -186,7 +187,7 @@ const CustomWeekHeader = ({ label }) => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError, addSuccess }) => {
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
@@ -307,6 +308,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleTimezoneChange = (calTimezone) => {
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
+		addSuccess(`Set calendar to ${calTimezone}`);
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -466,7 +468,8 @@ const mapDispatchToProps = (dispatch) => {
 		fetchCalendarPending: (calendarId) => { dispatch(fetchCalendarPending(calendarId)) },
 		addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
 		removeAuthCode: () => { dispatch(removeAuthCodeSuccess()) },
-		addError: (errorMessage) => { dispatch(addError(errorMessage)) }
+		addError: (errorMessage) => { dispatch(addError(errorMessage)) },
+		addSuccess: (successMessage) => { dispatch(addSuccess(successMessage)) }
 	}
 }
 

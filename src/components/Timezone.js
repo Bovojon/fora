@@ -626,8 +626,10 @@ const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone }) => {
           renderOption={(timezone) => (<Fragment>{timezone}</Fragment>)}
           value={calTimezone}
           onChange={(event, timezoneVal) => {
-            setCalTimezone(timezoneVal)
-            handleTimezoneChange(timezoneVal);
+            if (timezoneVal !== null) {
+              setCalTimezone(timezoneVal);
+              handleTimezoneChange(timezoneVal);
+            }
           }}
           renderInput={(params) => (
             <TextField
