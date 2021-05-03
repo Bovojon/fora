@@ -194,6 +194,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [eventDetailsOpen, setEventDetailsOpen] = useState(false);
 	const [times, setTimes] = useState(initialTimes);
+	const [sortedTimes, setSortedTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
 	const [timeSelectedObj, setTimeSelectedObj] = useState({});
@@ -203,6 +204,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [importedEventDetails, setImportedEventDetails] = useState({});
 	const [localizer, setLocalizer] = useState(momentLocalizer(moment));
 	const [calTimezone, setCalTimezone] = useState(browserTimezone);
+	const [startDate, setStartDate] = useState(new Date());
 	
 	const { calendarId } = useParams();
 	const theme = useTheme();
@@ -213,7 +215,13 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => { setTimes(initialTimes) }, [initialTimes]);
+	useEffect(() => {
+		setTimes(initialTimes);
+		const initialTimesCopy = [...initialTimes];
+		initialTimesCopy.sort(timeSorter);
+		setSortedTimes(initialTimesCopy);
+		if (initialTimesCopy.length > 0) setStartDate(initialTimesCopy[0]?.start)
+	}, [initialTimes]);
 
 	useEffect(() => {
 		const importedEvents = calendar.importedEvents;
@@ -393,7 +401,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								style={{height: "85vh"}}
 								defaultView={Views.WEEK}
 								views={{ month: true, week: true, day: true }}
-								scrollToTime={new Date(0, 0, 0, 7, 0, 0)}
+								date={startDate}
+								onNavigate={date => { setStartDate(date) }}
+								scrollToTime={startDate}
 								onSelectSlot={handleSelectSlot}
 								onSelectEvent={handleSelectEvent}
 								components = {{
@@ -425,7 +435,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 									/>
 									<Divider />
 									<TimesList
-										times={times.sort(timeSorter)}
+										times={sortedTimes}
 										handleDelete={handleDelete}
 										handleSelectEvent={handleSelectEvent}
 										handleEditUserName={handleEditUserName}
