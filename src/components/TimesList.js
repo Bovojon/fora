@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { Clear, Create } from '@material-ui/icons';
 import {
   Box as MuiBox,
-  Grid
+  Grid,
+  IconButton
 } from '@material-ui/core';
 import { 
 	Card as ReactCard,
@@ -120,7 +121,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                 <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
                   <CardBody>
                     <TopRightArea>
-                      {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}
+                      {canEdit && <IconButton id="clearIcon" onClick={() => handleDelete(time.id)} disableFocusRipple disableRipple><ClearIcon /></IconButton>}
                     </TopRightArea>
                     <Row>
                       <NameArea container direction="row" justify="flex-start" alignItems="center">
@@ -142,7 +143,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                 <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
                   <CardBody>
                     <TopRightArea>
-                      {canEdit && <ClearIcon id="clearIcon" onClick={() => handleDelete(time.id)} />}
+                      {canEdit && <IconButton id="clearIcon" onClick={() => handleDelete(time.id)} disableFocusRipple disableRipple><ClearIcon /></IconButton>}
                     </TopRightArea>
                     <Row>
                       <NameArea container direction="row" justify="flex-start" alignItems="center">
