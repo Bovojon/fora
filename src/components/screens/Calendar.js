@@ -311,9 +311,18 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		getUrlAndRedirect();
 	}
 	const handleTimezoneChange = (calTimezone) => {
+		const midnightDate = new Date(startDate).setHours(0,0,0,0);
+		const offset = moment.tz(midnightDate, calTimezone).format('Z');
+		const diff = offset.slice(1,3)
+		let gmt;
+		if (offset.charAt(0) === "-") {
+			gmt = moment(midnightDate).add(parseInt(diff), "hours").format('l LT');
+		} else {
+			gmt = moment(midnightDate).subtract(parseInt(diff), "hours").format('l LT');
+		}
+		setStartDate(new Date(moment.tz(gmt, browserTimezone).format()));
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
-		setStartDate(new Date(startDate).setHours(0,0,0,0));
 		addSuccess(`Changed timezone to ${calTimezone}`);
 	}
 
@@ -340,9 +349,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<TimeText>
 						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 					</TimeText>
-					<TimeText>
-						({browserTimezone})
-					</TimeText>
 				</Grid>
 			);
 		}
@@ -353,9 +359,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				</NameArea>
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
-				</TimeText>
-				<TimeText>
-					({browserTimezone})
 				</TimeText>
 			</Grid>
 		);
@@ -452,7 +455,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										handleEditUserName={handleEditUserName}
 										currentUser={currentUser}
 										initialTimes={initialTimes}
-										browserTimezone={browserTimezone}
 										handleNavigate={handleNavigate}
 									/>
 								</Paper>
