@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { TextField } from '@material-ui/core';
 import DatePicker from "react-datepicker";
-import moment from "moment-timezone";
+import momentTimezone from "moment-timezone";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -37,7 +37,7 @@ const EventForm = ({ event, participants, addEvent }) => {
   const [attendeesStr, setAttendeesStr] = useState("");
 
   useEffect(() => {
-    const tizn = moment.tz.guess();
+    const tizn = momentTimezone.tz.guess();
     const eventObj = {
       details: {
         summary,

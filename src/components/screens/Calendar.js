@@ -312,7 +312,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}
 	const handleTimezoneChange = (calTimezone) => {
 		const midnightDate = new Date(startDate).setHours(0,0,0,0);
-		const offset = moment.tz(midnightDate, calTimezone).format('Z');
+		const offset = momentTimezone.tz(midnightDate, calTimezone).format('Z');
 		const diff = offset.slice(1,3)
 		let gmt;
 		if (offset.charAt(0) === "-") {
@@ -320,7 +320,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		} else {
 			gmt = moment(midnightDate).subtract(parseInt(diff), "hours").format('l LT');
 		}
-		setStartDate(new Date(moment.tz(gmt, browserTimezone).format()));
+		setStartDate(new Date(momentTimezone.tz(gmt, browserTimezone).format()));
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
 		addSuccess(`Changed timezone to ${calTimezone}`);
@@ -367,7 +367,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const isDifferentTimezone = browserTimezone !== calTimezone ? true : false;
 		if (isDifferentTimezone) {
 			const propsCopy = {...props};
-			propsCopy.value = moment.tz(props.value, calTimezone);
+			propsCopy.value = momentTimezone.tz(props.value, calTimezone);
 			if (propsCopy.value.toString().includes("00:00:00")) {
 				return <div style={{ backgroundColor: "yellow" }}>{propsCopy.children}{"\u200C"}</div>;
 			}
