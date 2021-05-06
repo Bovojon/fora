@@ -313,7 +313,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleTimezoneChange = (calTimezone) => {
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
-		addSuccess(`Set calendar to ${calTimezone}`);
+		addSuccess(`Changed timezone to ${calTimezone}`);
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -358,6 +358,14 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				</TimeText>
 			</Grid>
 		);
+	}
+	const CustomTimeSlotWrapper = (props) => {
+		let propsCopy = {...props};
+		propsCopy.value = moment.tz(props.value, calTimezone);
+		if (propsCopy.value.toString().includes("00:00:00")) {
+			return <div style={{ backgroundColor: "yellow" }}>{propsCopy.children}{"\u200C"}</div>;
+		}
+		return <Fragment>{propsCopy.children}</Fragment>
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
@@ -405,6 +413,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								components = {{
 									toolbar : CustomToolbar,
 									event: CustomEvent,
+									timeSlotWrapper: CustomTimeSlotWrapper,
 									week: { header: CustomWeekHeader }
 								}}
 								formats={{

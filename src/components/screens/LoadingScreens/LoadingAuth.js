@@ -25,7 +25,7 @@ const LoadingAuth = ({ navigateTo, addAuthCode, addCalendar, setCurrentUser, add
     axios({
 			method: 'post',
       url: `${process.env.REACT_APP_URL}/auth/google/list`,
-      data: { ...calendarDetails, code }
+      data: {...calendarDetails, code}
 		}).then(response => {
       addImportedEvents(response.data.events.data.items)
       addSuccess("Successfully imported calendar!")
