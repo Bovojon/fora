@@ -313,6 +313,25 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleTimezoneChange = (calTimezone) => {
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
+		// let midnightDate = new Date(startDate).setHours(0,0,0,0);
+		// const offset = moment.tz(midnightDate, calTimezone).format('Z');
+		// let sign = offset.charAt(0);
+		// let diff = offset.charAt(2); // Double digits update
+		// let gmt;
+		// if (sign === "-") {
+		// 	let io = moment(new Date()).format('DD-MMM-YYYY') + " 00:00:00"
+		// 	console.log(moment(io).format());
+		// 	gmt = moment(io).add(parseInt(diff), "hours").format('l LT');
+		// 	console.log("----------")
+		// 	console.log(io)
+		// 	console.log(parseInt(diff))
+		// 	console.log(gmt)
+		// } else {
+		// 	gmt = moment(midnightDate).subtract(diff, "hours").format('l LT');
+		// }
+		// let currentMidnight = moment.tz(gmt, browserTimezone).format();
+		// setStartDate(new Date(currentMidnight));
+		setStartDate(new Date(startDate).setHours(0,0,0,0));
 		addSuccess(`Changed timezone to ${calTimezone}`);
 	}
 
@@ -360,12 +379,17 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		);
 	}
 	const CustomTimeSlotWrapper = (props) => {
-		let propsCopy = {...props};
-		propsCopy.value = moment.tz(props.value, calTimezone);
-		if (propsCopy.value.toString().includes("00:00:00")) {
-			return <div style={{ backgroundColor: "yellow" }}>{propsCopy.children}{"\u200C"}</div>;
+		const isDifferentTimezone = browserTimezone !== calTimezone ? true : false;
+		if (isDifferentTimezone) {
+			const propsCopy = {...props};
+			propsCopy.value = moment.tz(props.value, calTimezone);
+			if (propsCopy.value.toString().includes("00:00:00")) {
+				return <div style={{ backgroundColor: "yellow" }}>{propsCopy.children}{"\u200C"}</div>;
+			}
+			return <Fragment>{propsCopy.children}</Fragment>
+		} else {
+			return <Fragment>{props.children}</Fragment>
 		}
-		return <Fragment>{propsCopy.children}</Fragment>
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
