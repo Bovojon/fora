@@ -311,9 +311,19 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		getUrlAndRedirect();
 	}
 	const handleTimezoneChange = (calTimezone) => {
+		const midnightDate = new Date(startDate).setHours(0,0,0,0);
+		const offset = moment.tz(midnightDate, calTimezone).format('Z');
+		const diff = offset.slice(1,3)
+		let gmt;
+		if (offset.charAt(0) === "-") {
+			gmt = moment(midnightDate).add(parseInt(diff), "hours").format('l LT');
+		} else {
+			gmt = moment(midnightDate).subtract(parseInt(diff), "hours").format('l LT');
+		}
+		setStartDate(new Date(moment.tz(gmt, browserTimezone).format()));
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
-		addSuccess(`Set calendar to ${calTimezone}`);
+		addSuccess(`Changed timezone to ${calTimezone}`);
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -339,9 +349,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<TimeText>
 						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 					</TimeText>
-					<TimeText>
-						({browserTimezone})
-					</TimeText>
 				</Grid>
 			);
 		}
@@ -353,11 +360,21 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 				</TimeText>
-				<TimeText>
-					({browserTimezone})
-				</TimeText>
 			</Grid>
 		);
+	}
+	const CustomTimeSlotWrapper = (props) => {
+		const isDifferentTimezone = browserTimezone !== calTimezone ? true : false;
+		if (isDifferentTimezone) {
+			const propsCopy = {...props};
+			propsCopy.value = moment.tz(props.value, calTimezone);
+			if (propsCopy.value.toString().includes("00:00:00")) {
+				return <div style={{ backgroundColor: "yellow" }}>{propsCopy.children}{"\u200C"}</div>;
+			}
+			return <Fragment>{propsCopy.children}</Fragment>
+		} else {
+			return <Fragment>{props.children}</Fragment>
+		}
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
@@ -405,6 +422,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								components = {{
 									toolbar : CustomToolbar,
 									event: CustomEvent,
+									timeSlotWrapper: CustomTimeSlotWrapper,
 									week: { header: CustomWeekHeader }
 								}}
 								formats={{
@@ -437,7 +455,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										handleEditUserName={handleEditUserName}
 										currentUser={currentUser}
 										initialTimes={initialTimes}
-										browserTimezone={browserTimezone}
 										handleNavigate={handleNavigate}
 									/>
 								</Paper>
