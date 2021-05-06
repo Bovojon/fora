@@ -313,24 +313,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleTimezoneChange = (calTimezone) => {
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
-		// let midnightDate = new Date(startDate).setHours(0,0,0,0);
-		// const offset = moment.tz(midnightDate, calTimezone).format('Z');
-		// let sign = offset.charAt(0);
-		// let diff = offset.charAt(2); // Double digits update
-		// let gmt;
-		// if (sign === "-") {
-		// 	let io = moment(new Date()).format('DD-MMM-YYYY') + " 00:00:00"
-		// 	console.log(moment(io).format());
-		// 	gmt = moment(io).add(parseInt(diff), "hours").format('l LT');
-		// 	console.log("----------")
-		// 	console.log(io)
-		// 	console.log(parseInt(diff))
-		// 	console.log(gmt)
-		// } else {
-		// 	gmt = moment(midnightDate).subtract(diff, "hours").format('l LT');
-		// }
-		// let currentMidnight = moment.tz(gmt, browserTimezone).format();
-		// setStartDate(new Date(currentMidnight));
 		setStartDate(new Date(startDate).setHours(0,0,0,0));
 		addSuccess(`Changed timezone to ${calTimezone}`);
 	}
