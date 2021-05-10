@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import axios from 'axios';
@@ -200,6 +200,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [initialRender, setInitialRender] = useState(true);
 	
 	const { calendarId } = useParams();
+	const calRef = useRef(null);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -287,7 +288,10 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			setEventDetailsOpen(true);
 		}
 	}
-	const handleNavigate = (eventObj) => { setStartDate(eventObj.start) }
+	const handleNavigate = (eventObj) => {
+		calRef.current.scrollIntoView();
+		setStartDate(eventObj.start);
+	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
 		if (auth.code !== false) removeAuthCode();
@@ -324,6 +328,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		setStartDate(new Date(momentTimezone.tz(gmt, browserTimezone).format()));
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
+		calRef.current.scrollIntoView();
 		addSuccess(`Changed timezone to ${calTimezone}`);
 	}
 
@@ -405,7 +410,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<Loading />
 					:
 					<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
-						<Grid item md={8} xs={12}>
+						<Grid item md={8} xs={12} ref={calRef}>
 							<BigCalendar
 								localizer={localizer}
 								events={events}
