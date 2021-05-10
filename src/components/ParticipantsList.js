@@ -19,10 +19,10 @@ const Box = styled(MuiBox)`
   overflow: auto;
 `
 
-const Header = styled.span`
-  font-size: 1.5em;
+const Header = styled.h5`
+  font-size: 1.25em;
   text-align: center;
-  color: #4299e1;
+  color: #f2a099;
 `
 
 const List = styled(MuiList)`
@@ -125,8 +125,8 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   
   return (
     <Box m={2}>
-      <Header><h4>Others on this calendar</h4></Header>
-      <LightText>(Click the checkboxes to filter available times by user.)</LightText>
+      <Header>Others on this calendar</Header>
+      <LightText>Click the checkboxes to filter available times by user.</LightText>
       {isLoading ? 
         <LoadingListSkeleton />
         :

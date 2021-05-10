@@ -28,11 +28,19 @@ const Steps = tw.ul`mt-4`;
 const Step = tw.li`mt-8 flex flex-col md:flex-row items-center md:items-start`;
 const StepNumber = tw.div`font-semibold text-4xl leading-none text-gray-400`;
 const StepText = tw.div`mt-3 md:mt-0 md:ml-6`;
-const StepHeading = tw.h6`leading-none text-xl font-semibold`;
+const StepHeading = styled.h6`
+  ${tw`leading-none text-xl font-semibold`}
+  color: #f2a099 !important
+`
 const StepDescription = tw.p`mt-3 max-w-xs leading-loose text-sm text-gray-600 font-medium`;
 const Heading = styled.h1(props => [
   tw`font-bold text-3xl md:text-3xl lg:text-4xl text-gray-700 leading-tight`,
   props.textOnCenter ? tw`text-center` : tw`text-center md:text-left`
+]);
+const StepsHeading = styled.h1(props => [
+  tw`font-bold text-3xl md:text-3xl lg:text-4xl leading-tight`,
+  props.textOnCenter ? tw`text-center` : tw`text-center md:text-left`,
+  { color: "#4299e1 !important" }
 ]);
 const Actions = styled.div`
   ${tw`relative max-w-md text-center mx-auto lg:mx-0`}
@@ -86,7 +94,7 @@ const Home = ({ navigateTo, createUser, createCalendar, addError }) => {
               <BlueHighlight> schedule a time.</BlueHighlight>
             </Paragraph>
             <Actions>
-              <input value={email} onChange={handleEmailChange} onKeyDown={handleEnterEmail} type="email" placeholder="Enter your email" />
+              <input value={email} onChange={handleEmailChange} onKeyDown={handleEnterEmail} type="email" placeholder="Email" />
               <button onClick={handleScheduleClick}>Create calendar</button>
             </Actions>
           </LeftColumn>
@@ -99,7 +107,7 @@ const Home = ({ navigateTo, createUser, createCalendar, addError }) => {
         <ContentWithPaddingXl>
           <SingleColumn>
             <TextContent>
-              <Heading textOnCenter>How it works</Heading>
+              <StepsHeading textOnCenter>How it works</StepsHeading>
               <Steps>
                 {steps.map((step, index) => (
                   <Step key={index}>
