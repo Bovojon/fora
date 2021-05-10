@@ -1,15 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import { Autocomplete as MuiAutocomplete } from '@material-ui/lab';
+import momentTimezone from "moment-timezone";
 import {
-  Grid as MuiGrid,
+  Grid,
   TextField,
   Box
 } from '@material-ui/core';
-
-const Grid = styled(MuiGrid)`
-  margin-bottom: 25px;
-`
 
 const Header = styled.h5`
   font-size: 1.25em;
@@ -19,6 +16,14 @@ const Header = styled.h5`
 
 const Autocomplete = styled(MuiAutocomplete)`
   width: 100%;
+  margin-bottom: 1rem;
+`
+
+const LightText = styled.p`
+  color: #5f6368;
+  font: 400 15px / 20px Roboto, sans-serif;
+  text-align: center;
+  margin-bottom: 0px;
 `
 
 const timezonesList = [
@@ -616,7 +621,13 @@ const timezonesList = [
   "Zulu",
 ]
 
-const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone }) => {
+const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTimezone }) => {
+  const [time, setTime] = useState(momentTimezone.tz(new Date(), calTimezone).format('h:mm A ddd, MMM D'));
+
+  useEffect(() => {
+    setTime(momentTimezone.tz(new Date(), calTimezone).format('h:mm A ddd, MMM D'));
+  }, [calTimezone])
+
   return (
     <Box m={2}>
       <Grid container direction="column" justify="center" alignItems="center">
@@ -642,6 +653,11 @@ const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone }) => {
             />
           )}
         />
+        {browserTimezone !== calTimezone ?
+          <LightText>{time}</LightText>
+          :
+          null
+        }
       </Grid>
     </Box>
   );

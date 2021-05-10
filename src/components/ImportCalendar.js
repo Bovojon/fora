@@ -10,7 +10,7 @@ const Grid = styled(MuiGrid)`
 `
 
 const Button = styled(MuiButton)`
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   text-transform: none;
   font: 600 16px / 20px Roboto, sans-serif;
   :hover {
