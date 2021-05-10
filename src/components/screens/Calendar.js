@@ -66,6 +66,7 @@ const DateLabel = styled.span`margin-left: 10px;`
 const TodayButton = styled(Button)`
 	margin-right: 12px;
 	padding: 5px 7px;
+	border-radius: 9999px;
 `
 
 const IconButton = styled(MuiIconButton)`

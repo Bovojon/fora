@@ -17,7 +17,10 @@ const RightColumn = tw.div`relative mt-12 lg:mt-0 flex-1 flex flex-col justify-c
 const ContentWithPaddingXl= tw.div`max-w-screen-xl mx-auto py-8`;
 const SingleColumn = tw.div`flex flex-col items-center`;
 const TextContent = tw.div`lg:py-8 text-center md:text-left`;
-const Paragraph = tw.p`my-5 lg:my-8 text-base xl:text-lg text-gray-700`;
+const Paragraph = styled.div`
+  ${tw`my-5 lg:my-8 text-base xl:text-lg text-gray-700`}
+  color: #f2a099 !important;
+`
 const Column = tw.div`w-full max-w-md mx-auto md:max-w-none md:mx-0`;
 const ImageColumn = tw(Column)`md:w-10/12 flex-shrink-0 h-full md:h-auto`;
 const BlueHighlight = tw.span`text-blue-500`;
@@ -28,7 +31,7 @@ const StepText = tw.div`mt-3 md:mt-0 md:ml-6`;
 const StepHeading = tw.h6`leading-none text-xl font-semibold`;
 const StepDescription = tw.p`mt-3 max-w-xs leading-loose text-sm text-gray-600 font-medium`;
 const Heading = styled.h1(props => [
-  tw`font-bold text-3xl md:text-3xl lg:text-4xl text-gray-800 leading-tight`,
+  tw`font-bold text-3xl md:text-3xl lg:text-4xl text-gray-700 leading-tight`,
   props.textOnCenter ? tw`text-center` : tw`text-center md:text-left`
 ]);
 const Actions = styled.div`
