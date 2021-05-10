@@ -43,12 +43,13 @@ const NavLinks = styled.div`
 const NavLink = styled.a`
   ${tw`text-base md:text-lg my-2 lg:mx-6 lg:my-0 font-semibold tracking-wide transition duration-300
     pb-1 border-b-2 border-transparent hocus:text-blue-500 no-underline cursor-pointer`}
-  color: #4299e1 !important;
+  color: #f2a099 !important;
 `
 
 const PrimaryLink = styled.a`
-  ${tw`lg:mx-0 px-8 py-3 bg-blue-500 ml-3 text-base md:text-lg border-b-0 font-semibold cursor-pointer rounded-full`}
-  color: white !important;
+  ${tw`lg:mx-0 px-8 py-3 ml-3 text-base md:text-lg border-b-0 font-semibold cursor-pointer rounded-full`}
+  background-color: #fddede;
+  color: #4299e1 !important;
 `
 
 const ModalContent = styled(Grid)`

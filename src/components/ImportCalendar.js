@@ -11,12 +11,15 @@ const Grid = styled(MuiGrid)`
 
 const Button = styled(MuiButton)`
   margin-bottom: 15px;
-  background-color: #4299e1;
   text-transform: none;
-  font: 400 16px / 20px Roboto, sans-serif;
+  font: 600 16px / 20px Roboto, sans-serif;
   :hover {
-    background-color: #4299e1;
+    background-color: #fddede;
   }
+  border-radius: 9999px;
+  padding: 0.8rem 1.1rem;
+  background-color: #fddede;
+  color: #4299e1 !important;
 `
 
 const LightText = styled.span`
@@ -28,7 +31,7 @@ const LightText = styled.span`
 const ImportCalendar = ({ handleImportCalendarClick }) => {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import Calendar</Button>
+      <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import calendar</Button>
       <LightText>Check when you're available. Details about your personal calendar will not be visible to others.</LightText>
     </Grid>
   );
