@@ -11,10 +11,10 @@ const Grid = styled(MuiGrid)`
   margin-bottom: 25px;
 `
 
-const Header = styled.span`
-  font-size: 1.5em;
+const Header = styled.h5`
+  font-size: 1.25em;
   text-align: center;
-  color: #4299e1;
+  color: #f2a099;
 `
 
 const Autocomplete = styled(MuiAutocomplete)`

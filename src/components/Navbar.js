@@ -47,7 +47,7 @@ const NavLink = styled.a`
 `
 
 const PrimaryLink = styled.a`
-  ${tw`lg:mx-0 px-8 py-3 ml-3 text-base md:text-lg border-b-0 font-semibold cursor-pointer rounded-full`}
+  ${tw`lg:mx-0 px-6 py-3 ml-3 text-base md:text-lg border-b-0 font-semibold cursor-pointer rounded-full`}
   background-color: #fddede;
   color: #4299e1 !important;
 `
