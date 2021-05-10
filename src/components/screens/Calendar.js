@@ -104,6 +104,13 @@ const TimeText = styled.span`
   font: 400 12px / 20px Roboto, sans-serif;
 `
 
+const MidnightSlot = styled.span`
+	background-color: #fddede;
+	text-align: center;
+	font-weight: bold;
+	font-size: 90%
+`
+
 const timeSorter = (a, b) => {
   return moment(a.start).diff(b.start)
 }
@@ -316,16 +323,16 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		getUrlAndRedirect();
 	}
 	const handleTimezoneChange = (calTimezone) => {
-		const midnightDate = new Date(startDate).setHours(0,0,0,0);
-		const offset = momentTimezone.tz(midnightDate, calTimezone).format('Z');
-		const diff = offset.slice(1,3)
-		let gmt;
-		if (offset.charAt(0) === "-") {
-			gmt = moment(midnightDate).add(parseInt(diff), "hours").format('l LT');
-		} else {
-			gmt = moment(midnightDate).subtract(parseInt(diff), "hours").format('l LT');
-		}
-		setStartDate(new Date(momentTimezone.tz(gmt, browserTimezone).format()));
+		// const midnightDate = new Date(startDate).setHours(0,0,0,0);
+		// const offset = momentTimezone.tz(midnightDate, calTimezone).format('Z');
+		// const diff = offset.slice(1,3)
+		// let gmt;
+		// if (offset.charAt(0) === "-") {
+		// 	gmt = moment(midnightDate).add(parseInt(diff), "hours").format('l LT');
+		// } else {
+		// 	gmt = moment(midnightDate).subtract(parseInt(diff), "hours").format('l LT');
+		// }
+		// setStartDate(new Date(momentTimezone.tz(gmt, browserTimezone).format()));
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
 		calRef.current.scrollIntoView();
@@ -375,7 +382,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			const propsCopy = {...props};
 			propsCopy.value = momentTimezone.tz(props.value, calTimezone);
 			if (propsCopy.value.toString().includes("00:00:00")) {
-				return <div style={{ backgroundColor: "yellow" }}>{propsCopy.children}{"\u200C"}</div>;
+				return <MidnightSlot>{propsCopy.children}{moment(propsCopy.value).format('ddd D')}</MidnightSlot>;
 			}
 			return <Fragment>{propsCopy.children}</Fragment>
 		} else {
