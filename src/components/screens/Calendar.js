@@ -372,12 +372,14 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			const propsCopy = {...props};
 			propsCopy.value = momentTimezone.tz(props.value, calTimezone);
 			if (propsCopy.value.toString().includes("00:00:00")) {
-				return <MidnightSlot>{propsCopy.children}{moment(propsCopy.value).format('ddd D')}</MidnightSlot>;
+				if (typeof props.children.props.children === "undefined") {
+					return <MidnightSlot>{props.children}{moment(props.value).format('ddd D')}</MidnightSlot>;
+				}
+				return <MidnightSlot>{props.children}{"\u200C"}</MidnightSlot>;
 			}
-			return <Fragment>{propsCopy.children}</Fragment>
-		} else {
 			return <Fragment>{props.children}</Fragment>
 		}
+		return <Fragment>{props.children}</Fragment>
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
