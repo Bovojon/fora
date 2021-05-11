@@ -22,7 +22,7 @@ const SuccessNotification = ({ success, removeSuccess }) => {
   }, [success]);
 
   return (
-    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={isSuccess} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={isSuccess} autoHideDuration={3000} onClose={handleClose}>
       <Alert onClose={handleClose} severity="success" elevation={6} variant="filled">{successMessage}</Alert>
     </Snackbar>
   );
