@@ -146,7 +146,7 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
 }
 
 const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calendarUniqueId, eventObj, code }) => {
-  const [collapseIsOpen, setCollapseIsOpen] = useState(true);
+  const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
   const [aboutIsOpen, setAboutIsOpen] = useState(false);

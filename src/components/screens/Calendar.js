@@ -203,6 +203,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [importedEventDetails, setImportedEventDetails] = useState({});
 	const [localizer, setLocalizer] = useState(momentLocalizer(moment));
 	const [calTimezone, setCalTimezone] = useState(browserTimezone);
+	const [isDifferentTimezone, setIsDifferentTimezone] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [initialRender, setInitialRender] = useState(true);
 	
@@ -326,10 +327,13 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		momentTimezone.tz.setDefault(calTimezone);
 		setLocalizer(momentLocalizer(momentTimezone));
 		calRef.current.scrollIntoView();
+		setIsDifferentTimezone(browserTimezone !== calTimezone ? true : false)
 		addSuccess(`Changed timezone to ${calTimezone}`);
 	}
 
 	const CustomEvent = ({ event }) => {
+		const eventStart = momentTimezone.tz(event.start, calTimezone);
+		const eventEnd = momentTimezone.tz(event.end, calTimezone);
 		if (typeof event?.summary === "undefined") {
 			let userName;
 			let canEdit = false;
@@ -350,7 +354,21 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
 					</NameArea>
 					<TimeText>
-						{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
+						{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
+					</TimeText>
+					<TimeText>
+						{moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
+							<Fragment>{moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}</Fragment>
+							:
+							<Fragment>{moment(eventStart).format('ddd, MMM D')}</Fragment>
+						}
+					</TimeText>
+					<TimeText>
+						{isDifferentTimezone ?
+							<Fragment>({calTimezone})</Fragment>
+							:
+							null
+						}
 					</TimeText>
 				</Grid>
 			);
@@ -363,11 +381,24 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				<TimeText>
 					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
 				</TimeText>
+				<TimeText>
+					{moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
+						<Fragment>{moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}</Fragment>
+						:
+						<Fragment>{moment(eventStart).format('ddd, MMM D')}</Fragment>
+					}
+				</TimeText>
+				<TimeText>
+					{isDifferentTimezone ?
+						<Fragment>({calTimezone})</Fragment>
+						:
+						null
+					}
+				</TimeText>
 			</Grid>
 		);
 	}
 	const CustomTimeSlotWrapper = (props) => {
-		const isDifferentTimezone = browserTimezone !== calTimezone ? true : false;
 		if (isDifferentTimezone) {
 			const propsCopy = {...props};
 			propsCopy.value = momentTimezone.tz(props.value, calTimezone);
@@ -466,6 +497,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										currentUser={currentUser}
 										initialTimes={initialTimes}
 										handleNavigate={handleNavigate}
+										isDifferentTimezone={isDifferentTimezone}
+										calTimezone={calTimezone}
 									/>
 								</Paper>
 							</Grid>

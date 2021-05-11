@@ -22,7 +22,7 @@ const ErrorNotification = ({ error, removeError }) => {
   }, [error]);
 
   return (
-    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={isError} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={isError} autoHideDuration={3000} onClose={handleClose}>
       <Alert onClose={handleClose} severity="error" elevation={6} variant="filled">{errorMessage}</Alert>
     </Snackbar>
   );
