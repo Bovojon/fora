@@ -91,7 +91,7 @@ const NameArea = styled(Grid)`
   }
 `
 
-const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate }) => {
+const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate, isDifferentTimezone, calTimezone }) => {
   return (
     <Box mt={2}>
       <ListArea>
@@ -132,6 +132,13 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                       <Row>
                         {moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
                       </Row>
+                      <Row>
+                        {isDifferentTimezone ?
+                          <Fragment>({calTimezone})</Fragment>
+                          :
+                          null
+                        }
+                      </Row>
                     </CardBody>
                   </Card>
                 );
@@ -153,6 +160,13 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                       </Row>
                       <Row>
                         {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
+                      </Row>
+                      <Row>
+                        {isDifferentTimezone ?
+                          <Fragment>({calTimezone})</Fragment>
+                          :
+                          null
+                        }
                       </Row>
                     </CardBody>
                   </Card>
