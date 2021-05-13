@@ -8,9 +8,9 @@
   width: 120px;
   height: 120px;
   margin: -76px 0 0 -76px;
-  border: 16px solid #f3f3f3;
+  border: 16px solid #fddede;
   border-radius: 50%;
-  border-top: 16px solid #4299e1;
+  border-top: 16px solid #f2a099;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
@@ -18,4 +18,25 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.ml6 {
+  position: relative;
+  font-weight: 500;
+  font-size: 1.5em;
+  color: #4299e1;
+}
+
+.ml6 .text-wrapper {
+  position: relative;
+  display: inline-block;
+  padding-top: 0.2em;
+  padding-right: 0.05em;
+  padding-bottom: 0.1em;
+  overflow: hidden;
+}
+
+.ml6 .letter {
+  display: inline-block;
+  line-height: 1em;
 }

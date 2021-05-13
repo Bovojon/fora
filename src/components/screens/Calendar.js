@@ -420,14 +420,16 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			borderRadius: '3px',
 			opacity: 0.8,
 			border: '0px',
-			display: 'block'
+			display: 'block',
+			overflow: 'auto'
 		};
 		const importedStyle = {
 			backgroundColor: 'black',
 			borderRadius: '3px',
 			opacity: 1,
 			border: `3px solid ${background}`,
-			display: 'block'
+			display: 'block',
+			overflow: 'auto'
 		}
 		if (typeof event?.summary === "undefined") return { style: selectedStyle }
 		return { style: importedStyle }
