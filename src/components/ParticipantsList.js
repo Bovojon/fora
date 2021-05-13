@@ -144,7 +144,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
               <Fragment>
                 {canEditName ?
                   <Grid onClick={handleEditUserName} container direction="row" justify="flex-start" alignItems="center" style={{ cursor: "pointer", overflow: "hidden" }}>
-                    <Name>{name} (you)</Name>
+                    <Name>{name} {name.includes("Person") ? <Fragment>(you)</Fragment> : null}</Name>
                     <PencilButton>
                       <PencilIcon fontSize="small" />
                     </PencilButton>
