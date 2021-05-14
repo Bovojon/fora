@@ -25,11 +25,14 @@
   font-weight: 500;
   font-size: 1.5em;
   color: #4299e1;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .textAnimation {
   width: 100%;
   float: left;
+  padding-top: 10px;
   -webkit-clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 80%);
   clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 80%);
   transform: translateY(-50px);
@@ -40,6 +43,7 @@
   animation-delay: 0.6s;
   animation-iteration-count:infinite;
   -webkit-animation-fill-mode: forwards infinite;
+  animation-fill-mode: forwards;
   &:first-child{
     animation-delay: 0.7s;
   }
