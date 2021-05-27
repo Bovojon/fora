@@ -2,11 +2,27 @@ import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import { Autocomplete as MuiAutocomplete } from '@material-ui/lab';
 import momentTimezone from "moment-timezone";
+import { withStyles } from '@material-ui/core/styles';
 import {
   Grid,
   TextField,
-  Box
+  Box,
+  Switch as MuiSwitch
 } from '@material-ui/core';
+
+const Switch = withStyles({
+  switchBase: {
+    color: "#fddede",
+    '&$checked': {
+      color: "#f2a099",
+    },
+    '&$checked + $track': {
+      backgroundColor: "#f2a099",
+    },
+  },
+  checked: {},
+  track: {},
+})(MuiSwitch);
 
 const Header = styled.h5`
   font-size: 1.25em;
@@ -621,7 +637,7 @@ const timezonesList = [
   "Zulu",
 ]
 
-const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTimezone }) => {
+const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTimezone, handleShowTimeChange, showTimes }) => {
   const [time, setTime] = useState(momentTimezone.tz(new Date(), calTimezone).format('h:mm A ddd, MMM D'));
 
   useEffect(() => {
@@ -654,7 +670,13 @@ const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTi
           )}
         />
         {browserTimezone !== calTimezone ?
-          <LightText>{time}</LightText>
+          <Fragment>
+            <LightText>{time}</LightText>
+            <Grid container direction="row" justify="center" alignItems="center">
+              <LightText>Show time slot dates</LightText>
+              <Switch onChange={handleShowTimeChange} checked={showTimes} />
+            </Grid>
+          </Fragment>
           :
           null
         }
