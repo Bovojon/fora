@@ -108,7 +108,11 @@ const MidnightSlot = styled.span`
 	background-color: #fff4dc;
 	text-align: center;
 	font-weight: bold;
-	font-size: 90%
+`
+
+const ShowTimeText = styled.span`
+	color: #bdbdbd;
+	text-align: center;
 `
 
 const timeSorter = (a, b) => {
@@ -206,6 +210,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [isDifferentTimezone, setIsDifferentTimezone] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [initialRender, setInitialRender] = useState(true);
+	const [showTimes, setShowTimes] = useState(false);
 	
 	const { calendarId } = useParams();
 	const calRef = useRef(null);
@@ -314,6 +319,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleImportCalendarClick = () => { setImportDialogOpen(true) }
 	const handleImportDialogClose = () => { setImportDialogOpen(false) }
 	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
+	const handleShowTimeChange = (e) => { setShowTimes(!showTimes) }
 	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
 		const timeMin = importStartTime.toISOString();
@@ -408,7 +414,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				}
 				return <MidnightSlot>{props.children}{"\u200C"}</MidnightSlot>;
 			}
-			return <Fragment>{props.children}</Fragment>
+		}
+		if (showTimes && typeof props.children.props.children === "undefined") {
+			return <ShowTimeText>{props.children}{moment(props.value).format('ddd D')}</ShowTimeText>;
 		}
 		return <Fragment>{props.children}</Fragment>
 	}
@@ -480,6 +488,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										calTimezone={calTimezone}
 										browserTimezone={browserTimezone}
 										setCalTimezone={setCalTimezone}
+										handleShowTimeChange={handleShowTimeChange}
+										showTimes={showTimes}
 									/>
 									<Divider />
 									<ParticipantsList
