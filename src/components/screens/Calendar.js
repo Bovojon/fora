@@ -385,7 +385,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<Header>{event.summary}</Header>
 				</NameArea>
 				<TimeText>
-					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
+					{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
 				</TimeText>
 				<TimeText>
 					{moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
