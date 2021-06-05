@@ -443,18 +443,18 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		);
 	}
 	const CustomTimeSlotWrapper = (props) => {
+		const isNonGutter = typeof props.children.props.children === "undefined";
 		if (isDifferentTimezone) {
 			const propsCopy = {...props};
 			propsCopy.value = momentTimezone.tz(props.value, calTimezone);
 			if (propsCopy.value.toString().includes("00:00:00")) {
-				if (typeof props.children.props.children === "undefined") {
+				if (isNonGutter) {
 					return <MidnightSlot>{props.children}{moment(props.value).format('ddd D')}</MidnightSlot>;
 				}
 				return <MidnightSlot>{props.children}{"\u200C"}</MidnightSlot>;
+			} else if (showTimes && isNonGutter) {
+				return <ShowTimeText>{props.children}{moment(propsCopy.value).format('ddd D')}</ShowTimeText>;
 			}
-		}
-		if (showTimes && typeof props.children.props.children === "undefined") {
-			return <ShowTimeText>{props.children}{moment(props.value).format('ddd D')}</ShowTimeText>;
 		}
 		return <Fragment>{props.children}</Fragment>
 	}
