@@ -120,25 +120,30 @@ const timeSorter = (a, b) => {
 }
 
 const differentDay = (start, end) => {
-	if (moment(start).format('YYYY-MM-DD') !== moment(end).format('YYYY-MM-DD')) {
-		return true;
+	if (moment(start).isSame(end, 'day')) {
+		return false;
 	}
-	return false;
+	return true;
 }
 
 const breakDaysIntoHours = (timeObj) => {
 	const newTimes = []
-	let days = moment(timeObj.end).diff(moment(timeObj.start), 'days');
-	let startTime = moment(timeObj.start);
-	let endTime = moment(timeObj.start).endOf('day');
-	let id = timeObj.id + 100;
+	const startTime = timeObj.start;
+	const endTime = timeObj.end;
+	let days = moment(endTime).diff(moment(startTime), 'days');
+	if (days === 0 && differentDay(startTime, endTime)) {
+		days = 2;
+	}
+	let startTimeMO = moment(startTime);
+	let endTimeMO = moment(startTime).endOf('day');
+	let id = 1000000 + timeObj.id;
 	for (let day=0; day<days; day++) {
-		const start = new Date(startTime);
-		const end = new Date(endTime);
+		const start = new Date(startTimeMO);
+		const end = new Date(endTimeMO);
 		newTimes.push({...timeObj, id, start, end});
 		id += 100;
-		startTime = startTime.add(1, 'day').startOf('day');
-		endTime = differentDay(startTime, timeObj.end) ? moment(startTime).endOf('day') : moment(timeObj.end);
+		startTimeMO = startTimeMO.add(1, 'day').startOf('day');
+		endTimeMO = differentDay(startTimeMO, endTime) ? moment(startTimeMO).endOf('day') : moment(endTime);
 	}
 	return newTimes;
 }
