@@ -307,6 +307,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
+		if (moment(start).isSame(end)) {
+			end = moment(end).endOf('day');
+		}
 		start = new Date(start);
 		end = new Date(end);
 		const newTime = {
