@@ -119,6 +119,35 @@ const timeSorter = (a, b) => {
   return moment(a.start).diff(b.start)
 }
 
+const differentDay = (start, end) => {
+	if (moment(start).isSame(end, 'day')) {
+		return false;
+	}
+	return true;
+}
+
+const breakDaysIntoHours = (timeObj) => {
+	const newTimes = []
+	const startTime = timeObj.start;
+	const endTime = timeObj.end;
+	let days = moment(endTime).diff(moment(startTime), 'days');
+	if (days === 0 && differentDay(startTime, endTime)) {
+		days = 2;
+	}
+	let startTimeMO = moment(startTime);
+	let endTimeMO = moment(startTime).endOf('day');
+	let id = 1000000 + timeObj.id;
+	for (let day=0; day<days; day++) {
+		const start = new Date(startTimeMO);
+		const end = new Date(endTimeMO);
+		newTimes.push({...timeObj, id, start, end});
+		id += 100;
+		startTimeMO = startTimeMO.add(1, 'day').startOf('day');
+		endTimeMO = differentDay(startTimeMO, endTime) ? moment(startTimeMO).endOf('day') : moment(endTime);
+	}
+	return newTimes;
+}
+
 const Loading = () => {
 	return (
 		<div className="loader-wrapper">
@@ -223,8 +252,14 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}, []);
 
 	useEffect(() => {
-		setTimes(initialTimes);
-		const initialTimesCopy = [...initialTimes];
+		let newTimes = initialTimes;
+		initialTimes.forEach(timeObj => {
+			if (differentDay(timeObj.start, timeObj.end)) {
+				newTimes = newTimes.concat(breakDaysIntoHours(timeObj));
+			}
+		});
+		setTimes(newTimes);
+		const initialTimesCopy = [...newTimes];
 		initialTimesCopy.sort(timeSorter);
 		setSortedTimes(initialTimesCopy);
 		if (initialTimesCopy.length > 0 && initialRender) {
@@ -272,6 +307,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
+		if (moment(start).isSame(end)) {
+			end = moment(end).endOf('day');
+		}
 		start = new Date(start);
 		end = new Date(end);
 		const newTime = {
@@ -385,7 +423,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 					<Header>{event.summary}</Header>
 				</NameArea>
 				<TimeText>
-					{moment(event.start).format('h:mma') + " – " + moment(event.end).format('h:mma')}
+					{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
 				</TimeText>
 				<TimeText>
 					{moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
@@ -405,18 +443,18 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		);
 	}
 	const CustomTimeSlotWrapper = (props) => {
+		const isNonGutter = typeof props.children.props.children === "undefined";
 		if (isDifferentTimezone) {
 			const propsCopy = {...props};
 			propsCopy.value = momentTimezone.tz(props.value, calTimezone);
 			if (propsCopy.value.toString().includes("00:00:00")) {
-				if (typeof props.children.props.children === "undefined") {
+				if (isNonGutter) {
 					return <MidnightSlot>{props.children}{moment(props.value).format('ddd D')}</MidnightSlot>;
 				}
 				return <MidnightSlot>{props.children}{"\u200C"}</MidnightSlot>;
+			} else if (showTimes && isNonGutter) {
+				return <ShowTimeText>{props.children}{moment(propsCopy.value).format('ddd D')}</ShowTimeText>;
 			}
-		}
-		if (showTimes && typeof props.children.props.children === "undefined") {
-			return <ShowTimeText>{props.children}{moment(props.value).format('ddd D')}</ShowTimeText>;
 		}
 		return <Fragment>{props.children}</Fragment>
 	}

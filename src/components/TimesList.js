@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import moment from "moment";
+import momentTimezone from "moment-timezone";
 import styled from 'styled-components';
 import { Clear, Create } from '@material-ui/icons';
 import {
@@ -102,6 +103,8 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
           <Fragment>
             <LightText>Click an available time to schedule an event.</LightText>
             {times.map(time => {
+              const eventStart = momentTimezone.tz(time.start, calTimezone);
+              const eventEnd = momentTimezone.tz(time.end, calTimezone);
               let userName;
               let canEdit = false;
               let background = time.creator?.color;
@@ -116,7 +119,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                   canEdit = true;
                 }
               }
-              if (moment(time.start).format('YYYY-MM-DD') !== moment(time.end).format('YYYY-MM-DD')){
+              if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')){
                 return (
                   <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
                     <CardBody>
@@ -130,7 +133,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                         </NameArea>
                       </Row>
                       <Row>
-                        {moment(time.start).format('MMM D') + " – " + moment(time.end).format('MMM D')}
+                        {moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}
                       </Row>
                       <Row>
                         {isDifferentTimezone ?
@@ -156,10 +159,10 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                         </NameArea>
                       </Row>
                       <Row>
-                        {moment(time.start).format('ddd, MMM D')}
+                        {moment(eventStart).format('ddd, MMM D')}
                       </Row>
                       <Row>
-                        {moment(time.start).format('h:mma') + " – " + moment(time.end).format('h:mma')}
+                        {moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
                       </Row>
                       <Row>
                         {isDifferentTimezone ?

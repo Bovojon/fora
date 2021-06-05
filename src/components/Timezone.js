@@ -641,7 +641,12 @@ const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTi
   const [time, setTime] = useState(momentTimezone.tz(new Date(), calTimezone).format('h:mm A ddd, MMM D'));
 
   useEffect(() => {
-    setTime(momentTimezone.tz(new Date(), calTimezone).format('h:mm A ddd, MMM D'));
+    const gmtFull = momentTimezone.tz(calTimezone).format('Z')
+    const gmtArrays = gmtFull.split(":")
+    const gmt = gmtArrays[1] === "00" ? gmtArrays[0] : gmtFull
+    setTime(
+      momentTimezone.tz(new Date(), calTimezone).format('h:mm A ddd, MMM D') + " (GMT " + gmt + ")"
+    );
   }, [calTimezone])
 
   return (
