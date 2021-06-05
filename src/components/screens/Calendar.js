@@ -119,6 +119,30 @@ const timeSorter = (a, b) => {
   return moment(a.start).diff(b.start)
 }
 
+const differentDay = (start, end) => {
+	if (moment(start).format('YYYY-MM-DD') !== moment(end).format('YYYY-MM-DD')) {
+		return true;
+	}
+	return false;
+}
+
+const breakDaysIntoHours = (timeObj) => {
+	const newTimes = []
+	let days = moment(timeObj.end).diff(moment(timeObj.start), 'days');
+	let startTime = moment(timeObj.start);
+	let endTime = moment(timeObj.start).endOf('day');
+	let id = timeObj.id + 100;
+	for (let day=0; day<days; day++) {
+		const start = new Date(startTime);
+		const end = new Date(endTime);
+		newTimes.push({...timeObj, id, start, end});
+		id += 100;
+		startTime = startTime.add(1, 'day').startOf('day');
+		endTime = differentDay(startTime, timeObj.end) ? moment(startTime).endOf('day') : moment(timeObj.end);
+	}
+	return newTimes;
+}
+
 const Loading = () => {
 	return (
 		<div className="loader-wrapper">
@@ -223,8 +247,14 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}, []);
 
 	useEffect(() => {
-		setTimes(initialTimes);
-		const initialTimesCopy = [...initialTimes];
+		let newTimes = initialTimes;
+		initialTimes.forEach(timeObj => {
+			if (differentDay(timeObj.start, timeObj.end)) {
+				newTimes = newTimes.concat(breakDaysIntoHours(timeObj));
+			}
+		});
+		setTimes(newTimes);
+		const initialTimesCopy = [...newTimes];
 		initialTimesCopy.sort(timeSorter);
 		setSortedTimes(initialTimesCopy);
 		if (initialTimesCopy.length > 0 && initialRender) {
