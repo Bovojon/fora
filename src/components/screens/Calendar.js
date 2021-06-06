@@ -372,7 +372,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		setLocalizer(momentLocalizer(momentTimezone));
 		calRef.current.scrollIntoView();
 		setIsDifferentTimezone(browserTimezone !== calTimezone ? true : false)
-		addSuccess(`Changed timezone to ${calTimezone}`);
+		if (momentTimezone.tz(calTimezone).format('Z').split(":")[1] !== "00") {
+			addError(`Sorry, we currently do not support timezone change for ${calTimezone}.`);
+		} else {
+			addSuccess(`Changed timezone to ${calTimezone}`);
+		}
 	}
 
 	const CustomEvent = ({ event }) => {
@@ -449,11 +453,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			propsCopy.value = momentTimezone.tz(props.value, calTimezone);
 			if (propsCopy.value.toString().includes("00:00:00")) {
 				if (isNonGutter) {
-					return <MidnightSlot>{props.children}{moment(props.value).format('ddd D')}</MidnightSlot>;
+					return <MidnightSlot>{propsCopy.children}{moment(propsCopy.value).format('ddd D')}</MidnightSlot>;
 				}
-				return <MidnightSlot>{props.children}{"\u200C"}</MidnightSlot>;
+				return <MidnightSlot>{propsCopy.children.props.children}{"\u200C"}</MidnightSlot>;
 			} else if (showTimes && isNonGutter) {
-				return <ShowTimeText>{props.children}{moment(propsCopy.value).format('ddd D')}</ShowTimeText>;
+				return <ShowTimeText>{propsCopy.children}{moment(propsCopy.value).format('ddd D')}</ShowTimeText>;
 			}
 		}
 		return <Fragment>{props.children}</Fragment>
