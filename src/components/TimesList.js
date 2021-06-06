@@ -100,7 +100,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
       <ListArea>
         <Header>Available times</Header>
         {initialTimes.length === 0 ?
-          <LightText>Click and drag on the calendar to add available times.</LightText>
+          <LightText>Click and drag on the calendar to select availability.</LightText>
           :
           <Fragment>
             <LightText>Click an available time to schedule an event.</LightText>
