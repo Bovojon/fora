@@ -131,7 +131,7 @@ const breakDaysIntoHours = (timeObj) => {
 	const startTime = timeObj.start;
 	const endTime = timeObj.end;
 	let days = moment(endTime).diff(moment(startTime), 'days');
-	if (days === 0 && differentDay(startTime, endTime)) {
+	if ((days === 0 || days === 1) && differentDay(startTime, endTime)) {
 		days = 2;
 	}
 	let startTimeMO = moment(startTime);
@@ -297,7 +297,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		}).then(response => {
 			window.location.replace(response.data.url);
 		}).catch(err =>{
-			addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com.");
+			addError("Sorry, something went wrong. Please email us at letsfora@gmail.com.");
 			console.error(err);
 		});
 	}
