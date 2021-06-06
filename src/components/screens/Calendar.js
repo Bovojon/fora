@@ -372,7 +372,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		setLocalizer(momentLocalizer(momentTimezone));
 		calRef.current.scrollIntoView();
 		setIsDifferentTimezone(browserTimezone !== calTimezone ? true : false)
-		addSuccess(`Changed timezone to ${calTimezone}`);
+		if (momentTimezone.tz(calTimezone).format('Z').split(":")[1] !== "00") {
+			addError(`Sorry, we currently do not support timezone change for ${calTimezone}.`);
+		} else {
+			addSuccess(`Changed timezone to ${calTimezone}`);
+		}
 	}
 
 	const CustomEvent = ({ event }) => {
