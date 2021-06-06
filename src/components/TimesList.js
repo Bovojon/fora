@@ -21,6 +21,8 @@ const Card = styled(ReactCard)`
 	padding: 0.7rem;
   margin-bottom: 7px;
   cursor: pointer;
+  width: ${props => props.width};
+  margin-left: ${props => props.ml};
 
   &:hover {
     transition: all 0.2s ease-out;
@@ -108,13 +110,15 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
               let userName;
               let canEdit = false;
               let background = time.creator?.color;
+              let width = time.id < 1000000 ? "100%" : "90%";
+              let ml = time.id < 1000000 ? "0" : "5%";
               if (typeof background === "undefined") background = currentUser.color;
-              if (typeof time.creator?.name === "undefined") {
+              if (typeof time.creator?.name === "undefined" && time.id < 1000000) {
                 userName = currentUser.name;
                 canEdit = true;
               } else {
                 userName = time.creator.name;
-                if (currentUser.id === time.creator.id) {
+                if (currentUser.id === time.creator.id && time.id < 1000000) {
                   userName = currentUser.name;
                   canEdit = true;
                 }
@@ -147,7 +151,7 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                 );
               } else {
                 return (
-                  <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
+                  <Card key={time.id} onClick={() => handleNavigate(time)} body background={background} width={width} ml={ml}>
                     <CardBody>
                       <TopRightArea>
                         {canEdit && <IconButton id="clearIcon" onClick={() => handleDelete(time.id)} disableFocusRipple disableRipple><ClearIcon /></IconButton>}

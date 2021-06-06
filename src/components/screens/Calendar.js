@@ -140,7 +140,9 @@ const breakDaysIntoHours = (timeObj) => {
 	for (let day=0; day<days; day++) {
 		const start = new Date(startTimeMO);
 		const end = new Date(endTimeMO);
-		newTimes.push({...timeObj, id, start, end});
+		if (!moment(start).isSame(end)) {
+			newTimes.push({...timeObj, id, start, end});
+		}
 		id += 100;
 		startTimeMO = startTimeMO.add(1, 'day').startOf('day');
 		endTimeMO = differentDay(startTimeMO, endTime) ? moment(startTimeMO).endOf('day') : moment(endTime);
@@ -373,7 +375,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		calRef.current.scrollIntoView();
 		setIsDifferentTimezone(browserTimezone !== calTimezone ? true : false)
 		if (momentTimezone.tz(calTimezone).format('Z').split(":")[1] !== "00") {
-			addError(`Sorry, we currently do not support timezone change for ${calTimezone}.`);
+			addError(`Sorry, Fora does not support ${calTimezone} at the moment.`);
 		} else {
 			addSuccess(`Changed timezone to ${calTimezone}`);
 		}
