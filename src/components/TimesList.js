@@ -113,15 +113,11 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
               let width = time.id < 1000000 ? "100%" : "90%";
               let ml = time.id < 1000000 ? "0" : "5%";
               if (typeof background === "undefined") background = currentUser.color;
-              if (typeof time.creator?.name === "undefined" && time.id < 1000000) {
+              if (typeof time.creator?.name === "undefined" || currentUser.id === time.creator.id) {
                 userName = currentUser.name;
-                canEdit = true;
+                if (time.id < 1000000) canEdit = true;
               } else {
                 userName = time.creator.name;
-                if (currentUser.id === time.creator.id && time.id < 1000000) {
-                  userName = currentUser.name;
-                  canEdit = true;
-                }
               }
               if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')){
                 return (
