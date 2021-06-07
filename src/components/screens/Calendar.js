@@ -130,10 +130,8 @@ const breakDaysIntoHours = (timeObj) => {
 	const newTimes = []
 	const startTime = timeObj.start;
 	const endTime = timeObj.end;
-	let days = moment(endTime).diff(moment(startTime), 'days');
-	if ((days === 0 || days === 1) && differentDay(startTime, endTime)) {
-		days = 2;
-	}
+	let days = moment(endTime).diff(moment(startTime), 'days') + 1;
+	if (days === 1) days = 2;
 	let startTimeMO = moment(startTime);
 	let endTimeMO = moment(startTime).endOf('day');
 	let id = 1000000 + timeObj.id;
@@ -146,6 +144,11 @@ const breakDaysIntoHours = (timeObj) => {
 		id += 100;
 		startTimeMO = startTimeMO.add(1, 'day').startOf('day');
 		endTimeMO = differentDay(startTimeMO, endTime) ? moment(startTimeMO).endOf('day') : moment(endTime);
+	}
+	if (endTimeMO.isSame(endTime)) {
+		const start = new Date(startTimeMO);
+		const end = new Date(endTimeMO);
+		newTimes.push({...timeObj, id, start, end});
 	}
 	return newTimes;
 }
@@ -169,59 +172,8 @@ const Loading = () => {
 	);
 }
 
-const CustomToolbar = (toolbar) => {
-	const [calendarView, setCalendarView] = useState('week');
-
-	const handleCalendarViewChange = (e) => {
-		const view = e.target.value
-		setCalendarView(view);
-		toolbar.onView(view);
-	}
-	const handleBackClick = () => { toolbar.onNavigate('PREV'); };
-	const handleNextClick = () => { toolbar.onNavigate('NEXT'); };
-	const handleTodayClick = () => { toolbar.onNavigate('TODAY'); };
-	const dateLabel = () => {
-		const toolbarDate = moment(toolbar.date);
-		if (calendarView === "day") return toolbarDate.format('MMM D, YYYY');
-		return toolbarDate.format('MMM YYYY');
-  };
-
-	return (
-		<ToolbarBox>
-			<ToolbarItemLeft>
-				<TodayButton onClick={handleTodayClick} variant="outlined">Today</TodayButton>
-				<CalNavigation>
-					<IconButton onClick={handleBackClick}><ArrowLeftIcon /></IconButton>
-					<IconButton onClick={handleNextClick}><ArrowRightIcon /></IconButton>
-					<DateLabel>{dateLabel()}</DateLabel>
-				</CalNavigation>
-			</ToolbarItemLeft>
-			<ToolbarItemRight>
-				<Select value={calendarView} onChange={handleCalendarViewChange}>
-					<MenuItem value={'month'}>Month</MenuItem>
-					<MenuItem value={'week'}>Week</MenuItem>
-					<MenuItem value={'day'}>Day</MenuItem>
-				</Select>
-			</ToolbarItemRight>
-		</ToolbarBox>
-	)
-}
-
-const CustomWeekHeader = ({ label }) => {
-	const labels = label.split(" ");
-	return (
-		<Grid container direction="column" justify="center" alignItems="center">
-			<Grid item xs={12}>
-				{labels[0]}
-			</Grid>
-			<Grid item xs={12}>
-				{labels[1]}
-			</Grid>
-		</Grid>
-	);
-}
-
 const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError, addSuccess }) => {
+	const [calendarView, setCalendarView] = useState('week');
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
 	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
@@ -309,7 +261,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
-		if (moment(start).isSame(end)) {
+		if (moment(start).isSame(end) || calendarView === "month") {
 			end = moment(end).endOf('day');
 		}
 		start = new Date(start);
@@ -375,12 +327,60 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		calRef.current.scrollIntoView();
 		setIsDifferentTimezone(browserTimezone !== calTimezone ? true : false)
 		if (momentTimezone.tz(calTimezone).format('Z').split(":")[1] !== "00") {
-			addError(`Sorry, Fora does not support ${calTimezone} at the moment.`);
+			addError(`Sorry, Fora does not currently support ${calTimezone}.`);
 		} else {
 			addSuccess(`Changed timezone to ${calTimezone}`);
 		}
 	}
 
+	const CustomToolbar = (toolbar) => {
+		const handleCalendarViewChange = (e) => {
+			const view = e.target.value
+			setCalendarView(view);
+			toolbar.onView(view);
+		}
+		const handleBackClick = () => { toolbar.onNavigate('PREV'); };
+		const handleNextClick = () => { toolbar.onNavigate('NEXT'); };
+		const handleTodayClick = () => { toolbar.onNavigate('TODAY'); };
+		const dateLabel = () => {
+			const toolbarDate = moment(toolbar.date);
+			if (calendarView === "day") return toolbarDate.format('MMM D, YYYY');
+			return toolbarDate.format('MMM YYYY');
+		};
+
+		return (
+			<ToolbarBox>
+				<ToolbarItemLeft>
+					<TodayButton onClick={handleTodayClick} variant="outlined">Today</TodayButton>
+					<CalNavigation>
+						<IconButton onClick={handleBackClick}><ArrowLeftIcon /></IconButton>
+						<IconButton onClick={handleNextClick}><ArrowRightIcon /></IconButton>
+						<DateLabel>{dateLabel()}</DateLabel>
+					</CalNavigation>
+				</ToolbarItemLeft>
+				<ToolbarItemRight>
+					<Select value={calendarView} onChange={handleCalendarViewChange}>
+						<MenuItem value={'month'}>Month</MenuItem>
+						<MenuItem value={'week'}>Week</MenuItem>
+						<MenuItem value={'day'}>Day</MenuItem>
+					</Select>
+				</ToolbarItemRight>
+			</ToolbarBox>
+		)
+	}
+	const CustomWeekHeader = ({ label }) => {
+		const labels = label.split(" ");
+		return (
+			<Grid container direction="column" justify="center" alignItems="center">
+				<Grid item xs={12}>
+					{labels[0]}
+				</Grid>
+				<Grid item xs={12}>
+					{labels[1]}
+				</Grid>
+			</Grid>
+		);
+	}
 	const CustomEvent = ({ event }) => {
 		const eventStart = momentTimezone.tz(event.start, calTimezone);
 		const eventEnd = momentTimezone.tz(event.end, calTimezone);
