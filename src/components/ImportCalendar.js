@@ -32,7 +32,7 @@ const ImportCalendar = ({ handleImportCalendarClick }) => {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import calendar</Button>
-      <LightText>Check when you're available. Details about your personal calendar will not be visible to others.</LightText>
+      <LightText>Check your availability. Details about your personal calendar will not be visible to others.</LightText>
     </Grid>
   );
 }

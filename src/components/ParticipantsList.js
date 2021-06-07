@@ -126,7 +126,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   return (
     <Box m={2}>
       <Header>Others on this calendar</Header>
-      <LightText>Click the checkboxes to filter available times by user.</LightText>
+      <LightText>Click the checkboxes to filter availability by user.</LightText>
       {isLoading ? 
         <LoadingListSkeleton />
         :
