@@ -14,11 +14,14 @@ const LoadingMessage = styled.div`
 
 const sentences = [
   "You look great today!",
-  "Tip: Click on an available time to schedule a new event.",
+  "Tip: Click on an availability slot to schedule an event.",
   "One moment please...",
   "Polishing the edges.",
+  "Tip: You can invite others to this calendar.",
+  "If you don't like something, send your feedback to letsfora@gmail.com!",
   "Almost there.",
-  "Tip: Click and drag on the calendar to add your available times."
+  "Hope you're having a wonderful day!",
+  "Tip: Click and drag on the calendar to add your availability."
 ]
 
 const LoadingNewCalendar = ({ calendar, navigateTo }) => {

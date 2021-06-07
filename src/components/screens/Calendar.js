@@ -572,7 +572,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={3000} onClose={handleScrollToBottom}>
-					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below to view others on this calendar and available times.</Alert>
+					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below to view others on this calendar and their availabilities.</Alert>
 				</Snackbar>
       </Box>
 			<SuccessNotification />

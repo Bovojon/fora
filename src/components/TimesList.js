@@ -98,12 +98,12 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
   return (
     <Box mt={2}>
       <ListArea>
-        <Header>Available times</Header>
+        <Header>Availability</Header>
         {initialTimes.length === 0 ?
           <LightText>Click and drag on the calendar to select availability.</LightText>
           :
           <Fragment>
-            <LightText>Click an available time to schedule an event.</LightText>
+            <LightText>Click on an availability slot to schedule an event.</LightText>
             {times.map(time => {
               const eventStart = momentTimezone.tz(time.start, calTimezone);
               const eventEnd = momentTimezone.tz(time.end, calTimezone);
