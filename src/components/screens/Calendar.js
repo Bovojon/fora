@@ -37,6 +37,7 @@ import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
 import ImportTimesForm from '../forms/ImportTimesForm';
 import EventDetails from '../EventDetails';
+import EventDialog from '../EventDialog';
 import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
 import Timezone from '../Timezone';
@@ -176,9 +177,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [calendarView, setCalendarView] = useState('week');
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
-	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [eventDetailsOpen, setEventDetailsOpen] = useState(false);
+	const [eventDialogOpen, setEventDialogOpen] = useState(false);
 	const [times, setTimes] = useState(initialTimes);
 	const [sortedTimes, setSortedTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
@@ -258,7 +259,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleEditUserName = () => { setUserFormOpen(true) }
   const handleUserFormClose = () => { setUserFormOpen(false) }
 	const handleUserLoginClose = () => { setUserLoginOpen(false) }
-	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
 		if (moment(start).isSame(end) || calendarView === "month") {
@@ -275,19 +275,19 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		addTime(newTime);
 	}
 	const handleSelectEvent = (event, e) => {
+		console.log(event);
 		if (typeof event?.summary === "undefined") {
-			if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
-				setIsOwner(currentUser.id === event.user_id);
-				setTimeSelectedObj(event);
-				const { start, end } = event;
-				const newEventObj = {
-					details: { start, end },
-					calendar_id: calendar.id,
-					user_id: currentUser.id
-				}
-				addEvent(newEventObj);
-				setEventClickFormOpen(true);
+			setIsOwner(currentUser.id === event.user_id);
+			setTimeSelectedObj(event);
+			const { start, end, creator } = event;
+			const newEventObj = {
+				details: { start, end },
+				calendar_id: calendar.id,
+				user_id: currentUser.id,
+				user_name: creator?.name
 			}
+			addEvent(newEventObj);
+			setEventDialogOpen(true);
 		} else {
 			setImportedEventDetails(event);
 			setEventDetailsOpen(true);
@@ -311,6 +311,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleImportCalendarClick = () => { setImportDialogOpen(true) }
 	const handleImportDialogClose = () => { setImportDialogOpen(false) }
 	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
+	const handleEventDialogClose = () => { setEventDialogOpen(false) }
 	const handleShowTimeChange = (e) => { setShowTimes(!showTimes) }
 	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
@@ -563,16 +564,23 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				}
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
-			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} handleUserFormOpen={setUserFormOpen} />
-			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} isOwner={isOwner} 
-				eventObj={eventObj} handleAddTime={handleAddTime} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} 
-				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj} />
+			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} 
+				handleUserFormOpen={setUserFormOpen} 
+			/>
 			<ImportTimesForm handleImportClick={handleImportClick} dialogIsOpen={importDialogOpen} handleDialogClose={handleImportDialogClose}
-				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} fullScreen={fullScreen} />
+				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} 
+				fullScreen={fullScreen} 
+			/>
 			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
+			<EventDialog dialogIsOpen={eventDialogOpen} handleDialogClose={handleEventDialogClose} isOwner={isOwner} eventObj={eventObj}
+				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete} 
+				timeSelectedObj={timeSelectedObj} isDifferentTimezone={isDifferentTimezone} calTimezone={calTimezone}
+			/>
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={3000} onClose={handleScrollToBottom}>
-					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below to view others on this calendar and their availabilities.</Alert>
+					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">
+						Scroll below to view more details.
+					</Alert>
 				</Snackbar>
       </Box>
 			<SuccessNotification />

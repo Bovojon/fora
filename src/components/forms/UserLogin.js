@@ -10,7 +10,7 @@ import {
   DialogTitle as MuiDialogTitle,
   Dialog,
 } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+import { Add as MuiAddIcon } from '@material-ui/icons';
 
 import { createUserPending, setCurrentUserPending } from '../../actions/userActionCreators';
 
@@ -24,6 +24,11 @@ const DialogTitle = styled(MuiDialogTitle)`
 
 const List = styled(MuiList)`
   padding: 0px 24px 16px 24px;
+`
+
+const AddIcon = styled(MuiAddIcon)`
+  background-color: #fddede;
+  color: #4299e1 !important;
 `
 
 const UserLogin = ({ dialogIsOpen, handleDialogClose, handleUserFormOpen, fullScreen, participants, createUserPending, setCurrentUserPending }) => {
@@ -71,11 +76,11 @@ const UserLogin = ({ dialogIsOpen, handleDialogClose, handleUserFormOpen, fullSc
             ))}
             <ListItem onClick={handleCreateNewClick} button>
               <ListItemAvatar>
-                <Avatar>
+                <Avatar background="#fddede;">
                   <AddIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary="New user" />
+              <ListItemText primary="New" />
             </ListItem>
           </List>
         </Dialog>
