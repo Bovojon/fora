@@ -30,7 +30,10 @@ const IconButton = styled(MuiIconButton)`
   position: absolute;
   right: 4px;
   top: 4px;
-  color: theme.palette.grey[500]
+  color: theme.palette.grey[500];
+  :focus {
+    outline: none;
+  }
 `
 
 const DialogContent = styled(MuiDialogContent)`
@@ -54,6 +57,9 @@ const Button = styled(MuiButton)`
   padding: 0.8rem 1.1rem;
   width: 100%;
   margin-bottom: 10px;
+  :focus {
+    outline: none;
+  }
 `
 
 const Avatar = styled(MuiAvatar)`
@@ -116,7 +122,9 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, isOwner, handleSchedule
           <Button onClick={handleScheduleClick} variant="contained" disableElevation>Schedule event</Button>
           <Fragment>
             {isOwner ?
-              <Button onClick={handleDeleteClick} variant="contained" disableElevation>Remove Time</Button>
+              <Fragment>
+                {selectedEvent.id < 1000000 && <Button onClick={handleDeleteClick} variant="contained" disableElevation>Remove Time</Button>}
+              </Fragment>
               :
               <Button onClick={handleAddTimeClick} variant="contained" disableElevation>Select same time</Button>
             }
