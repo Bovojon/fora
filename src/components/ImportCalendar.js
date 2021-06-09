@@ -16,6 +16,9 @@ const Button = styled(MuiButton)`
   :hover {
     background-color: #fddede;
   }
+  :focus {
+    outline: none;
+  }
   border-radius: 9999px;
   padding: 0.8rem 1.1rem;
   background-color: #fddede;
