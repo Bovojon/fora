@@ -26,8 +26,7 @@ import {
 } from '@material-ui/core';
 import {
 	ArrowRight as ArrowRightIcon,
-	ArrowLeft as ArrowLeftIcon,
-	Create
+	ArrowLeft as ArrowLeftIcon
 } from '@material-ui/icons';
 
 import ParticipantsList from '../ParticipantsList';
@@ -68,30 +67,26 @@ const TodayButton = styled(Button)`
 	margin-right: 12px;
 	padding: 5px 7px;
 	border-radius: 9999px;
+	:focus {
+    outline: none;
+  }
 `
 
 const IconButton = styled(MuiIconButton)`
 	width: 32px;
 	height: 32px;
 	padding: 0px;
+	:focus {
+    outline: none;
+  }
 `
 
 const Select = styled(MuiSelect)`
 	padding: 5px;
 `
 
-const PencilIcon = styled(Create)`
-	width: 13%;
-  height: 15%;
-	display: none;
-`
-
 const NameArea = styled(Grid)`
 	width: 70%;
-
-	&:hover ${PencilIcon} {
-    display: block;
-  }
 `
 
 const Header = styled.span`
@@ -293,9 +288,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			setEventDetailsOpen(true);
 		}
 	}
-	const handleNavigate = (timeClicked) => {
-		calRef.current.scrollIntoView();
-		setStartDate(timeClicked.start);
+	const handleNavigate = (timeClicked, event) => {
+		if (event.target.id !== "more") {
+			calRef.current.scrollIntoView();
+			setStartDate(timeClicked.start);
+		}
 	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
@@ -387,22 +384,15 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const eventEnd = momentTimezone.tz(event.end, calTimezone);
 		if (typeof event?.summary === "undefined") {
 			let userName;
-			let canEdit = false;
-			if (typeof event.creator?.name === "undefined") {
+			if (typeof event.creator?.name === "undefined" || currentUser.id === event.creator.id) {
 				userName = currentUser.name;
-				canEdit = true;
 			} else {
 				userName = event.creator.name;
-				if (currentUser.id === event.creator.id) {
-					userName = currentUser.name;
-					canEdit = true;
-				}
 			}
 			return (
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 					<NameArea container direction="row" justify="flex-start" alignItems="center">
 						<Header>{userName}</Header>
-						{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
 					</NameArea>
 					<TimeText>
 						{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
@@ -548,7 +538,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 									<Divider />
 									<TimesList
 										times={sortedTimes}
-										handleDelete={handleDelete}
 										handleSelectEvent={handleSelectEvent}
 										handleEditUserName={handleEditUserName}
 										currentUser={currentUser}
