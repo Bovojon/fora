@@ -184,7 +184,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [sortedTimes, setSortedTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
-	const [timeSelectedObj, setTimeSelectedObj] = useState({});
+	const [selectedEvent, setSelectedEvent] = useState({});
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
 	const [importStartTime, setImportStartTime] = useState(new Date(moment(new Date()).subtract(1, 'day')));
 	const [importEndTime, setImportEndTime] = useState(new Date(moment(new Date()).add(1, 'month')));
@@ -275,16 +275,16 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		addTime(newTime);
 	}
 	const handleSelectEvent = (event, e) => {
-		console.log(event);
 		if (typeof event?.summary === "undefined") {
 			setIsOwner(currentUser.id === event.user_id);
-			setTimeSelectedObj(event);
 			const { start, end, creator } = event;
+			let userName = typeof creator?.name === "undefined" || currentUser.id === creator.id ? currentUser.name : creator.name;
+			let background = typeof creator?.color === "undefined" ? currentUser.color : creator.color;
+			setSelectedEvent({...event, userName, background});
 			const newEventObj = {
 				details: { start, end },
 				calendar_id: calendar.id,
-				user_id: currentUser.id,
-				user_name: creator?.name
+				user_id: currentUser.id
 			}
 			addEvent(newEventObj);
 			setEventDialogOpen(true);
@@ -572,9 +572,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				fullScreen={fullScreen} 
 			/>
 			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
-			<EventDialog dialogIsOpen={eventDialogOpen} handleDialogClose={handleEventDialogClose} isOwner={isOwner} eventObj={eventObj}
-				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete} 
-				timeSelectedObj={timeSelectedObj} isDifferentTimezone={isDifferentTimezone} calTimezone={calTimezone}
+			<EventDialog dialogIsOpen={eventDialogOpen} handleDialogClose={handleEventDialogClose} isOwner={isOwner} calTimezone={calTimezone}
+				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete}
+				selectedEvent={selectedEvent}
 			/>
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={3000} onClose={handleScrollToBottom}>

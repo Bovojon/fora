@@ -7,16 +7,14 @@ import {
   Dialog,
   DialogActions as MuiDialogActions,
   DialogContent as MuiDialogContent,
-  DialogTitle,
   Button as MuiButton,
   Grid,
-  IconButton as MuiIconButton
+  IconButton as MuiIconButton,
+  Avatar as MuiAvatar,
+  ListItem as MuiListItem,
+  ListItemText,
+  ListItemAvatar,
 } from '@material-ui/core';
-
-const SmallTitle = styled.span`
-  font: 500 16px / 20px Roboto, sans-serif;
-  margin-right: 5px;
-`
 
 const LightText = styled.span`
   color: #5f6368;
@@ -30,13 +28,14 @@ const GridItem = styled(Grid)`
 const IconButton = styled(MuiIconButton)`
   margin-left: 10px;
   position: absolute;
-  right: 2px;
-  top: 2px;
+  right: 4px;
+  top: 4px;
   color: theme.palette.grey[500]
 `
 
 const DialogContent = styled(MuiDialogContent)`
-  padding: 40px 35px 0px 35px;
+  padding: 25px 35px 0px 35px;
+  text-align: center;
 `
 
 const DialogActions = styled(MuiDialogActions)`
@@ -57,9 +56,31 @@ const Button = styled(MuiButton)`
   margin-bottom: 10px;
 `
 
-const EventDetails = ({ dialogIsOpen, handleDialogClose, eventObj, isOwner, handleScheduleEventClick,
-  handleAddTime, handleDelete, timeSelectedObj, isDifferentTimezone, calTimezone }) => {
+const Avatar = styled(MuiAvatar)`
+  background-color: ${props => props.background};
+`
+
+const ListItem = styled(MuiListItem)`
+  padding: 16px 20px 0px 20px;
+`
+
+const EventDetails = ({ dialogIsOpen, handleDialogClose, isOwner, handleScheduleEventClick, handleAddTime,
+  handleDelete, selectedEvent, calTimezone }) => {
   const descriptionElementRef = useRef(null);
+  const eventStart = momentTimezone.tz(selectedEvent.start, calTimezone);
+	const eventEnd = momentTimezone.tz(selectedEvent.end, calTimezone);
+  const handleDeleteClick = () => {
+    handleDialogClose();
+    handleDelete(selectedEvent.id);
+  }
+  const handleAddTimeClick = () => {
+    handleDialogClose();
+    handleAddTime(selectedEvent);
+  }
+  const handleScheduleClick = () => {
+    handleDialogClose();
+    handleScheduleEventClick(selectedEvent);
+  }
   
   useEffect(() => {
     if (dialogIsOpen) {
@@ -68,46 +89,36 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, eventObj, isOwner, hand
     }
   }, [dialogIsOpen]);
 
-  console.log(eventObj)
-
-  const eventStart = momentTimezone.tz(eventObj.start, calTimezone);
-	const eventEnd = momentTimezone.tz(eventObj.end, calTimezone);
-
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} scroll="paper">
-      <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>
-      <DialogContent dividers={true}>
+      <ListItem key={1}>
+        <ListItemAvatar>
+        <Avatar background={selectedEvent.background}>{selectedEvent.userName?.charAt(0).toUpperCase()}</Avatar>
+        </ListItemAvatar>
+        <ListItemText id={1} primary={<LightText>{selectedEvent.userName}{isOwner ? <Fragment> (you)</Fragment> : null}</LightText>} />
+      </ListItem>
+      <DialogContent dividers={false}>
+        <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>
         <Grid container direction="column" justify="center" alignItems="center">
           <GridItem container direction="row" justify="center" alignItems="center">
-            <LightText>{eventObj.user_name}{isOwner ? <Fragment> (you)</Fragment> : null}</LightText>
+            <LightText>{moment(eventStart).format('h:mma, ddd, MMM D YYYY (Z)')}</LightText>
           </GridItem>
           <GridItem container direction="row" justify="center" alignItems="center">
-            <LightText>{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}</LightText>
+            <LightText>to</LightText>
           </GridItem>
           <GridItem container direction="row" justify="center" alignItems="center">
-            {moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
-              <LightText>{moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}</LightText>
-              :
-              <LightText>{moment(eventStart).format('ddd, MMM D')}</LightText>
-            }
-          </GridItem>
-          <GridItem container direction="row" justify="center" alignItems="center">
-            {isDifferentTimezone ?
-              <LightText>({calTimezone})</LightText>
-              :
-              null
-            }
+            <LightText>{moment(eventEnd).format('h:mma, ddd, MMM D YYYY (Z)')}</LightText>
           </GridItem>
         </Grid>
       </DialogContent>
       <DialogActions>
         <Grid container direction="column" justify="center" alignItems="center">
-          <Button onClick={handleDialogClose} variant="contained" disableElevation>Schedule event</Button>
+          <Button onClick={handleScheduleClick} variant="contained" disableElevation>Schedule event</Button>
           <Fragment>
             {isOwner ?
-              <Button onClick={handleDialogClose} variant="contained" disableElevation>Remove Time</Button>
+              <Button onClick={handleDeleteClick} variant="contained" disableElevation>Remove Time</Button>
               :
-              <Button onClick={handleDialogClose} variant="contained" disableElevation>Select same time</Button>
+              <Button onClick={handleAddTimeClick} variant="contained" disableElevation>Select same time</Button>
             }
           </Fragment>
           <Button onClick={handleDialogClose} variant="contained" disableElevation>Cancel</Button>
