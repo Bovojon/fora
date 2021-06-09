@@ -48,7 +48,20 @@ const IconButton = styled(MuiIconButton)`
 `
 
 const Button = styled(MuiButton)`
+  font-size: 1rem;
+  border-radius: 9999px;
+  background-color: #fddede;
+  color: #4299e1 !important;
+  :hover {
+    background-color: #fddede;
+  }
+  border-radius: 9999px;
+  padding: 0.8rem 1.1rem;
+  width: 100%;
   margin: 5px 0px;
+  :focus {
+    outline: none;
+  }
 `
 
 const Text = tw.div`md:w-16 sm:w-5/12 flex justify-center items-center font-semibold mr-2`;
@@ -84,7 +97,7 @@ const ImportTimesForm = ({ dialogIsOpen, handleDialogClose, handleImportClick, s
           </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleImportClick} variant="contained" color="primary" disableElevation>Submit</Button>
+        <Button onClick={handleImportClick} variant="contained" disableElevation>Submit</Button>
       </DialogActions>
     </Dialog>
   );

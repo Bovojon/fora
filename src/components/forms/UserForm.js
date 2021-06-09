@@ -4,30 +4,38 @@ import styled from "styled-components";
 import {
   Grid,
   TextField,
-  Button,
+  Button as MuiButton,
   Dialog,
   DialogActions as MuiDialogActions,
   DialogContent as MuiDialogContent,
-  DialogContentText as MuiDialogContentText,
   CircularProgress
 } from '@material-ui/core';
 
 import { updateUserPending } from '../../actions/userActionCreators';
 
 const DialogContent = styled(MuiDialogContent)`
-  min-width: 320px;
   padding: 25px 35px 0px 35px !important;
 `
 
-const DialogContentText = styled(MuiDialogContentText)`
-  color: #5f6368;
-  font: 500 17px / 20px Roboto, sans-serif;
-  margin-bottom: 10px;
-  margin-top: 15px;
+const DialogActions = styled(MuiDialogActions)`
+  padding: 30px 20px !important;
 `
 
-const DialogActions = styled(MuiDialogActions)`
-  padding: 30px 20px 30px 20px !important;
+const Button = styled(MuiButton)`
+  font-size: 1rem;
+  border-radius: 9999px;
+  background-color: #fddede;
+  color: #4299e1 !important;
+  :hover {
+    background-color: #fddede;
+  }
+  border-radius: 9999px;
+  padding: 0.8rem 1.1rem;
+  width: 100%;
+  margin-bottom: 10px;
+  :focus {
+    outline: none;
+  }
 `
 
 const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUser, updateUser }) => {
@@ -62,17 +70,18 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm">
       <DialogContent>
-        <DialogContentText>Add your name and email if you wish to receive calendar invites from other users.</DialogContentText>
         <Grid container direction="column" justify="center" alignItems="center">
           <TextField value={name} onChange={handleNameChange}  onKeyDown={handleNameKeyPress} id="name" label="Name" type="text" fullWidth margin="normal" autoFocus />
           <TextField value={email} onChange={handleEmailChange} onKeyDown={handleEmailKeyPress} inputRef={inputRef} id="email" label="Email" type="email" fullWidth margin="normal" />
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleDialogClose} variant="contained" disableElevation>Maybe Later</Button>
-        <Button onClick={handleSubmitClick} disabled={user.status.isLoading} variant="contained" color="primary" disableElevation>
-          { user.status.isLoading ? <CircularProgress size={24} /> : "Submit" }
-        </Button>
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Button onClick={handleDialogClose} variant="contained" disableElevation>Later</Button>
+          <Button onClick={handleSubmitClick} disabled={user.status.isLoading} variant="contained" disableElevation>
+            { user.status.isLoading ? <CircularProgress size={24} /> : "Submit" }
+          </Button>
+        </Grid>
       </DialogActions>
     </Dialog>
   );

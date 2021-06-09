@@ -18,7 +18,7 @@ const sentences = [
   "One moment please...",
   "Polishing the edges.",
   "Tip: You can invite others to this calendar.",
-  "If you don't like something, send your feedback to letsfora@gmail.com!",
+  "Have feedback? Email them to letsfora@gmail.com!",
   "Almost there.",
   "Hope you're having a wonderful day!",
   "Tip: Click and drag on the calendar to add your availability."

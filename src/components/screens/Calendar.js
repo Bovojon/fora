@@ -26,8 +26,7 @@ import {
 } from '@material-ui/core';
 import {
 	ArrowRight as ArrowRightIcon,
-	ArrowLeft as ArrowLeftIcon,
-	Create
+	ArrowLeft as ArrowLeftIcon
 } from '@material-ui/icons';
 
 import ParticipantsList from '../ParticipantsList';
@@ -37,6 +36,7 @@ import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
 import ImportTimesForm from '../forms/ImportTimesForm';
 import EventDetails from '../EventDetails';
+import EventDialog from '../EventDialog';
 import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
 import Timezone from '../Timezone';
@@ -67,30 +67,26 @@ const TodayButton = styled(Button)`
 	margin-right: 12px;
 	padding: 5px 7px;
 	border-radius: 9999px;
+	:focus {
+    outline: none;
+  }
 `
 
 const IconButton = styled(MuiIconButton)`
 	width: 32px;
 	height: 32px;
 	padding: 0px;
+	:focus {
+    outline: none;
+  }
 `
 
 const Select = styled(MuiSelect)`
 	padding: 5px;
 `
 
-const PencilIcon = styled(Create)`
-	width: 13%;
-  height: 15%;
-	display: none;
-`
-
 const NameArea = styled(Grid)`
 	width: 70%;
-
-	&:hover ${PencilIcon} {
-    display: block;
-  }
 `
 
 const Header = styled.span`
@@ -176,14 +172,14 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [calendarView, setCalendarView] = useState('week');
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
-	const [eventClickFormOpen, setEventClickFormOpen] = useState(false);
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [eventDetailsOpen, setEventDetailsOpen] = useState(false);
+	const [eventDialogOpen, setEventDialogOpen] = useState(false);
 	const [times, setTimes] = useState(initialTimes);
 	const [sortedTimes, setSortedTimes] = useState(initialTimes);
 	const [events, setEvents] = useState(times);
 	const [isOwner, setIsOwner] = useState(false);
-	const [timeSelectedObj, setTimeSelectedObj] = useState({});
+	const [selectedEvent, setSelectedEvent] = useState({});
 	const [scrollToBottomOpen, setScrollToBottomOpen] = useState(true);
 	const [importStartTime, setImportStartTime] = useState(new Date(moment(new Date()).subtract(1, 'day')));
 	const [importEndTime, setImportEndTime] = useState(new Date(moment(new Date()).add(1, 'month')));
@@ -258,7 +254,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleEditUserName = () => { setUserFormOpen(true) }
   const handleUserFormClose = () => { setUserFormOpen(false) }
 	const handleUserLoginClose = () => { setUserLoginOpen(false) }
-	const handleEventClickFormClose = () => { setEventClickFormOpen(false) }
 	const handleSelectSlot = (event) => {
 		let { start, end } = event;
 		if (moment(start).isSame(end) || calendarView === "month") {
@@ -276,26 +271,28 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}
 	const handleSelectEvent = (event, e) => {
 		if (typeof event?.summary === "undefined") {
-			if (e.target.id !== "pencilIcon" && e.target.id !== "clearIcon") {
-				setIsOwner(currentUser.id === event.user_id);
-				setTimeSelectedObj(event);
-				const { start, end } = event;
-				const newEventObj = {
-					details: { start, end },
-					calendar_id: calendar.id,
-					user_id: currentUser.id
-				}
-				addEvent(newEventObj);
-				setEventClickFormOpen(true);
+			setIsOwner(currentUser.id === event.user_id);
+			const { start, end, creator } = event;
+			let userName = typeof creator?.name === "undefined" || currentUser.id === creator.id ? currentUser.name : creator.name;
+			let background = typeof creator?.color === "undefined" ? currentUser.color : creator.color;
+			setSelectedEvent({...event, userName, background});
+			const newEventObj = {
+				details: { start, end },
+				calendar_id: calendar.id,
+				user_id: currentUser.id
 			}
+			addEvent(newEventObj);
+			setEventDialogOpen(true);
 		} else {
 			setImportedEventDetails(event);
 			setEventDetailsOpen(true);
 		}
 	}
-	const handleNavigate = (eventObj) => {
-		calRef.current.scrollIntoView();
-		setStartDate(eventObj.start);
+	const handleNavigate = (timeClicked, event) => {
+		if (event.target.id !== "more") {
+			calRef.current.scrollIntoView();
+			setStartDate(timeClicked.start);
+		}
 	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
@@ -311,6 +308,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleImportCalendarClick = () => { setImportDialogOpen(true) }
 	const handleImportDialogClose = () => { setImportDialogOpen(false) }
 	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
+	const handleEventDialogClose = () => { setEventDialogOpen(false) }
 	const handleShowTimeChange = (e) => { setShowTimes(!showTimes) }
 	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
@@ -386,22 +384,15 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const eventEnd = momentTimezone.tz(event.end, calTimezone);
 		if (typeof event?.summary === "undefined") {
 			let userName;
-			let canEdit = false;
-			if (typeof event.creator?.name === "undefined") {
+			if (typeof event.creator?.name === "undefined" || currentUser.id === event.creator.id) {
 				userName = currentUser.name;
-				canEdit = true;
 			} else {
 				userName = event.creator.name;
-				if (currentUser.id === event.creator.id) {
-					userName = currentUser.name;
-					canEdit = true;
-				}
 			}
 			return (
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 					<NameArea container direction="row" justify="flex-start" alignItems="center">
 						<Header>{userName}</Header>
-						{canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
 					</NameArea>
 					<TimeText>
 						{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
@@ -547,7 +538,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 									<Divider />
 									<TimesList
 										times={sortedTimes}
-										handleDelete={handleDelete}
 										handleSelectEvent={handleSelectEvent}
 										handleEditUserName={handleEditUserName}
 										currentUser={currentUser}
@@ -563,16 +553,23 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				}
 			</Box>
 			<UserForm handleDialogClose={handleUserFormClose} dialogIsOpen={userFormOpen} fullScreen={fullScreen} />
-			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} handleUserFormOpen={setUserFormOpen} />
-			<EventClickForm handleDialogClose={handleEventClickFormClose} handleScheduleEventClick={handleScheduleEventClick} isOwner={isOwner} 
-				eventObj={eventObj} handleAddTime={handleAddTime} dialogIsOpen={eventClickFormOpen} fullScreen={fullScreen} 
-				handleDelete={handleDelete} timeSelectedObj={timeSelectedObj} />
+			<UserLogin handleDialogClose={handleUserLoginClose} dialogIsOpen={userLoginOpen} fullScreen={fullScreen} 
+				handleUserFormOpen={setUserFormOpen} 
+			/>
 			<ImportTimesForm handleImportClick={handleImportClick} dialogIsOpen={importDialogOpen} handleDialogClose={handleImportDialogClose}
-				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} fullScreen={fullScreen} />
+				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} 
+				fullScreen={fullScreen} 
+			/>
 			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
+			<EventDialog dialogIsOpen={eventDialogOpen} handleDialogClose={handleEventDialogClose} isOwner={isOwner} calTimezone={calTimezone}
+				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete}
+				selectedEvent={selectedEvent} eventObj={eventObj}
+			/>
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={3000} onClose={handleScrollToBottom}>
-					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">Scroll below to view others on this calendar and their availabilities.</Alert>
+					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">
+						Scroll below to view more details.
+					</Alert>
 				</Snackbar>
       </Box>
 			<SuccessNotification />
