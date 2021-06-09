@@ -293,9 +293,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			setEventDetailsOpen(true);
 		}
 	}
-	const handleNavigate = (eventObj) => {
+	const handleNavigate = (timeClicked) => {
 		calRef.current.scrollIntoView();
-		setStartDate(eventObj.start);
+		setStartDate(timeClicked.start);
 	}
 	const handleAddTime = (timeSelectedObj) => { handleSelectSlot(timeSelectedObj) }
 	const handleScheduleEventClick = (eventObject) => {
@@ -574,7 +574,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
 			<EventDialog dialogIsOpen={eventDialogOpen} handleDialogClose={handleEventDialogClose} isOwner={isOwner} calTimezone={calTimezone}
 				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete}
-				selectedEvent={selectedEvent}
+				selectedEvent={selectedEvent} eventObj={eventObj}
 			/>
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={3000} onClose={handleScrollToBottom}>

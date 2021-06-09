@@ -65,7 +65,7 @@ const ListItem = styled(MuiListItem)`
 `
 
 const EventDetails = ({ dialogIsOpen, handleDialogClose, isOwner, handleScheduleEventClick, handleAddTime,
-  handleDelete, selectedEvent, calTimezone }) => {
+  handleDelete, selectedEvent, calTimezone, eventObj }) => {
   const descriptionElementRef = useRef(null);
   const eventStart = momentTimezone.tz(selectedEvent.start, calTimezone);
 	const eventEnd = momentTimezone.tz(selectedEvent.end, calTimezone);
@@ -79,7 +79,7 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, isOwner, handleSchedule
   }
   const handleScheduleClick = () => {
     handleDialogClose();
-    handleScheduleEventClick(selectedEvent);
+    handleScheduleEventClick(eventObj);
   }
   
   useEffect(() => {

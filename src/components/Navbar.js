@@ -22,7 +22,8 @@ import {
   Fade,
   IconButton as MuiIconButton,
   makeStyles,
-  Snackbar
+  Snackbar,
+  CircularProgress
 } from '@material-ui/core';
 
 import AboutDialog from './AboutDialog';
@@ -114,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareClick, handleAboutClick, handlePrivacyClick }) => {
+const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareClick, handleAboutClick, handlePrivacyClick, scheduleEventLoading }) => {
   const location = useLocation();
   if (location.pathname === "/" || location.pathname === "/privacy_policy") {
     return (
@@ -129,7 +130,9 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
     return (
       <NavItem>
         <NavLinks>
-          <PrimaryLink onClick={handleScheduleClick}>Schedule time</PrimaryLink>
+          <PrimaryLink onClick={handleScheduleClick} disabled={scheduleEventLoading}>
+            { scheduleEventLoading ? <CircularProgress size={24} /> : "Schedule event" }
+          </PrimaryLink>
         </NavLinks>
       </NavItem>
     )
@@ -150,6 +153,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
   const [aboutIsOpen, setAboutIsOpen] = useState(false);
+  const [scheduleEventLoading, setScheduleEventLoading] = useState(false);
   const classes = useStyles();
 
   const handleBrandClick = (e) => {
@@ -163,6 +167,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
   }
   const handleShareClick = () => { setModalIsOpen(true) };
   const handleScheduleClick = () => {
+    setScheduleEventLoading(true);
     const event = eventObj.details;
     if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
       submitEvent({ event, code });
@@ -199,6 +204,7 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
               handleShareClick={handleShareClick}
               handleAboutClick={handleAboutClick}
               handlePrivacyClick={handlePrivacyClick}
+              scheduleEventLoading={scheduleEventLoading}
             />
           </Nav>
         </Collapse>
