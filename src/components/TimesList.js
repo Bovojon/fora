@@ -2,11 +2,11 @@ import React, { Fragment } from "react";
 import moment from "moment";
 import momentTimezone from "moment-timezone";
 import styled from 'styled-components';
-import { Clear, Create } from '@material-ui/icons';
+import { MoreHoriz } from '@material-ui/icons';
 import {
   Box as MuiBox,
   Grid,
-  IconButton
+  IconButton as MuiIconButton
 } from '@material-ui/core';
 import { 
 	Card as ReactCard,
@@ -47,7 +47,7 @@ const TopRightArea = styled.span`
 	padding-right: 0.7rem;
 `
 
-const ClearIcon = styled(Clear)`
+const MoreIcon = styled(MoreHoriz)`
   cursor: pointer;
   color: white;
 `
@@ -76,25 +76,21 @@ const LightText = styled.p`
   text-align: center
 `
 
-const PencilIcon = styled(Create)`
-  cursor: pointer;
-	display: none;
-  height: 60%;
-`
-
 const NameHeader = styled.span`
 	margin-right: 7px;
 `
 
 const NameArea = styled(Grid)`
 	width: 70%;
+`
 
-	&:hover ${PencilIcon} {
-    display: block;
+const IconButton = styled(MuiIconButton)`
+  :focus {
+    outline: none;
   }
 `
 
-const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate, isDifferentTimezone, calTimezone }) => {
+const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate, isDifferentTimezone, calTimezone }) => {
   return (
     <Box mt={2}>
       <ListArea>
@@ -107,29 +103,24 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
             {times.map(time => {
               const eventStart = momentTimezone.tz(time.start, calTimezone);
               const eventEnd = momentTimezone.tz(time.end, calTimezone);
-              let userName;
-              let canEdit = false;
               let background = time.creator?.color;
               let width = time.id < 1000000 ? "100%" : "90%";
               let ml = time.id < 1000000 ? "0" : "5%";
               if (typeof background === "undefined") background = currentUser.color;
-              if (typeof time.creator?.name === "undefined" || currentUser.id === time.creator.id) {
-                userName = currentUser.name;
-                if (time.id < 1000000) canEdit = true;
-              } else {
-                userName = time.creator.name;
-              }
+              let userName = typeof time.creator?.name === "undefined" || currentUser.id === time.creator.id ?
+                currentUser.name
+                :
+                time.creator.name;
               if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')){
                 return (
-                  <Card key={time.id} onClick={() => handleNavigate(time)} body background={background}>
+                  <Card key={time.id} onClick={(event) => handleNavigate(time, event)} body background={background}>
                     <CardBody>
                       <TopRightArea>
-                        {canEdit && <IconButton id="clearIcon" onClick={() => handleDelete(time.id)} disableFocusRipple disableRipple><ClearIcon /></IconButton>}
+                        {time.id < 1000000 && <IconButton id="more" onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          {canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
                         </NameArea>
                       </Row>
                       <Row>
@@ -147,15 +138,14 @@ const TimesList = ({ times, handleDelete, handleSelectEvent, handleEditUserName,
                 );
               } else {
                 return (
-                  <Card key={time.id} onClick={() => handleNavigate(time)} body background={background} width={width} ml={ml}>
+                  <Card key={time.id} onClick={(event) => handleNavigate(time, event)} body background={background} width={width} ml={ml}>
                     <CardBody>
                       <TopRightArea>
-                        {canEdit && <IconButton id="clearIcon" onClick={() => handleDelete(time.id)} disableFocusRipple disableRipple><ClearIcon /></IconButton>}
+                        {time.id < 1000000 && <IconButton id="more" onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
                           <NameHeader>{userName}</NameHeader>
-                          {canEdit && <PencilIcon id="pencilIcon" onClick={handleEditUserName} fontSize="small" />}
                         </NameArea>
                       </Row>
                       <Row>
