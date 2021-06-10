@@ -77,7 +77,7 @@ const UserForm = ({ dialogIsOpen, handleDialogClose, fullScreen, user, createUse
       </DialogContent>
       <DialogActions>
         <Grid container direction="column" justify="center" alignItems="center">
-          <Button onClick={handleDialogClose} variant="contained" disableElevation>Later</Button>
+          <Button onClick={handleDialogClose} variant="contained" disableElevation>Skip</Button>
           <Button onClick={handleSubmitClick} disabled={user.status.isLoading} variant="contained" disableElevation>
             { user.status.isLoading ? <CircularProgress size={24} /> : "Submit" }
           </Button>
