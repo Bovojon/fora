@@ -113,10 +113,10 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
                 time.creator.name;
               if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')){
                 return (
-                  <Card key={time.id} onClick={(event) => handleNavigate(time, event)} body background={background}>
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background}>
                     <CardBody>
                       <TopRightArea>
-                        {time.id < 1000000 && <IconButton id="more" onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
+                        {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
@@ -138,10 +138,10 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
                 );
               } else {
                 return (
-                  <Card key={time.id} onClick={(event) => handleNavigate(time, event)} body background={background} width={width} ml={ml}>
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background} width={width} ml={ml}>
                     <CardBody>
                       <TopRightArea>
-                        {time.id < 1000000 && <IconButton id="more" onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
+                        {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
                       </TopRightArea>
                       <Row>
                         <NameArea container direction="row" justify="flex-start" alignItems="center">
