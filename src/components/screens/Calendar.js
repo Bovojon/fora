@@ -288,8 +288,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			setEventDetailsOpen(true);
 		}
 	}
-	const handleNavigate = (timeClicked, event) => {
-		if (event.target.id !== "more") {
+	const handleNavigate = (event, timeClicked) => {
+		if (event.target.nodeName !== "path" && event.target.nodeName !== "svg") {
 			calRef.current.scrollIntoView();
 			setStartDate(timeClicked.start);
 		}

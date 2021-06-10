@@ -118,7 +118,7 @@ const EventForm = ({ event, participants, addEvent }) => {
               </InputContainer>
             </RowButton>
           </TwoColumn>
-          <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guest emails" multiline rows={4} fullWidth margin="normal" variant="outlined" />
+          <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guests (e.g. ex1@email.com, ex2@email.com)" multiline rows={4} fullWidth margin="normal" variant="outlined" />
         </FormContainer>
       </Content>
     </Container>
