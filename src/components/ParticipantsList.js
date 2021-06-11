@@ -23,12 +23,12 @@ const Header = styled.h5`
   font-size: 1.25em;
   text-align: center;
   color: #f2a099;
+  margin-bottom: 2px;
 `
 
 const List = styled(MuiList)`
   overflow-y: auto;
   overflow-x: hidden;
-  margin-top: 10px;
   padding: 0px 13px;
 `
 

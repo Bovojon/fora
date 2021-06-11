@@ -102,13 +102,14 @@ const HeaderGrid = styled(Grid)`
   margin-bottom: 5px;
 `
 
-const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate, isDifferentTimezone, calTimezone }) => {
+const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate,
+  isDifferentTimezone, calTimezone, setAvailabilityDialogOpen }) => {
   return (
     <Box mt={2}>
       <ListArea>
         <HeaderGrid container direction="row" justify="center" alignItems="center">
           <Header>Availability</Header>
-          <AddIconButton onClick={() => console.log("Hey")} disableFocusRipple disableRipple>
+          <AddIconButton onClick={() => setAvailabilityDialogOpen(true)} disableFocusRipple disableRipple>
             <AddIcon />
           </AddIconButton>
         </HeaderGrid>

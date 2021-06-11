@@ -35,6 +35,7 @@ import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
 import EventClickForm from '../forms/EventClickForm';
 import ImportTimesForm from '../forms/ImportTimesForm';
+import AddAvailabilityForm from '../forms/AddAvailabilityForm';
 import EventDetails from '../EventDetails';
 import EventDialog from '../EventDialog';
 import SuccessNotification from '../notifications/SuccessNotification';
@@ -190,6 +191,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [startDate, setStartDate] = useState(new Date());
 	const [initialRender, setInitialRender] = useState(true);
 	const [showTimes, setShowTimes] = useState(false);
+	const [availabilityDialogOpen, setAvailabilityDialogOpen] = useState(false);
 	
 	const { calendarId } = useParams();
 	const calRef = useRef(null);
@@ -309,6 +311,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const handleImportDialogClose = () => { setImportDialogOpen(false) }
 	const handleEventDetailsClose = () => { setEventDetailsOpen(false) }
 	const handleEventDialogClose = () => { setEventDialogOpen(false) }
+	const handleAvailabilityDialogClose = () => { setAvailabilityDialogOpen(false) }
 	const handleShowTimeChange = (e) => { setShowTimes(!showTimes) }
 	const handleImportClick = () => {
 		if (auth.code !== false) removeAuthCode();
@@ -545,6 +548,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										handleNavigate={handleNavigate}
 										isDifferentTimezone={isDifferentTimezone}
 										calTimezone={calTimezone}
+										setAvailabilityDialogOpen={setAvailabilityDialogOpen}
 									/>
 								</Paper>
 							</Grid>
@@ -565,6 +569,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete}
 				selectedEvent={selectedEvent} eventObj={eventObj}
 			/>
+			<AddAvailabilityForm dialogIsOpen={availabilityDialogOpen} handleDialogClose={handleAvailabilityDialogClose} handleAddTime={handleAddTime} />
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={3000} onClose={handleScrollToBottom}>
 					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">
