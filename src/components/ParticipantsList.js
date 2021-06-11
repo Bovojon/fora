@@ -52,7 +52,7 @@ const Avatar = styled(MuiAvatar)`
 `
 
 const Name = styled.span`
-  margin-right: 9px;
+  margin-right: 7px;
 `
 
 const LightText = styled.p`
@@ -150,9 +150,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
                     </PencilButton>
                   </Grid>
                   :
-                  <Grid container direction="row" justify="flex-start" alignItems="center">
-                    <Name>{name}</Name>
-                  </Grid>
+                  <Name>{name}</Name>
                 }
               </Fragment>
             );

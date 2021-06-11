@@ -2,13 +2,13 @@ import React, { Fragment } from "react";
 import moment from "moment";
 import momentTimezone from "moment-timezone";
 import styled from 'styled-components';
-import { MoreHoriz } from '@material-ui/icons';
+import { MoreHoriz, Add as MuiAddIcon } from '@material-ui/icons';
 import {
   Box as MuiBox,
   Grid,
   IconButton as MuiIconButton
 } from '@material-ui/core';
-import { 
+import {
 	Card as ReactCard,
   CardBody as ReactCardBody,
 	Row as ReactCardRow
@@ -84,17 +84,36 @@ const NameArea = styled(Grid)`
 	width: 70%;
 `
 
+const AddIconButton = styled(MuiIconButton)`
+  background-color: #fddede;
+  margin: 0px 0px 6px 7px;
+  height: 32px;
+  width: 32px;
+  :focus {
+    outline: none;
+  }
+`
+
 const IconButton = styled(MuiIconButton)`
   :focus {
     outline: none;
   }
 `
 
+const AddIcon = styled(MuiAddIcon)`
+  color: #4299e1 !important;
+`
+
 const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate, isDifferentTimezone, calTimezone }) => {
   return (
     <Box mt={2}>
       <ListArea>
-        <Header>Availability</Header>
+        <Grid container direction="row" justify="center" alignItems="center">
+          <Header>Availability</Header>
+          <AddIconButton onClick={() => console.log("Hey")} disableFocusRipple disableRipple>
+            <AddIcon />
+          </AddIconButton>
+        </Grid>
         {initialTimes.length === 0 ?
           <LightText>Click and drag on the calendar to select availability.</LightText>
           :
