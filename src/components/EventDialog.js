@@ -101,7 +101,7 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, isOwner, handleSchedule
         <ListItemAvatar>
         <Avatar background={selectedEvent.background}>{selectedEvent.userName?.charAt(0).toUpperCase()}</Avatar>
         </ListItemAvatar>
-        <ListItemText id={1} primary={<LightText>{selectedEvent.userName}{isOwner ? <Fragment> (you)</Fragment> : null}</LightText>} />
+        <ListItemText id={1} primary={<LightText>{selectedEvent.userName}{isOwner ? <Fragment> (me)</Fragment> : null}</LightText>} />
       </ListItem>
       <DialogContent dividers={false}>
         <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>
