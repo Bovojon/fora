@@ -2,7 +2,6 @@ import React from 'react';
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import tw from "twin.macro";
-import { makeStyles } from '@material-ui/core/styles';
 import { Close as CloseIcon } from '@material-ui/icons';
 import {
   Grid,
@@ -11,7 +10,8 @@ import {
   DialogActions as MuiDialogActions,
   DialogTitle as MuiDialogTitle,
   DialogContent as MuiDialogContent,
-  IconButton as MuiIconButton
+  IconButton as MuiIconButton,
+  makeStyles
 } from '@material-ui/core';
 
 const DialogTitle = styled(MuiDialogTitle)`

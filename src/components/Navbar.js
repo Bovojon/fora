@@ -10,7 +10,7 @@ import copy from 'copy-to-clipboard';
 import {
   Navbar,
   NavbarBrand as BootNavbarBrand,
-  NavbarToggler,
+  NavbarToggler as BootNavbarToggler,
   Collapse,
   Nav,
   NavItem as BootNavItem
@@ -100,6 +100,12 @@ const IconButton = styled(MuiIconButton)`
 const NavItem = styled(BootNavItem)`
   ${NavLinks} {
     ${tw`flex flex-col md:flex-row items-center`}
+  }
+`
+
+const NavbarToggler = styled(BootNavbarToggler)`
+  :focus {
+    outline: none;
   }
 `
 

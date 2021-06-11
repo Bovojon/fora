@@ -2,12 +2,12 @@ import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import { Autocomplete as MuiAutocomplete } from '@material-ui/lab';
 import momentTimezone from "moment-timezone";
-import { withStyles } from '@material-ui/core/styles';
 import {
   Grid,
-  TextField,
+  TextField as MuiTextField,
   Box,
-  Switch as MuiSwitch
+  Switch as MuiSwitch,
+  withStyles
 } from '@material-ui/core';
 
 const Switch = withStyles({
@@ -34,6 +34,25 @@ const Autocomplete = styled(MuiAutocomplete)`
   width: 100%;
   margin-bottom: 1rem;
 `
+
+const TextField = withStyles({
+  root: {
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#e2e8f0',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#e2e8f0',
+      },
+      '&:hover fieldset': {
+        borderColor: '#e2e8f0',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#e2e8f0',
+      },
+    },
+  },
+})(MuiTextField);
 
 const LightText = styled.p`
   color: #5f6368;
@@ -640,6 +659,13 @@ const timezonesList = [
 const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTimezone, handleShowTimeChange, showTimes }) => {
   const [time, setTime] = useState(momentTimezone.tz(new Date(), calTimezone).format('h:mm A ddd, MMM D'));
 
+  const handleChange = (event, timezoneVal) => {
+    if (timezoneVal !== null) {
+      setCalTimezone(timezoneVal);
+      handleTimezoneChange(timezoneVal);
+    }
+  }
+
   useEffect(() => {
     const gmtFull = momentTimezone.tz(calTimezone).format('Z')
     const gmtArrays = gmtFull.split(":")
@@ -657,21 +683,9 @@ const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTi
           options={timezonesList}
           renderOption={(timezone) => (<Fragment>{timezone}</Fragment>)}
           value={calTimezone}
-          onChange={(event, timezoneVal) => {
-            if (timezoneVal !== null) {
-              setCalTimezone(timezoneVal);
-              handleTimezoneChange(timezoneVal);
-            }
-          }}
+          onChange={handleChange}
           renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: 'new-password', // disable autocomplete and autofill
-              }}
-            />
+            <TextField {...params} variant="outlined" inputProps={{...params.inputProps}} />
           )}
         />
         {browserTimezone !== calTimezone ?
