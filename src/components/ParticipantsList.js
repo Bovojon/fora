@@ -55,13 +55,6 @@ const Name = styled.span`
   margin-right: 7px;
 `
 
-const LightText = styled.p`
-  color: #5f6368;
-  font: 400 15px / 20px Roboto, sans-serif;
-  text-align: center;
-  margin-bottom: 0px;
-`
-
 const LoadingListSkeleton = () => {
   return (
     <List>
@@ -125,8 +118,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   
   return (
     <Box m={2}>
-      <Header>Others on this calendar</Header>
-      <LightText>Click the checkboxes to filter availability by user.</LightText>
+      <Header>Members</Header>
       {isLoading ? 
         <LoadingListSkeleton />
         :
@@ -144,7 +136,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
               <Fragment>
                 {canEditName ?
                   <Grid onClick={handleEditUserName} container direction="row" justify="flex-start" alignItems="center" style={{ cursor: "pointer", overflow: "hidden" }}>
-                    <Name>{name} {name.includes("Person") ? <Fragment> (you)</Fragment> : null}</Name>
+                    <Name>{name} {name.includes("Person") ? <Fragment> (me)</Fragment> : null}</Name>
                     <PencilButton>
                       <PencilIcon fontSize="small" />
                     </PencilButton>
