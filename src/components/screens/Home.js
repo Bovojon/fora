@@ -51,6 +51,9 @@ const Actions = styled.div`
   button {
     ${tw`w-full sm:absolute right-0 top-0 bottom-0 bg-blue-500 text-gray-100 font-bold mr-2 my-4 sm:my-2 rounded-full
       py-4 flex items-center justify-center sm:w-40 sm:leading-none transition duration-300`}
+    :focus {
+      outline: none;
+    }
   }
 `;
 
