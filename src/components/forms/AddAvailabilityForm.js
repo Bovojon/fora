@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import moment from "moment";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Close as CloseIcon } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 import { 
   Grid,
   Button as MuiButton,
   Dialog,
-  DialogTitle,
+  DialogTitle as MuiDialogTitle,
   DialogContent as MuiDialogContent,
   DialogActions as MuiDialogActions,
   IconButton as MuiIconButton
 } from '@material-ui/core';
 
+const DialogTitle = styled(MuiDialogTitle)`
+  margin-right: 35px;
+  padding: 16px 24px 5px;
+`
+
 const DialogContent = styled(MuiDialogContent)`
-  padding: 20px;
+  padding: 8px 30px;
   text-align: center;
 `
 
 const DialogActions = styled(MuiDialogActions)`
-  padding: 10px;
+  padding: 8px 13px;
 `
 
 const Button = styled(MuiButton)`
@@ -41,15 +48,16 @@ const Button = styled(MuiButton)`
 
 const IconButton = styled(MuiIconButton)`
   position: absolute;
-  right: 8px;
-  top: 8px;
+  right: 4px;
+  top: 5px;
   color: theme.palette.grey[500]
 `
 
-const Text = tw.div`md:w-16 sm:w-5/12 flex justify-center items-center font-semibold`;
+const Text = tw.div`md:w-16 sm:w-5/12 my-2 flex justify-center items-center font-semibold`;
 const CustomDatePicker = styled(DatePicker)`
   padding: 8px;
   margin-right: 8px;
+  margin-bottom: 10px;
   color: #3c4043;
   font-size: 14px;
   font-weight: 400;
@@ -60,14 +68,27 @@ const CustomDatePicker = styled(DatePicker)`
   width: 80%
 `
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    overflow: "visible !important"
+  }
+}));
+
+const startBeforeEnd = (start, end) => {
+  return moment(end).diff(moment(start)) > 0;
+}
+
 const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime }) => {
   const [startDateTime, setStartDateTime] = useState(new Date());
   const [endDateTime, setEndDateTime] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
+  const classes = useStyles();
 
   useEffect(() => {
-    if (Date.parse(startDateTime) < Date.parse(endDateTime)) {
+    if (startBeforeEnd(startDateTime, endDateTime)) {
       setIsLoading(false);
+    } else {
+      setIsLoading(true);
     }
   }, [startDateTime, endDateTime]);
 
@@ -81,37 +102,33 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
   }
 
   return (
-    <Dialog open={dialogIsOpen} onClose={handleDialogClose}>
+    <Dialog open={dialogIsOpen} onClose={handleDialogClose} classes={{ paper: classes.paper}}>
       <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>
       <DialogTitle>Add your availability</DialogTitle>
       <DialogContent dividers={false}>
-        <Grid container direction="column" justify="center" alignItems="flex-start">
-          <Grid container direction="row" justify="flex-start" alignItems="center" style={{ marginBottom: "20px" }}>
-            <Text>Start:</Text>
-            <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
-            <CustomDatePicker
-              selected={startDateTime}
-              onChange={time => setStartDateTime(time)}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-            />
-          </Grid>
-          <Grid container direction="row" justify="flex-start" alignItems="center">
-            <Text>End:</Text>
-            <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
-            <CustomDatePicker
-              selected={endDateTime}
-              onChange={time => setEndDateTime(time)}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-            />
-          </Grid>
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Text>Start:</Text>
+          <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
+          <CustomDatePicker
+            selected={startDateTime}
+            onChange={time => setStartDateTime(time)}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+          />
+          <Text style={{ marginTop: "20px" }}>End:</Text>
+          <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
+          <CustomDatePicker
+            selected={endDateTime}
+            onChange={time => setEndDateTime(time)}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+          />
         </Grid>
       </DialogContent>
       <DialogActions>
