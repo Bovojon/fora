@@ -1,6 +1,6 @@
-import { 
-  TIME_ADDED_SUCCESS, 
-  TIMES_FETCHED_SUCCESS, 
+import {
+  TIME_ADDED_SUCCESS,
+  TIMES_FETCHED_SUCCESS,
   TIME_REMOVED_SUCCESS
 } from '../actions/constants';
 
