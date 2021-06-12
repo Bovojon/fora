@@ -24,14 +24,34 @@ const changeTimeFormat = (time) => {
   time.end = new Date(time.end);
 }
 
-const groupTimesByUser = times => times.reduce((obj, time) => {
-  const userId = time.user_id;
-  if (!obj[userId]) {
-    obj[userId] = []
-  }
-  obj[userId].push(time);
-  return obj;
-}, {});
+// const groupTimesByUser = times => times.reduce((obj, time) => {
+//   const userId = time.user_id;
+//   if (!obj[userId]) {
+//     obj[userId] = []
+//   }
+//   obj[userId].push(time);
+//   return obj;
+// }, {});
+
+const groupTimesByUser = (times) => {
+  const groupTimes = (times) => times.reduce((obj, time) => {
+    const userId = time.user_id;
+    if (!obj[userId]) {
+      obj[userId] = []
+    }
+    obj[userId].push(time);
+    return obj;
+  }, {});
+
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(groupTimes(times));
+    } catch (err) {
+      reject(`Error grouping times by user: ${err}`);
+    }
+    return;
+  });
+}
 
 export const timeCreationMiddleware = ({ getState, dispatch }) => next => action => {
   if (action.type === TIME_ADDED_PENDING) {
@@ -53,9 +73,10 @@ export const timeFetchMiddleware = ({ getState, dispatch }) => next => action =>
   return next(action);
 }
 
-export const timeClassifierMiddleware = ({ getState, dispatch }) => next => action => {
+export const timeClassifierMiddleware = ({ getState, dispatch }) => next => async action => {
   if (action.type === TIMES_GROUP_BY_USER_PENDING) {
-    action.payload = groupTimesByUser(action.payload);
+    const timesByUser = await groupTimesByUser(action.payload);
+    action.payload = timesByUser;
   }
   return next(action);
 }
