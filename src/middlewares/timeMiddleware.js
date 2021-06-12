@@ -1,6 +1,11 @@
 import moment from 'moment';
 
-import { TIME_ADDED_PENDING, TIME_ADDED_DUPLICATE, TIMES_FETCHED_SUCCESS } from "../actions/constants";
+import {
+  TIME_ADDED_PENDING,
+  TIME_ADDED_DUPLICATE,
+  TIMES_FETCHED_SUCCESS,
+  TIMES_GROUP_BY_USER_PENDING
+} from "../actions/constants";
 
 const checkDuplicateTimes = (timeObj, newTimeObj) => {
   const sameStartTimes = moment(timeObj.start).format('X') === moment(newTimeObj.start).format('X');
@@ -19,6 +24,15 @@ const changeTimeFormat = (time) => {
   time.end = new Date(time.end);
 }
 
+const groupTimesByUser = times => times.reduce((obj, time) => {
+  const userId = time.user_id;
+  if (!obj[userId]) {
+    obj[userId] = []
+  }
+  obj[userId].push(time);
+  return obj;
+}, {});
+
 export const timeCreationMiddleware = ({ getState, dispatch }) => next => action => {
   if (action.type === TIME_ADDED_PENDING) {
     const newTimeObj = action.payload;
@@ -35,6 +49,13 @@ export const timeFetchMiddleware = ({ getState, dispatch }) => next => action =>
     const times = action.payload;
     times.forEach(time => changeTimeFormat(time));
     action.payload = times;
+  }
+  return next(action);
+}
+
+export const timeClassifierMiddleware = ({ getState, dispatch }) => next => action => {
+  if (action.type === TIMES_GROUP_BY_USER_PENDING) {
+    action.payload = groupTimesByUser(action.payload);
   }
   return next(action);
 }
