@@ -1,6 +1,6 @@
 import { TIMES_GROUP_BY_USER_PENDING } from '../actions/constants';
 
-const userTimesReducer = (state={}, { type, payload }) => {
+const groupedTimesReducer = (state={}, { type, payload }) => {
   switch(type) {
     case TIMES_GROUP_BY_USER_PENDING: {
       const userTimesObj = payload;
@@ -11,4 +11,4 @@ const userTimesReducer = (state={}, { type, payload }) => {
   }
 }
 
-export default userTimesReducer;
+export default groupedTimesReducer;

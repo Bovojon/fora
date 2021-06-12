@@ -8,7 +8,7 @@ import authReducer from './authReducer';
 import eventReducer from './eventReducer';
 import errorReducer from './errorReducer';
 import successReducer from './successReducer';
-import userTimesReducer from './userTimesReducer';
+import groupedTimesReducer from './groupedTimesReducer';
 
 export default (history) => combineReducers({
     router: connectRouter(history),
@@ -19,5 +19,5 @@ export default (history) => combineReducers({
     event: eventReducer,
     error: errorReducer,
     success: successReducer,
-    userTimesReducer
+    groupedTimesReducer
 })
