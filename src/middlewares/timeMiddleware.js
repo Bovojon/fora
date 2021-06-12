@@ -24,15 +24,6 @@ const changeTimeFormat = (time) => {
   time.end = new Date(time.end);
 }
 
-// const groupTimesByUser = times => times.reduce((obj, time) => {
-//   const userId = time.user_id;
-//   if (!obj[userId]) {
-//     obj[userId] = []
-//   }
-//   obj[userId].push(time);
-//   return obj;
-// }, {});
-
 const groupTimesByUser = (times) => {
   const groupTimes = (times) => times.reduce((obj, time) => {
     const userId = time.user_id;
