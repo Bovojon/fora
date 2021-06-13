@@ -4,7 +4,8 @@ import {
   TIME_ADDED_PENDING,
   TIME_ADDED_DUPLICATE,
   TIMES_FETCHED_SUCCESS,
-  TIMES_GROUP_BY_USER_PENDING
+  TIMES_GROUP_BY_USER_PENDING,
+  TIMES_FILTER_BY_USER_PENDING
 } from "../actions/constants";
 
 const checkDuplicateTimes = (timeObj, newTimeObj) => {
@@ -44,6 +45,64 @@ const groupTimesByUser = (times) => {
   });
 }
 
+
+// class Solution:
+//     def intervalIntersection(self, A: List[List[int]], B: List[List[int]]) -> List[List[int]]:
+//         ans = []
+//         i = j = 0
+
+//         while i < len(A) and j < len(B):
+//             # Let's check if A[i] intersects B[j].
+//             # lo - the startpoint of the intersection
+//             # hi - the endpoint of the intersection
+//             lo = max(A[i][0], B[j][0])
+//             hi = min(A[i][1], B[j][1])
+//             if lo <= hi:
+//                 ans.append([lo, hi])
+
+//             # Remove the interval with the smallest endpoint
+//             if A[i][1] < B[j][1]:
+//                 i += 1
+//             else:
+//                 j += 1
+
+//         return ans
+
+const intervalIntersection = (timesA, timesB) => {
+  if (timesA.length === 0) return timesB;
+  let intervalTimes = [];
+  let i = 0;
+  let j = 0;
+  while (i < timesA.length && j < timesB.length) {
+    const start = moment.max(moment(timesA[i].start), moment(timesB[j].start));
+    const end = moment.min(moment(timesA[i].end), moment(timesB[j].end));
+    if (start <= end) {
+      const intervalTime = {
+        start: new Date(start),
+        end: new Date(end)
+      }
+      intervalTimes.push(intervalTime);
+    }
+    if (timesA[i].end < timesB[j].end) {
+      i += 1
+    } else {
+      j += 1
+    }
+  }
+  return intervalTimes;
+}
+
+const filterTimes = (timesByUserObj) => {
+
+  const filterTimesArray = (timesArray) => timesArray.reduce((commonTimes, timeArray) => {
+    commonTimes = intervalIntersection(commonTimes, timeArray);
+    return commonTimes;
+  }, []);
+
+  const commonTimes = filterTimesArray(Object.values(timesByUserObj));
+  return commonTimes;
+}
+
 export const timeCreationMiddleware = ({ getState, dispatch }) => next => action => {
   if (action.type === TIME_ADDED_PENDING) {
     const newTimeObj = action.payload;
@@ -68,6 +127,14 @@ export const timeClassifierMiddleware = ({ getState, dispatch }) => next => asyn
   if (action.type === TIMES_GROUP_BY_USER_PENDING) {
     const timesByUser = await groupTimesByUser(action.payload);
     action.payload = timesByUser;
+  }
+  return next(action);
+}
+
+export const timeFilterMiddleware = ({ getState, dispatch }) => next => action => {
+  if (action.type === TIMES_FILTER_BY_USER_PENDING) {
+    const filteredTimes = filterTimes(getState().groupedTimes);
+    action.payload = filteredTimes;
   }
   return next(action);
 }
