@@ -110,7 +110,15 @@ export const timeClassifierMiddleware = ({ getState, dispatch }) => next => asyn
 
 export const timeFilterMiddleware = ({ getState, dispatch }) => next => action => {
   if (action.type === TIMES_FILTER_BY_USER_PENDING) {
-    const filteredTimes = filterTimes(getState().groupedTimes);
+    const userIds = action.payload;
+    const groupedTimes = getState().groupedTimes;
+    const checkedUsers = Object.keys(groupedTimes)
+      .filter(userId => userIds.includes(parseInt(userId)))
+      .reduce((obj, userId) => {
+        obj[userId] = groupedTimes[userId];
+        return obj;
+      }, {});
+    const filteredTimes = filterTimes(checkedUsers);
     action.payload = filteredTimes;
   }
   return next(action);
