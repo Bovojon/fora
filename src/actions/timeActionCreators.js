@@ -10,7 +10,9 @@ import {
   TIMES_FETCHED_PENDING,
   TIMES_FETCHED_SUCCESS,
 
-  TIMES_GROUP_BY_USER_PENDING
+  TIMES_GROUP_BY_USER_PENDING,
+
+  TIMES_FILTER_BY_USER_PENDING
 } from './constants';
 
 export const addTimePending = createAction(TIME_ADDED_PENDING);
@@ -23,3 +25,5 @@ export const fetchTimesPending = createAction(TIMES_FETCHED_PENDING);
 export const fetchTimesSuccess = createAction(TIMES_FETCHED_SUCCESS);
 
 export const groupTimesPending = createAction(TIMES_GROUP_BY_USER_PENDING);
+
+export const filterTimesPending = createAction(TIMES_FILTER_BY_USER_PENDING);
