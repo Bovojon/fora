@@ -118,7 +118,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
   const [showCommonTimes, setShowCommonTimes] = useState(false);
 
-  const handleShowCommonTimesChange = (checkedTimes=checked) => {
+  const handleShowCommonTimesChange = (checkedTimes) => {
     if (checkedTimes.length > 0 && initialTimes.length > 0) {
       if (showCommonTimes) {
         filterTimesPending(checkedTimes);
@@ -158,7 +158,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   }, [filteredTimes, setTimes])
 
   useEffect(() => {
-    handleShowCommonTimesChange();
+    handleShowCommonTimesChange(checked);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showCommonTimes])
   
@@ -166,7 +166,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
     <Box m={2}>
       <Header>Members</Header>
       <Grid container direction="row" justify="center" alignItems="center">
-        <LightText>Show common times only</LightText>
+        <LightText>Common availabilities</LightText>
         <Switch onChange={() => setShowCommonTimes(!showCommonTimes)} checked={showCommonTimes} />
       </Grid>
       {isLoading ? 
