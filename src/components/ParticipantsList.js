@@ -1,9 +1,10 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
 import { Create } from '@material-ui/icons';
 import { 
-  List as MuiList,  
+  List as MuiList,
   ListItem as MuiListItem,
   ListItemSecondaryAction,
   ListItemText,
@@ -13,6 +14,8 @@ import {
   Box as MuiBox,
   Grid
 } from '@material-ui/core';
+
+import { filterTimesPending } from '../actions/timeActionCreators';
 
 const Box = styled(MuiBox)`
   height: 24vh;
@@ -86,7 +89,7 @@ const LoadingListSkeleton = () => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, setTimes }) => {
+const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, setTimes, filterTimesPending }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
 
@@ -99,6 +102,8 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
       newChecked.splice(currentIndex, 1);
     }
     setChecked(newChecked);
+
+    filterTimesPending(newChecked);
 
     if (newChecked.length > 0 && initialTimes.length > 0) {
       const newTimes = initialTimes.filter(time => newChecked.includes(time.user_id));
@@ -164,4 +169,10 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   );
 }
 
-export default ParticipantsList;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		filterTimesPending: (userIds) => { dispatch(filterTimesPending(userIds)) }
+	}
+}
+
+export default connect(null, mapDispatchToProps)(ParticipantsList);
