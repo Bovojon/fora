@@ -15,9 +15,9 @@ export default (history) => combineReducers({
     calendar: calendarReducer,
     user: userReducer,
     times: timeReducer,
+    groupedTimes: groupedTimesReducer,
     auth: authReducer,
     event: eventReducer,
     error: errorReducer,
-    success: successReducer,
-    groupedTimesReducer
+    success: successReducer
 })
