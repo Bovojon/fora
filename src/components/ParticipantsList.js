@@ -12,7 +12,9 @@ import {
   Checkbox,
   Avatar as MuiAvatar,
   Box as MuiBox,
-  Grid
+  Grid,
+  Switch as MuiSwitch,
+  withStyles
 } from '@material-ui/core';
 
 import { filterTimesPending } from '../actions/timeActionCreators';
@@ -58,6 +60,27 @@ const Name = styled.span`
   margin-right: 7px;
 `
 
+const LightText = styled.p`
+  color: #5f6368;
+  font: 400 15px / 20px Roboto, sans-serif;
+  text-align: center;
+  margin-bottom: 0px;
+`
+
+const Switch = withStyles({
+  switchBase: {
+    color: "#fddede",
+    '&$checked': {
+      color: "#f2a099",
+    },
+    '&$checked + $track': {
+      backgroundColor: "#f2a099",
+    },
+  },
+  checked: {},
+  track: {},
+})(MuiSwitch);
+
 const LoadingListSkeleton = () => {
   return (
     <List>
@@ -89,9 +112,24 @@ const LoadingListSkeleton = () => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, setTimes, filterTimesPending }) => {
+const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, setTimes,
+  filterTimesPending, filteredTimes }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
+  const [showCommonTimes, setShowCommonTimes] = useState(false);
+
+  const handleShowCommonTimesChange = (checkedTimes=checked) => {
+    if (checkedTimes.length > 0 && initialTimes.length > 0) {
+      if (showCommonTimes) {
+        filterTimesPending(checkedTimes);
+      } else {
+        const newTimes = initialTimes.filter(time => checkedTimes.includes(time.user_id));
+        setTimes(newTimes);
+      }
+    } else {
+      setTimes(initialTimes);
+    }
+  }
 
   const handleCheckBoxClick = (participantId) => () => {
     const currentIndex = checked.indexOf(participantId);
@@ -102,15 +140,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
       newChecked.splice(currentIndex, 1);
     }
     setChecked(newChecked);
-
-    filterTimesPending(newChecked);
-
-    if (newChecked.length > 0 && initialTimes.length > 0) {
-      const newTimes = initialTimes.filter(time => newChecked.includes(time.user_id));
-      setTimes(newTimes);
-    } else {
-      setTimes(initialTimes);
-    }
+    handleShowCommonTimesChange(newChecked);
   };
 
   useEffect(() => {
@@ -120,10 +150,25 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
       setIsLoading(false);
     }
   }, [participants]);
+
+  useEffect(() => {
+    if (filteredTimes.length > 0) {
+      setTimes(filteredTimes);
+    }
+  }, [filteredTimes, setTimes])
+
+  useEffect(() => {
+    handleShowCommonTimesChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCommonTimes])
   
   return (
     <Box m={2}>
       <Header>Members</Header>
+      <Grid container direction="row" justify="center" alignItems="center">
+        <LightText>Show common times only</LightText>
+        <Switch onChange={() => setShowCommonTimes(!showCommonTimes)} checked={showCommonTimes} />
+      </Grid>
       {isLoading ? 
         <LoadingListSkeleton />
         :
@@ -169,10 +214,16 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   );
 }
 
+const mapStateToProps = (state) => {
+  return {
+		filteredTimes: state.filteredTimes
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
 	return {
 		filterTimesPending: (userIds) => { dispatch(filterTimesPending(userIds)) }
 	}
 }
 
-export default connect(null, mapDispatchToProps)(ParticipantsList);
+export default connect(mapStateToProps, mapDispatchToProps)(ParticipantsList);

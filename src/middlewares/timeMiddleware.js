@@ -75,11 +75,16 @@ const findIntervals = (timesArray) => timesArray.reduce((commonTimes, timeArray)
   return commonTimes;
 }, []);
 
+const timeSorter = (a, b) => {
+  return moment(a.start).diff(b.start)
+}
+
 const filterTimes = (userIds, groupedTimes) => {
   const checkedUsers = Object.keys(groupedTimes)
     .filter(userId => userIds.includes(parseInt(userId)))
     .reduce((obj, userId) => {
-      obj[userId] = groupedTimes[userId];
+      const timesArrayCopy = [...groupedTimes[userId]];
+      obj[userId] = timesArrayCopy.sort(timeSorter);
       return obj;
     }, {});
 
