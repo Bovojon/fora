@@ -55,6 +55,7 @@ const intervalIntersection = (timesA, timesB) => {
     const end = moment.min(moment(timesA[i].end), moment(timesB[j].end));
     if (start <= end) {
       const intervalTime = {
+        id: "C_"+timesA[i].id+"_"+timesB[j].id,
         start: new Date(start),
         end: new Date(end)
       }
@@ -69,15 +70,27 @@ const intervalIntersection = (timesA, timesB) => {
   return intervalTimes;
 }
 
-const filterTimes = (timesByUserObj) => {
-
-  const filterTimesArray = (timesArray) => timesArray.reduce((commonTimes, timeArray) => {
-    commonTimes = intervalIntersection(commonTimes, timeArray);
-    return commonTimes;
-  }, []);
-
-  const commonTimes = filterTimesArray(Object.values(timesByUserObj));
+const findIntervals = (timesArray) => timesArray.reduce((commonTimes, timeArray) => {
+  commonTimes = intervalIntersection(commonTimes, timeArray);
   return commonTimes;
+}, []);
+
+const filterTimes = (userIds, groupedTimes) => {
+  const checkedUsers = Object.keys(groupedTimes)
+    .filter(userId => userIds.includes(parseInt(userId)))
+    .reduce((obj, userId) => {
+      obj[userId] = groupedTimes[userId];
+      return obj;
+    }, {});
+
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(findIntervals(Object.values(checkedUsers)));
+    } catch (err) {
+      reject(`Error in filtering times by user: ${err}`);
+    }
+    return;
+  });
 }
 
 export const timeCreationMiddleware = ({ getState, dispatch }) => next => action => {
@@ -108,17 +121,9 @@ export const timeClassifierMiddleware = ({ getState, dispatch }) => next => asyn
   return next(action);
 }
 
-export const timeFilterMiddleware = ({ getState, dispatch }) => next => action => {
+export const timeFilterMiddleware = ({ getState, dispatch }) => next => async action => {
   if (action.type === TIMES_FILTER_BY_USER_PENDING) {
-    const userIds = action.payload;
-    const groupedTimes = getState().groupedTimes;
-    const checkedUsers = Object.keys(groupedTimes)
-      .filter(userId => userIds.includes(parseInt(userId)))
-      .reduce((obj, userId) => {
-        obj[userId] = groupedTimes[userId];
-        return obj;
-      }, {});
-    const filteredTimes = filterTimes(checkedUsers);
+    const filteredTimes = await filterTimes(action.payload, getState().groupedTimes);
     action.payload = filteredTimes;
   }
   return next(action);
