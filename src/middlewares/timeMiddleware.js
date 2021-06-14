@@ -46,7 +46,6 @@ const groupTimesByUser = (times) => {
 }
 
 const intervalIntersection = (timesA, timesB) => {
-  if (timesA.length === 0) return timesB;
   let intervalTimes = [];
   let i = 0;
   let j = 0;
