@@ -152,7 +152,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   }, [participants]);
 
   useEffect(() => {
-    if (filteredTimes.length > 0) handleSetTimesChange(filteredTimes);
+    handleSetTimesChange(filteredTimes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredTimes])
 
