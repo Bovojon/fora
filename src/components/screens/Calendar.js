@@ -41,6 +41,7 @@ import EventDialog from '../EventDialog';
 import SuccessNotification from '../notifications/SuccessNotification';
 import ImportCalendar from '../ImportCalendar';
 import Timezone from '../Timezone';
+import CustomCalEvent from '../helpers/CustomEvent';
 import { addTimePending, removeTimePending } from '../../actions/timeActionCreators';
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
@@ -84,21 +85,6 @@ const IconButton = styled(MuiIconButton)`
 
 const Select = styled(MuiSelect)`
 	padding: 5px;
-`
-
-const NameArea = styled(Grid)`
-	width: 70%;
-`
-
-const Header = styled.span`
-  color: #FFFFFF;
-  font: 400 14px / 20px Roboto, sans-serif;
-	margin-right: 5px;
-`
-
-const TimeText = styled.span`
-  color: #FFFFFF;
-  font: 400 12px / 20px Roboto, sans-serif;
 `
 
 const MidnightSlot = styled.span`
@@ -395,64 +381,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		);
 	}
 	const CustomEvent = ({ event }) => {
-		const eventStart = momentTimezone.tz(event.start, calTimezone);
-		const eventEnd = momentTimezone.tz(event.end, calTimezone);
-		if (typeof event?.summary === "undefined") {
-			let userName;
-			if (typeof event.creator?.name === "undefined" || currentUser.id === event.creator.id) {
-				userName = currentUser.name;
-			} else {
-				userName = event.creator.name;
-			}
-			return (
-				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
-					<NameArea container direction="row" justify="flex-start" alignItems="center">
-						<Header>{userName}</Header>
-					</NameArea>
-					<TimeText>
-						{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
-					</TimeText>
-					<TimeText>
-						{moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
-							<Fragment>{moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}</Fragment>
-							:
-							<Fragment>{moment(eventStart).format('ddd, MMM D')}</Fragment>
-						}
-					</TimeText>
-					<TimeText>
-						{isDifferentTimezone ?
-							<Fragment>({calTimezone})</Fragment>
-							:
-							null
-						}
-					</TimeText>
-				</Grid>
-			);
-		}
-		return (
-			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
-				<NameArea container direction="row" justify="flex-start" alignItems="center">
-					<Header>{event.summary}</Header>
-				</NameArea>
-				<TimeText>
-					{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
-				</TimeText>
-				<TimeText>
-					{moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
-						<Fragment>{moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}</Fragment>
-						:
-						<Fragment>{moment(eventStart).format('ddd, MMM D')}</Fragment>
-					}
-				</TimeText>
-				<TimeText>
-					{isDifferentTimezone ?
-						<Fragment>({calTimezone})</Fragment>
-						:
-						null
-					}
-				</TimeText>
-			</Grid>
-		);
+		return <CustomCalEvent event={event} isDifferentTimezone={isDifferentTimezone} calTimezone={calTimezone} currentUser={currentUser} />
 	}
 	const CustomTimeSlotWrapper = (props) => {
 		const isNonGutter = typeof props.children.props.children === "undefined";
