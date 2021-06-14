@@ -69,11 +69,6 @@ const intervalIntersection = (timesA, timesB) => {
   return intervalTimes;
 }
 
-// const findIntervals = (timesArray) => timesArray.reduce((commonTimes, timeArray) => {
-//   commonTimes = intervalIntersection(commonTimes, timeArray);
-//   return commonTimes;
-// }, []);
-
 const findIntervals = (timesArray) => {
   let commonTimes = timesArray[0];
   for (let i=1; i<timesArray.length; i++) {
