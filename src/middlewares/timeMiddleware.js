@@ -70,6 +70,7 @@ const intervalIntersection = (timesA, timesB) => {
 }
 
 const findIntervals = (timesArray) => {
+  if (timesArray.length === 0) return []
   let commonTimes = timesArray[0];
   for (let i=1; i<timesArray.length; i++) {
     commonTimes = intervalIntersection(commonTimes, timesArray[i]);
