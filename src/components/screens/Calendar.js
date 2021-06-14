@@ -198,14 +198,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-	useEffect(() => {
-		fetchCalendarPending(calendarId);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const handleSetTimesChange = (times) => {
-		let newTimes = times;
-		times.forEach(timeObj => {
+	const handleSetTimesChange = (timesArray) => {
+		let newTimes = timesArray;
+		timesArray.forEach(timeObj => {
 			if (differentDay(timeObj.start, timeObj.end)) {
 				newTimes = newTimes.concat(breakDaysIntoHours(timeObj));
 			}
@@ -213,6 +208,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		setTimes(newTimes);
 		return newTimes;
 	}
+
+	useEffect(() => {
+		fetchCalendarPending(calendarId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		const newTimes = handleSetTimesChange(initialTimes);
@@ -244,6 +244,13 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [times, calendar.importedEvents]);
+
+	useEffect(() => {
+		const timesCopy = [...times];
+		timesCopy.sort(timeSorter);
+		setSortedTimes(timesCopy);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [times]);
 
 	const getUrlAndRedirect = () => {
 		axios({
