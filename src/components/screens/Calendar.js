@@ -203,14 +203,19 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => {
-		let newTimes = initialTimes;
-		initialTimes.forEach(timeObj => {
+	const handleSetTimesChange = (times) => {
+		let newTimes = times;
+		times.forEach(timeObj => {
 			if (differentDay(timeObj.start, timeObj.end)) {
 				newTimes = newTimes.concat(breakDaysIntoHours(timeObj));
 			}
 		});
 		setTimes(newTimes);
+		return newTimes;
+	}
+
+	useEffect(() => {
+		const newTimes = handleSetTimesChange(initialTimes);
 		const initialTimesCopy = [...newTimes];
 		initialTimesCopy.sort(timeSorter);
 		setSortedTimes(initialTimesCopy);
@@ -536,7 +541,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										currentUser={currentUser}
 										handleEditUserName={handleEditUserName}
 										initialTimes={initialTimes}
-										setTimes={setTimes}
+										handleSetTimesChange={handleSetTimesChange}
 									/>
 									<Divider />
 									<TimesList

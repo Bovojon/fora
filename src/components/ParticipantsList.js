@@ -112,7 +112,7 @@ const LoadingListSkeleton = () => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, setTimes,
+const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, handleSetTimesChange,
   filterTimesPending, filteredTimes }) => {
   const [checked, setChecked] = useState([]);
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
@@ -124,10 +124,10 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
         filterTimesPending(checkedTimes);
       } else {
         const newTimes = initialTimes.filter(time => checkedTimes.includes(time.user_id));
-        setTimes(newTimes);
+        handleSetTimesChange(newTimes);
       }
     } else {
-      setTimes(initialTimes);
+      handleSetTimesChange(initialTimes);
     }
   }
 
@@ -152,10 +152,9 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   }, [participants]);
 
   useEffect(() => {
-    if (filteredTimes.length > 0) {
-      setTimes(filteredTimes);
-    }
-  }, [filteredTimes, setTimes])
+    if (filteredTimes.length > 0) handleSetTimesChange(filteredTimes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredTimes])
 
   useEffect(() => {
     handleShowCommonTimesChange(checked);
