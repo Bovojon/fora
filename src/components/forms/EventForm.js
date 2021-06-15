@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { TextField } from '@material-ui/core';
+import { TextField, Grid } from '@material-ui/core';
 import DatePicker from "react-datepicker";
 import momentTimezone from "moment-timezone";
 import styled from "styled-components";
@@ -10,13 +10,13 @@ import { css } from "styled-components/macro"; //eslint-disable-line
 import { addEventPending } from '../../actions/eventActionCreators';
 
 const Container = tw.div`relative`;
-const Content = tw.div`max-w-5xl mx-auto py-20 lg:py-24`;
-const FormContainer = tw.div`p-10 sm:p-12 md:p-16 relative`;
-const TwoColumn = tw.div`flex flex-col lg:flex-row justify-center mt-6`;
-const Text = tw.div`md:w-16 sm:w-5/12 flex justify-center items-center font-semibold`;
-const RowButton = tw.div`md:w-1/3 sm:w-5/12 flex justify-center items-center`;
-const InputContainer = tw.div`relative py-5 justify-center`;
+const Content = styled.div`
+  ${tw`flex flex-col md:flex-row max-w-xs md:max-w-lg mx-auto py-4 md:py-2`};
+`
+const Time = tw.div`flex flex-col md:flex-row justify-center items-center mt-4`;
+const Text = tw.div`md:w-16 sm:w-5/12 my-2 flex justify-center items-center font-semibold`;
 const CustomDatePicker = styled(DatePicker)`
+  ${tw`mb-1 md:mb-0`};
   padding: 8px;
   margin-right: 8px;
   color: #3c4043;
@@ -26,7 +26,13 @@ const CustomDatePicker = styled(DatePicker)`
   background-color: #f1f3f4;
   border-radius: 4px;
   text-align: center;
-  width: 80%
+`
+
+const Header = styled.h2`
+  font-size: 1.25em;
+  text-align: center;
+  color: #f2a099;
+  margin-bottom: 20px;
 `
 
 const EventForm = ({ event, participants, addEvent }) => {
@@ -66,6 +72,7 @@ const EventForm = ({ event, participants, addEvent }) => {
     }
   }, [participants]);
 
+  const handleDialogClose = () => {console.log("yes")}
   const handleSummaryChange = (event) => { setSummary(event.target.value) }
   const handleAttendeesChange = (event) => {
     const emails = event.target.value;
@@ -80,46 +87,38 @@ const EventForm = ({ event, participants, addEvent }) => {
   return (
     <Container>
       <Content>
-        <FormContainer>
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Header>Schedule a new event</Header>
           <TextField value={summary} onChange={handleSummaryChange} placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
-          <TwoColumn>
+          <Time>
             <Text>Start:</Text>
-            <RowButton>
-              <InputContainer>
-                <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
-              </InputContainer>
-              <InputContainer>
-                <CustomDatePicker
-                  selected={startDateTime}
-                  onChange={time => setStartDateTime(time)}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="h:mm aa"
-                />
-              </InputContainer>
-            </RowButton>
+            <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
+            <CustomDatePicker
+              selected={startDateTime}
+              onChange={time => setStartDateTime(time)}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+            />
+          </Time>
+          <Time container direction="row" justify="center" alignItems="center">
             <Text>End:</Text>
-            <RowButton>
-              <InputContainer>
-                <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
-              </InputContainer>
-              <InputContainer>
-                <CustomDatePicker
-                  selected={endDateTime}
-                  onChange={time => setEndDateTime(time)}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="h:mm aa"
-                />
-              </InputContainer>
-            </RowButton>
-          </TwoColumn>
-          <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guests (e.g. ex1@email.com, ex2@email.com)" multiline rows={4} fullWidth margin="normal" variant="outlined" />
-        </FormContainer>
+            <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
+            <CustomDatePicker
+              selected={endDateTime}
+              onChange={time => setEndDateTime(time)}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+            />
+          </Time>
+          <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guests (e.g. ex1@email.com, ex2@email.com)"
+            multiline rows={3} fullWidth margin="normal" variant="outlined" style={{ marginTop: "16px" }}/>
+        </Grid>
       </Content>
     </Container>
   );
