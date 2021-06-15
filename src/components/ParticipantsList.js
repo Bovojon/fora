@@ -68,7 +68,8 @@ const LightText = styled.p`
 `
 
 const CheckAll = styled(Checkbox)`
-  margin-right: 17px;
+  margin-right: 18px;
+  margin-left: 7px;
 `
 
 const Switch = withStyles({
@@ -182,6 +183,7 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
         <Switch onChange={() => setShowCommonTimes(!showCommonTimes)} checked={showCommonTimes} />
       </Grid>
       <Grid container direction="row" justify="flex-end" alignItems="center">
+        <LightText>Select all</LightText>
         <CheckAll onChange={handleSelectAll} checked={selectAll} color="default" />
       </Grid>
       {isLoading ?
