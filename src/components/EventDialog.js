@@ -98,10 +98,16 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, isOwner, handleSchedule
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} scroll="paper">
       <ListItem key={1}>
-        <ListItemAvatar>
-        <Avatar background={selectedEvent.background}>{selectedEvent.userName?.charAt(0).toUpperCase()}</Avatar>
-        </ListItemAvatar>
-        <ListItemText id={1} primary={<LightText>{selectedEvent.userName}{isOwner ? <Fragment> (me)</Fragment> : null}</LightText>} />
+        {typeof selectedEvent.id === "string" && selectedEvent.id.charAt(0) === "C" ?
+          <ListItemText id={1} primary={<LightText>Common availability</LightText>} />
+          :
+          <Fragment>
+            <ListItemAvatar>
+              <Avatar background={selectedEvent.background}>{selectedEvent.userName?.charAt(0).toUpperCase()}</Avatar>
+            </ListItemAvatar>
+            <ListItemText id={1} primary={<LightText>{selectedEvent.userName}{isOwner ? <Fragment> (me)</Fragment> : null}</LightText>} />
+          </Fragment>
+        }
       </ListItem>
       <DialogContent dividers={false}>
         <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>

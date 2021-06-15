@@ -113,10 +113,8 @@ const LoadingListSkeleton = () => {
 }
 
 const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, handleSetTimesChange,
-  filterTimesPending, filteredTimes }) => {
-  const [checked, setChecked] = useState([]);
+  filterTimesPending, filteredTimes, showCommonTimes, setShowCommonTimes, checked, setChecked }) => {
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
-  const [showCommonTimes, setShowCommonTimes] = useState(false);
 
   const handleShowCommonTimesChange = (checkedTimes) => {
     if (checkedTimes.length > 0 && initialTimes.length > 0) {
