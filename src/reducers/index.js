@@ -8,7 +8,6 @@ import authReducer from './authReducer';
 import eventReducer from './eventReducer';
 import errorReducer from './errorReducer';
 import successReducer from './successReducer';
-import groupedTimesReducer from './groupedTimesReducer';
 import filteredTimesReducer from './filteredTimesReducer';
 
 export default (history) => combineReducers({
@@ -16,7 +15,6 @@ export default (history) => combineReducers({
     calendar: calendarReducer,
     user: userReducer,
     times: timeReducer,
-    groupedTimes: groupedTimesReducer,
     auth: authReducer,
     event: eventReducer,
     error: errorReducer,
