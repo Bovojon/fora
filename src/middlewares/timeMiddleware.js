@@ -90,6 +90,11 @@ const filterTimes = (userIds, groupedTimes) => {
       obj[userId] = timesArrayCopy.sort(timeSorter);
       return obj;
     }, {});
+  userIds.forEach(userId => {
+    if (!checkedUsers[userId]) {
+      checkedUsers[userId] = []
+    }
+  });
 
   return new Promise((resolve, reject) => {
     try {
