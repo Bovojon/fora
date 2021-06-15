@@ -4,7 +4,6 @@ import {
   TIME_ADDED_PENDING,
   TIME_ADDED_DUPLICATE,
   TIMES_FETCHED_SUCCESS,
-  TIMES_GROUP_BY_USER_PENDING,
   TIMES_FILTER_BY_USER_PENDING
 } from "../actions/constants";
 
@@ -126,17 +125,10 @@ export const timeFetchMiddleware = ({ getState, dispatch }) => next => action =>
   return next(action);
 }
 
-export const timeClassifierMiddleware = ({ getState, dispatch }) => next => async action => {
-  if (action.type === TIMES_GROUP_BY_USER_PENDING) {
-    const timesByUser = await groupTimesByUser(action.payload);
-    action.payload = timesByUser;
-  }
-  return next(action);
-}
-
 export const timeFilterMiddleware = ({ getState, dispatch }) => next => async action => {
   if (action.type === TIMES_FILTER_BY_USER_PENDING) {
-    const filteredTimes = await filterTimes(action.payload, getState().groupedTimes);
+    const timesByUser = await groupTimesByUser(getState().times);
+    const filteredTimes = await filterTimes(action.payload, timesByUser);
     action.payload = filteredTimes;
   }
   return next(action);
