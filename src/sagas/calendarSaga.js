@@ -6,7 +6,7 @@ import { createUserSuccess } from '../actions/userActionCreators';
 import { fetchTimesSuccess } from '../actions/timeActionCreators';
 import { addError } from '../actions/errorActionCreators';
 import { 
-  createCalendarSuccess, 
+  createCalendarSuccess,
   fetchCalendarSuccess,
   addUserToCalendarPending,
   addUserToCalendarSuccess

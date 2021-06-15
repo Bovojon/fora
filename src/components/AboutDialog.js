@@ -7,7 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Button,
+  Button as MuiButton,
   Grid,
   IconButton as MuiIconButton
 } from '@material-ui/core';
@@ -32,6 +32,23 @@ const IconButton = styled(MuiIconButton)`
   color: theme.palette.grey[500]
 `
 
+const Button = styled(MuiButton)`
+  font-size: 1rem;
+  border-radius: 9999px;
+  background-color: #fddede;
+  color: #4299e1 !important;
+  :hover {
+    background-color: #fddede;
+  }
+  border-radius: 9999px;
+  padding: 0.8rem 1.1rem;
+  width: 100%;
+  margin-bottom: 10px;
+  :focus {
+    outline: none;
+  }
+`
+
 const Heading = tw.h1`font-bold text-lg text-gray-800 leading-tight text-center mt-5 mb-4`
 
 const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
@@ -50,7 +67,7 @@ const AboutDialog = ({ aboutIsOpen, handleAboutClose }) => {
         <span>About Fora</span>
         <IconButton onClick={handleAboutClose}><CloseIcon /></IconButton>
       </DialogTitle>
-      <DialogContent dividers={true}>
+      <DialogContent dividers={false}>
         <Grid container direction="column" justify="center" alignItems="flex-start">
           <SmallTitle>What is Fora?</SmallTitle>
           <LightText>

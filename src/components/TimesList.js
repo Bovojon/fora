@@ -118,66 +118,134 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
             const eventStart = momentTimezone.tz(time.start, calTimezone);
             const eventEnd = momentTimezone.tz(time.end, calTimezone);
             let background = time.creator?.color;
-            let width = time.id < 1000000 ? "100%" : "90%";
-            let ml = time.id < 1000000 ? "0" : "5%";
+            let width = time.id > 1000000 || (typeof time.id === "string" && time.id.charAt(0) === "U")  ? "90%" : "100%";
+            let ml = time.id > 1000000 || (typeof time.id === "string" && time.id.charAt(0) === "U")  ? "5%" : "0";
             if (typeof background === "undefined") background = currentUser.color;
             let userName = typeof time.creator?.name === "undefined" || currentUser.id === time.creator.id ?
               currentUser.name
               :
               time.creator.name;
-            if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')){
-              return (
-                <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background}>
-                  <CardBody>
-                    <TopRightArea>
-                      {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
-                    </TopRightArea>
-                    <Row>
-                      <NameArea container direction="row" justify="flex-start" alignItems="center">
-                        <NameHeader>{userName}</NameHeader>
-                      </NameArea>
-                    </Row>
-                    <Row>
-                      {moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}
-                    </Row>
-                    <Row>
-                      {isDifferentTimezone ?
-                        <Fragment>({calTimezone})</Fragment>
-                        :
-                        null
-                      }
-                    </Row>
-                  </CardBody>
-                </Card>
-              );
+            if (typeof time.id === "string" && (time.id.charAt(0) === "C" || time.id.charAt(0) === "U")) {
+              if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')) {
+                return (
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background="white"
+                    style={{
+                      background: "repeating-linear-gradient(45deg, white, #fddede 5px, white 5px, #fddede 10px)",
+                      border: "1px solid #265985",
+                      color: "#5f6368"
+                    }}
+                  >
+                    <CardBody>
+                      <TopRightArea>
+                        <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple>
+                          <MoreIcon style={{ color: "#5f6368" }} />
+                        </IconButton>
+                      </TopRightArea>
+                      <Row>
+                        {moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}
+                      </Row>
+                      <Row>
+                        <NameArea container direction="row" justify="flex-start" alignItems="center">
+                          <NameHeader>{"\u200C"}</NameHeader>
+                        </NameArea>
+                      </Row>
+                      <Row>
+                        {isDifferentTimezone ?
+                          <Fragment>({calTimezone})</Fragment>
+                          :
+                          null
+                        }
+                      </Row>
+                    </CardBody>
+                  </Card>
+                );
+              } else {
+                return (
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background="white" width={width} ml={ml}
+                    style={{
+                      background: "repeating-linear-gradient(45deg, white, #fddede 5px, white 5px, #fddede 10px)",
+                      border: "1px solid #265985",
+                      color: "#5f6368"
+                    }}
+                  >
+                    <CardBody>
+                      <TopRightArea>
+                        <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple>
+                          <MoreIcon style={{ color: "#5f6368" }} />
+                        </IconButton>
+                      </TopRightArea>
+                      <Row>
+                        {moment(eventStart).format('ddd, MMM D')}
+                      </Row>
+                      <Row>
+                        {moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
+                      </Row>
+                      <Row>
+                        {isDifferentTimezone ?
+                          <Fragment>({calTimezone})</Fragment>
+                          :
+                          null
+                        }
+                      </Row>
+                    </CardBody>
+                  </Card>
+                );
+              }
             } else {
-              return (
-                <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background} width={width} ml={ml}>
-                  <CardBody>
-                    <TopRightArea>
-                      {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
-                    </TopRightArea>
-                    <Row>
-                      <NameArea container direction="row" justify="flex-start" alignItems="center">
-                        <NameHeader>{userName}</NameHeader>
-                      </NameArea>
-                    </Row>
-                    <Row>
-                      {moment(eventStart).format('ddd, MMM D')}
-                    </Row>
-                    <Row>
-                      {moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
-                    </Row>
-                    <Row>
-                      {isDifferentTimezone ?
-                        <Fragment>({calTimezone})</Fragment>
-                        :
-                        null
-                      }
-                    </Row>
-                  </CardBody>
-                </Card>
-              );
+              if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')) {
+                return (
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background}>
+                    <CardBody>
+                      <TopRightArea>
+                        {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
+                      </TopRightArea>
+                      <Row>
+                        <NameArea container direction="row" justify="flex-start" alignItems="center">
+                          <NameHeader>{userName}</NameHeader>
+                        </NameArea>
+                      </Row>
+                      <Row>
+                        {moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}
+                      </Row>
+                      <Row>
+                        {isDifferentTimezone ?
+                          <Fragment>({calTimezone})</Fragment>
+                          :
+                          null
+                        }
+                      </Row>
+                    </CardBody>
+                  </Card>
+                );
+              } else {
+                return (
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background} width={width} ml={ml}>
+                    <CardBody>
+                      <TopRightArea>
+                        {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
+                      </TopRightArea>
+                      <Row>
+                        <NameArea container direction="row" justify="flex-start" alignItems="center">
+                          <NameHeader>{userName}</NameHeader>
+                        </NameArea>
+                      </Row>
+                      <Row>
+                        {moment(eventStart).format('ddd, MMM D')}
+                      </Row>
+                      <Row>
+                        {moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
+                      </Row>
+                      <Row>
+                        {isDifferentTimezone ?
+                          <Fragment>({calTimezone})</Fragment>
+                          :
+                          null
+                        }
+                      </Row>
+                    </CardBody>
+                  </Card>
+                );
+              }
             }
           })}
         </Fragment>

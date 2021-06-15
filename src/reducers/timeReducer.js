@@ -1,7 +1,7 @@
-import { 
-  TIME_ADDED_SUCCESS, 
-  TIMES_FETCHED_SUCCESS, 
-  TIME_REMOVED_SUCCESS
+import {
+  TIME_ADDED_SUCCESS,
+  TIME_REMOVED_SUCCESS,
+  TIMES_FETCHED_SUCCESS
 } from '../actions/constants';
 
 const timeReducer = (state=[], { type, payload }) => {

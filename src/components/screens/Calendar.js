@@ -33,7 +33,6 @@ import ParticipantsList from '../ParticipantsList';
 import TimesList from '../TimesList';
 import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
-import EventClickForm from '../forms/EventClickForm';
 import ImportTimesForm from '../forms/ImportTimesForm';
 import AddAvailabilityForm from '../forms/AddAvailabilityForm';
 import EventDetails from '../EventDetails';
@@ -101,6 +100,11 @@ const TimeText = styled.span`
   font: 400 12px / 20px Roboto, sans-serif;
 `
 
+const TimeTextGray = styled.span`
+  color: #5f6368;
+  font: 400 12px / 20px Roboto, sans-serif;
+`
+
 const MidnightSlot = styled.span`
 	background-color: #fff4dc;
 	text-align: center;
@@ -123,7 +127,7 @@ const differentDay = (start, end) => {
 	return true;
 }
 
-const breakDaysIntoHours = (timeObj) => {
+const breakDaysIntoHours = (timeObj, showCommonTimes, checked) => {
 	const newTimes = []
 	const startTime = timeObj.start;
 	const endTime = timeObj.end;
@@ -131,7 +135,7 @@ const breakDaysIntoHours = (timeObj) => {
 	if (days === 1) days = 2;
 	let startTimeMO = moment(startTime);
 	let endTimeMO = moment(startTime).endOf('day');
-	let id = 1000000 + timeObj.id;
+	let id = showCommonTimes && checked.length > 1 ? "U_" + timeObj.id : 1000000 + timeObj.id;
 	for (let day=0; day<days; day++) {
 		const start = new Date(startTimeMO);
 		const end = new Date(endTimeMO);
@@ -192,11 +196,24 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [initialRender, setInitialRender] = useState(true);
 	const [showTimes, setShowTimes] = useState(false);
 	const [availabilityDialogOpen, setAvailabilityDialogOpen] = useState(false);
+	const [showCommonTimes, setShowCommonTimes] = useState(false);
+	const [checked, setChecked] = useState([]);
 	
 	const { calendarId } = useParams();
 	const calRef = useRef(null);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const handleSetTimesChange = (timesArray) => {
+		let newTimes = timesArray;
+		timesArray.forEach(timeObj => {
+			if (differentDay(timeObj.start, timeObj.end)) {
+				newTimes = newTimes.concat(breakDaysIntoHours(timeObj, showCommonTimes, checked));
+			}
+		});
+		setTimes(newTimes);
+		return newTimes;
+	}
 
 	useEffect(() => {
 		fetchCalendarPending(calendarId);
@@ -204,13 +221,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}, []);
 
 	useEffect(() => {
-		let newTimes = initialTimes;
-		initialTimes.forEach(timeObj => {
-			if (differentDay(timeObj.start, timeObj.end)) {
-				newTimes = newTimes.concat(breakDaysIntoHours(timeObj));
-			}
-		});
-		setTimes(newTimes);
+		const newTimes = handleSetTimesChange(initialTimes);
 		const initialTimesCopy = [...newTimes];
 		initialTimesCopy.sort(timeSorter);
 		setSortedTimes(initialTimesCopy);
@@ -239,6 +250,13 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [times, calendar.importedEvents]);
+
+	useEffect(() => {
+		const timesCopy = [...times];
+		timesCopy.sort(timeSorter);
+		setSortedTimes(timesCopy);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [times]);
 
 	const getUrlAndRedirect = () => {
 		axios({
@@ -386,6 +404,29 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const eventStart = momentTimezone.tz(event.start, calTimezone);
 		const eventEnd = momentTimezone.tz(event.end, calTimezone);
 		if (typeof event?.summary === "undefined") {
+			if (typeof event?.id === "string" && (event?.id.charAt(0) === "C" || event?.id.charAt(0) === "U")) {
+				return (
+					<Grid container direction="column" justify="flex-start" alignItems="flex-start">
+						<TimeTextGray>
+							{moment(eventStart).format('h:mma') + " – " + moment(eventEnd).format('h:mma')}
+						</TimeTextGray>
+						<TimeTextGray>
+							{moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD') ?
+								<Fragment>{moment(eventStart).format('MMM D') + " – " + moment(eventEnd).format('MMM D')}</Fragment>
+								:
+								<Fragment>{moment(eventStart).format('ddd, MMM D')}</Fragment>
+							}
+						</TimeTextGray>
+						<TimeTextGray>
+							{isDifferentTimezone ?
+								<Fragment>({calTimezone})</Fragment>
+								:
+								null
+							}
+						</TimeTextGray>
+					</Grid>
+				);
+			}
 			let userName;
 			if (typeof event.creator?.name === "undefined" || currentUser.id === event.creator.id) {
 				userName = currentUser.name;
@@ -477,7 +518,19 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			display: 'block',
 			overflow: 'auto'
 		}
-		if (typeof event?.summary === "undefined") return { style: selectedStyle }
+		const commonStyle = {
+			background: 'repeating-linear-gradient(45deg, white, #fddede 5px, white 5px, #fddede 10px)',
+			borderRadius: '3px',
+			opacity: 1,
+			display: 'block',
+			overflow: 'auto'
+		}
+		if (typeof event?.summary === "undefined") {
+			if (typeof event?.id === "string" && (event?.id.charAt(0) === "C" || event?.id.charAt(0) === "U")) {
+				return { style: commonStyle }	
+			}
+			return { style: selectedStyle }
+		}
 		return { style: importedStyle }
 	};
 
@@ -536,7 +589,11 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										currentUser={currentUser}
 										handleEditUserName={handleEditUserName}
 										initialTimes={initialTimes}
-										setTimes={setTimes}
+										handleSetTimesChange={handleSetTimesChange}
+										showCommonTimes={showCommonTimes}
+										setShowCommonTimes={setShowCommonTimes}
+										checked={checked}
+										setChecked={setChecked}
 									/>
 									<Divider />
 									<TimesList

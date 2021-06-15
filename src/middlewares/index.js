@@ -1,6 +1,11 @@
-import { timeCreationMiddleware, timeFetchMiddleware } from './timeMiddleware.js';
+import {
+  timeCreationMiddleware,
+  timeFetchMiddleware,
+  timeFilterMiddleware
+} from './timeMiddleware.js';
 
 export default [
   timeCreationMiddleware,
-  timeFetchMiddleware
+  timeFetchMiddleware,
+  timeFilterMiddleware
 ]

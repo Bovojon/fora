@@ -1,9 +1,10 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Skeleton } from '@material-ui/lab';
 import { Create } from '@material-ui/icons';
 import { 
-  List as MuiList,  
+  List as MuiList,
   ListItem as MuiListItem,
   ListItemSecondaryAction,
   ListItemText,
@@ -11,8 +12,12 @@ import {
   Checkbox,
   Avatar as MuiAvatar,
   Box as MuiBox,
-  Grid
+  Grid,
+  Switch as MuiSwitch,
+  withStyles
 } from '@material-ui/core';
+
+import { filterTimesPending } from '../actions/timeActionCreators';
 
 const Box = styled(MuiBox)`
   height: 24vh;
@@ -55,6 +60,31 @@ const Name = styled.span`
   margin-right: 7px;
 `
 
+const LightText = styled.p`
+  color: #5f6368;
+  font: 400 15px / 20px Roboto, sans-serif;
+  text-align: center;
+  margin-bottom: 0px;
+`
+
+const CheckAll = styled(Checkbox)`
+  margin-right: 17px;
+`
+
+const Switch = withStyles({
+  switchBase: {
+    color: "#fddede",
+    '&$checked': {
+      color: "#f2a099",
+    },
+    '&$checked + $track': {
+      backgroundColor: "#f2a099",
+    },
+  },
+  checked: {},
+  track: {},
+})(MuiSwitch);
+
 const LoadingListSkeleton = () => {
   return (
     <List>
@@ -86,10 +116,23 @@ const LoadingListSkeleton = () => {
   );
 }
 
-const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, setTimes }) => {
-  const [checked, setChecked] = useState([]);
+const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, handleSetTimesChange,
+  filterTimesPending, filteredTimes, showCommonTimes, setShowCommonTimes, checked, setChecked }) => {
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
+  const [selectAll, setSelectAll] = useState(false);
 
+  const handleShowCommonTimesChange = (checkedTimes) => {
+    if (checkedTimes.length > 0 && initialTimes.length > 0) {
+      if (showCommonTimes) {
+        filterTimesPending(checkedTimes);
+      } else {
+        const newTimes = initialTimes.filter(time => checkedTimes.includes(time.user_id));
+        handleSetTimesChange(newTimes);
+      }
+    } else {
+      handleSetTimesChange(initialTimes);
+    }
+  }
   const handleCheckBoxClick = (participantId) => () => {
     const currentIndex = checked.indexOf(participantId);
     const newChecked = [...checked];
@@ -99,14 +142,19 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
       newChecked.splice(currentIndex, 1);
     }
     setChecked(newChecked);
-
-    if (newChecked.length > 0 && initialTimes.length > 0) {
-      const newTimes = initialTimes.filter(time => newChecked.includes(time.user_id));
-      setTimes(newTimes);
-    } else {
-      setTimes(initialTimes);
-    }
+    handleShowCommonTimesChange(newChecked);
   };
+  const handleSelectAll = () => {
+    let newChecked = []
+    if (!selectAll) {
+      participants.forEach(memberObj => {
+        newChecked.push(memberObj.id);
+      });
+    }
+    setChecked(newChecked);
+    handleShowCommonTimesChange(newChecked);
+    setSelectAll(!selectAll)
+  }
 
   useEffect(() => {
     if (typeof participants === "undefined") {
@@ -115,11 +163,28 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
       setIsLoading(false);
     }
   }, [participants]);
+
+  useEffect(() => {
+    handleSetTimesChange(filteredTimes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredTimes])
+
+  useEffect(() => {
+    handleShowCommonTimesChange(checked);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCommonTimes])
   
   return (
     <Box m={2}>
       <Header>Members</Header>
-      {isLoading ? 
+      <Grid container direction="row" justify="center" alignItems="center">
+        <LightText>Common availabilities</LightText>
+        <Switch onChange={() => setShowCommonTimes(!showCommonTimes)} checked={showCommonTimes} />
+      </Grid>
+      <Grid container direction="row" justify="flex-end" alignItems="center">
+        <CheckAll onChange={handleSelectAll} checked={selectAll} color="default" />
+      </Grid>
+      {isLoading ?
         <LoadingListSkeleton />
         :
         <List>
@@ -164,4 +229,16 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   );
 }
 
-export default ParticipantsList;
+const mapStateToProps = (state) => {
+  return {
+		filteredTimes: state.filteredTimes
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		filterTimesPending: (userIds) => { dispatch(filterTimesPending(userIds)) }
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ParticipantsList);
