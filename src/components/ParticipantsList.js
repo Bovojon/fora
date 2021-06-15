@@ -67,6 +67,10 @@ const LightText = styled.p`
   margin-bottom: 0px;
 `
 
+const CheckAll = styled(Checkbox)`
+  margin-right: 17px;
+`
+
 const Switch = withStyles({
   switchBase: {
     color: "#fddede",
@@ -115,6 +119,7 @@ const LoadingListSkeleton = () => {
 const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleEditUserName, initialTimes, handleSetTimesChange,
   filterTimesPending, filteredTimes, showCommonTimes, setShowCommonTimes, checked, setChecked }) => {
   const [isLoading, setIsLoading] = useState(typeof participants === "undefined");
+  const [selectAll, setSelectAll] = useState(false);
 
   const handleShowCommonTimesChange = (checkedTimes) => {
     if (checkedTimes.length > 0 && initialTimes.length > 0) {
@@ -128,7 +133,6 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
       handleSetTimesChange(initialTimes);
     }
   }
-
   const handleCheckBoxClick = (participantId) => () => {
     const currentIndex = checked.indexOf(participantId);
     const newChecked = [...checked];
@@ -140,6 +144,17 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
     setChecked(newChecked);
     handleShowCommonTimesChange(newChecked);
   };
+  const handleSelectAll = () => {
+    let newChecked = []
+    if (!selectAll) {
+      participants.forEach(memberObj => {
+        newChecked.push(memberObj.id);
+      });
+    }
+    setChecked(newChecked);
+    handleShowCommonTimesChange(newChecked);
+    setSelectAll(!selectAll)
+  }
 
   useEffect(() => {
     if (typeof participants === "undefined") {
@@ -166,7 +181,10 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
         <LightText>Common availabilities</LightText>
         <Switch onChange={() => setShowCommonTimes(!showCommonTimes)} checked={showCommonTimes} />
       </Grid>
-      {isLoading ? 
+      <Grid container direction="row" justify="flex-end" alignItems="center">
+        <CheckAll onChange={handleSelectAll} checked={selectAll} color="default" />
+      </Grid>
+      {isLoading ?
         <LoadingListSkeleton />
         :
         <List>
