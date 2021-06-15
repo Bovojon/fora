@@ -33,7 +33,6 @@ import ParticipantsList from '../ParticipantsList';
 import TimesList from '../TimesList';
 import UserForm from '../forms/UserForm';
 import UserLogin from '../forms/UserLogin';
-import EventClickForm from '../forms/EventClickForm';
 import ImportTimesForm from '../forms/ImportTimesForm';
 import AddAvailabilityForm from '../forms/AddAvailabilityForm';
 import EventDetails from '../EventDetails';
