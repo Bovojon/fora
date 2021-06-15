@@ -405,7 +405,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const eventStart = momentTimezone.tz(event.start, calTimezone);
 		const eventEnd = momentTimezone.tz(event.end, calTimezone);
 		if (typeof event?.summary === "undefined") {
-			if (typeof event?.id === "string" && event?.id.charAt(0) === "C") {
+			if (typeof event?.id === "string" && (event?.id.charAt(0) === "C" || event?.id.charAt(0) === "U")) {
 				return (
 					<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 						<TimeTextGray>
@@ -527,7 +527,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			overflow: 'auto'
 		}
 		if (typeof event?.summary === "undefined") {
-			if (typeof event?.id === "string" && event?.id.charAt(0) === "C") {
+			if (typeof event?.id === "string" && (event?.id.charAt(0) === "C" || event?.id.charAt(0) === "U")) {
 				return { style: commonStyle }	
 			}
 			return { style: selectedStyle }
