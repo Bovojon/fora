@@ -3,10 +3,10 @@ import { call, put, all, takeEvery, takeLatest, select } from 'redux-saga/effect
 import { CalendarService, UserService } from '../services';
 import { UserSelector, CalendarSelector } from '../selectors';
 import { createUserSuccess } from '../actions/userActionCreators';
-import { fetchTimesSuccess, groupTimesPending } from '../actions/timeActionCreators';
+import { fetchTimesSuccess } from '../actions/timeActionCreators';
 import { addError } from '../actions/errorActionCreators';
 import { 
-  createCalendarSuccess, 
+  createCalendarSuccess,
   fetchCalendarSuccess,
   addUserToCalendarPending,
   addUserToCalendarSuccess
@@ -64,7 +64,6 @@ function* getCalendar(action) {
     const { calendar } = yield calResponse.data;
     yield put(fetchCalendarSuccess(calendar));
     yield put(fetchTimesSuccess(calendar.times));
-    yield put(groupTimesPending(calendar.times));
   } catch(error) {
     yield put(addError("Sorry, something went wrong. If you keep seeing this, please contact us at letsfora@gmail.com."));
     console.error("Error in getting Calendar: ", error);
