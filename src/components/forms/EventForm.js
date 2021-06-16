@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import moment from "moment";
 import { connect } from 'react-redux';
-import { TextField } from '@material-ui/core';
+import { push } from 'connected-react-router';
 import DatePicker from "react-datepicker";
 import momentTimezone from "moment-timezone";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
+import {
+  TextField,
+  Grid,
+  Button as MuiButton,
+  CircularProgress
+} from '@material-ui/core';
 
 import { addEventPending } from '../../actions/eventActionCreators';
+import { submitEventPending } from '../../actions/eventActionCreators';
+import { addError } from '../../actions/errorActionCreators';
 
 const Container = tw.div`relative`;
-const Content = tw.div`max-w-5xl mx-auto py-20 lg:py-24`;
-const FormContainer = tw.div`p-10 sm:p-12 md:p-16 relative`;
-const TwoColumn = tw.div`flex flex-col lg:flex-row justify-center mt-6`;
-const Text = tw.div`md:w-16 sm:w-5/12 flex justify-center items-center font-semibold`;
-const RowButton = tw.div`md:w-1/3 sm:w-5/12 flex justify-center items-center`;
-const InputContainer = tw.div`relative py-5 justify-center`;
+const Content = styled.div`
+  ${tw`flex flex-col md:flex-row max-w-xs md:max-w-lg mx-auto py-4 md:py-2`};
+`
+const Time = tw.div`flex flex-col md:flex-row justify-center items-center mt-4`;
+const Text = tw.div`md:w-16 sm:w-5/12 my-2 flex justify-center items-center font-semibold`;
 const CustomDatePicker = styled(DatePicker)`
+  ${tw`mb-1 md:mb-0`};
   padding: 8px;
   margin-right: 8px;
   color: #3c4043;
@@ -26,19 +35,47 @@ const CustomDatePicker = styled(DatePicker)`
   background-color: #f1f3f4;
   border-radius: 4px;
   text-align: center;
-  width: 80%
 `
 
-const EventForm = ({ event, participants, addEvent }) => {
+const Header = styled.h2`
+  font-size: 1.25em;
+  text-align: center;
+  color: #f2a099;
+  margin-bottom: 20px;
+`
+
+const Button = styled(MuiButton)`
+  font-size: 1rem;
+  border-radius: 9999px;
+  background-color: #fddede;
+  color: #4299e1 !important;
+  :hover {
+    background-color: #fddede;
+  }
+  border-radius: 9999px;
+  padding: 0.8rem 1.1rem;
+  width: 100%;
+  margin-top: 10px;
+  :focus {
+    outline: none;
+  }
+`
+
+const startBeforeEnd = (start, end) => {
+  return moment(end).diff(moment(start)) > 0;
+}
+
+const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addError, calendarUniqueId, navigateTo }) => {
   const [summary, setSummary] = useState("");
-  const [startDateTime, setStartDateTime] = useState(new Date(event.details.start));
-  const [endDateTime, setEndDateTime] = useState(new Date(event.details.end));
+  const [startDateTime, setStartDateTime] = useState(new Date(eventObj.details.start));
+  const [endDateTime, setEndDateTime] = useState(new Date(eventObj.details.end));
   const [attendeesList, setAttendeesList] = useState([]);
   const [attendeesStr, setAttendeesStr] = useState("");
+  const [scheduleEventLoading, setScheduleEventLoading] = useState(false);
 
   useEffect(() => {
     const tizn = momentTimezone.tz.guess();
-    const eventObj = {
+    const newEventObj = {
       details: {
         summary,
         start: { dateTime: startDateTime, timeZone: tizn },
@@ -46,7 +83,7 @@ const EventForm = ({ event, participants, addEvent }) => {
         attendees: attendeesList
       }
     }
-    addEvent(eventObj);
+    addEvent(newEventObj);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [summary, startDateTime, endDateTime, attendeesStr]);
 
@@ -66,6 +103,7 @@ const EventForm = ({ event, participants, addEvent }) => {
     }
   }, [participants]);
 
+  const handleCancel = () => { navigateTo(`/${calendarUniqueId}`) }
   const handleSummaryChange = (event) => { setSummary(event.target.value) }
   const handleAttendeesChange = (event) => {
     const emails = event.target.value;
@@ -76,50 +114,56 @@ const EventForm = ({ event, participants, addEvent }) => {
     });
     setAttendeesList(attendeesList);
   }
+  const handleScheduleClick = () => {
+    setScheduleEventLoading(true);
+    const event = eventObj.details;
+    if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
+      submitEvent({ event, code });
+    } else {
+      const errorMessage = "Please select a start time that is before the end time."
+      addError(errorMessage);
+    }
+  };
 
   return (
     <Container>
       <Content>
-        <FormContainer>
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Header>Schedule a new event</Header>
           <TextField value={summary} onChange={handleSummaryChange} placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
-          <TwoColumn>
+          <Time>
             <Text>Start:</Text>
-            <RowButton>
-              <InputContainer>
-                <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
-              </InputContainer>
-              <InputContainer>
-                <CustomDatePicker
-                  selected={startDateTime}
-                  onChange={time => setStartDateTime(time)}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="h:mm aa"
-                />
-              </InputContainer>
-            </RowButton>
+            <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
+            <CustomDatePicker
+              selected={startDateTime}
+              onChange={time => setStartDateTime(time)}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+            />
+          </Time>
+          <Time container direction="row" justify="center" alignItems="center">
             <Text>End:</Text>
-            <RowButton>
-              <InputContainer>
-                <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
-              </InputContainer>
-              <InputContainer>
-                <CustomDatePicker
-                  selected={endDateTime}
-                  onChange={time => setEndDateTime(time)}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="h:mm aa"
-                />
-              </InputContainer>
-            </RowButton>
-          </TwoColumn>
-          <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guests (e.g. ex1@email.com, ex2@email.com)" multiline rows={4} fullWidth margin="normal" variant="outlined" />
-        </FormContainer>
+            <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
+            <CustomDatePicker
+              selected={endDateTime}
+              onChange={time => setEndDateTime(time)}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+            />
+          </Time>
+          <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guests (e.g. ex1@email.com, ex2@email.com)"
+            multiline rows={3} fullWidth margin="normal" variant="outlined" style={{ margin: "16px 0px" }}/>
+          <Button onClick={handleScheduleClick} disabled={scheduleEventLoading} variant="contained" disableElevation>
+            { scheduleEventLoading ? <CircularProgress size={24} /> : "Schedule event" }
+          </Button>
+          <Button onClick={handleCancel} variant="contained" disableElevation>Cancel</Button>
+        </Grid>
       </Content>
     </Container>
   );
@@ -127,14 +171,19 @@ const EventForm = ({ event, participants, addEvent }) => {
 
 const mapStateToProps = (state) => {
   return {
-    event: state.event,
-    participants: state.calendar?.participants
+    eventObj: state.event,
+    calendarUniqueId: state.calendar.unique_id,
+    participants: state.calendar?.participants,
+    code: state.auth.code
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) }
+    addEvent: (eventObj) => { dispatch(addEventPending(eventObj)) },
+    submitEvent: (eventCodeObj) => { dispatch(submitEventPending(eventCodeObj)) },
+    addError: (errorMessage) => { dispatch(addError(errorMessage)) },
+    navigateTo: (route) => { dispatch(push(route)) }
   }
 }
 

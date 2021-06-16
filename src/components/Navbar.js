@@ -2,7 +2,6 @@ import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { useLocation } from 'react-router-dom';
-import moment from "moment";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { Clear, FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
@@ -22,14 +21,11 @@ import {
   Fade,
   IconButton as MuiIconButton,
   makeStyles,
-  Snackbar,
-  CircularProgress
+  Snackbar
 } from '@material-ui/core';
 
 import AboutDialog from './AboutDialog';
 import { createCalendarPending } from '../actions/calendarActionCreators';
-import { submitEventPending } from '../actions/eventActionCreators';
-import { addError } from '../actions/errorActionCreators';
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};
@@ -109,10 +105,6 @@ const NavbarToggler = styled(BootNavbarToggler)`
   }
 `
 
-const startBeforeEnd = (start, end) => {
-  return moment(end).diff(moment(start)) > 0;
-}
-
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -121,27 +113,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareClick, handleAboutClick, handlePrivacyClick, scheduleEventLoading }) => {
+const RightSection = ({ handleFindTimeClick, handleShareClick, handleAboutClick, handlePrivacyClick }) => {
   const location = useLocation();
-  if (location.pathname === "/" || location.pathname === "/privacy_policy") {
+  const locationPath = location.pathname;
+  if (locationPath === "/" || locationPath === "/privacy_policy" || locationPath === "/event") {
     return (
       <NavItem>
         <NavLinks>
-          <NavLink onClick={handlePrivacyClick}>Privacy</NavLink>
+          {locationPath === "/privacy_policy" ?
+            <NavLink onClick={handlePrivacyClick}>Privacy</NavLink>
+            :
+            null
+          }
           <PrimaryLink onClick={handleFindTimeClick}>Schedule time</PrimaryLink>
         </NavLinks>
       </NavItem>
     );
-  } else if (location.pathname === "/event") {
-    return (
-      <NavItem>
-        <NavLinks>
-          <PrimaryLink onClick={handleScheduleClick} disabled={scheduleEventLoading}>
-            { scheduleEventLoading ? <CircularProgress size={24} /> : "Schedule event" }
-          </PrimaryLink>
-        </NavLinks>
-      </NavItem>
-    )
   } else {
     return (
       <NavItem>
@@ -154,12 +141,11 @@ const RightSection = ({ handleFindTimeClick, handleScheduleClick, handleShareCli
   }
 }
 
-const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calendarUniqueId, eventObj, code }) => {
+const MainNavbar = ({ navigateTo, createCalendar, calendarUniqueId }) => {
   const [collapseIsOpen, setCollapseIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [snackBarIsOpen, setSnackBarIsOpen] = useState(false);
   const [aboutIsOpen, setAboutIsOpen] = useState(false);
-  const [scheduleEventLoading, setScheduleEventLoading] = useState(false);
   const classes = useStyles();
 
   const handleBrandClick = (e) => {
@@ -172,16 +158,6 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
     navigateTo("/creating_calendar");
   }
   const handleShareClick = () => { setModalIsOpen(true) };
-  const handleScheduleClick = () => {
-    setScheduleEventLoading(true);
-    const event = eventObj.details;
-    if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
-      submitEvent({ event, code });
-    } else {
-      const errorMessage = "Please select a start time that is before the end time."
-      addError(errorMessage);
-    }
-  };
   const toggleNavbar = () => { setCollapseIsOpen(!collapseIsOpen) };
   const handleModalClose = () => { setModalIsOpen(false) };
   const handleCopyClick = (textToCopy) => {
@@ -206,11 +182,9 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
           <Nav className="ml-auto" navbar>
             <RightSection
               handleFindTimeClick={handleFindTimeClick}
-              handleScheduleClick={handleScheduleClick}
               handleShareClick={handleShareClick}
               handleAboutClick={handleAboutClick}
               handlePrivacyClick={handlePrivacyClick}
-              scheduleEventLoading={scheduleEventLoading}
             />
           </Nav>
         </Collapse>
@@ -252,18 +226,14 @@ const MainNavbar = ({ navigateTo, createCalendar, submitEvent, addError, calenda
 
 const mapStateToProps = (state) => {
   return {
-    calendarUniqueId: state.calendar.unique_id,
-    eventObj: state.event,
-    code: state.auth.code
+    calendarUniqueId: state.calendar.unique_id
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     navigateTo: (route) => { dispatch(push(route)) },
-    createCalendar: () => { dispatch(createCalendarPending()) },
-    submitEvent: (eventCodeObj) => { dispatch(submitEventPending(eventCodeObj)) },
-    addError: (errorMessage) => { dispatch(addError(errorMessage)) }
+    createCalendar: () => { dispatch(createCalendarPending()) }
   }
 }
 

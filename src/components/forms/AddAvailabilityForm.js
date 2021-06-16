@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Close as CloseIcon } from '@material-ui/icons';
-import { 
+import {
   Grid,
   Button as MuiButton,
   Dialog,
