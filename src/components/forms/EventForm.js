@@ -133,7 +133,6 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
           <TextField value={summary} onChange={handleSummaryChange} placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
           <Time>
             <Text>Start:</Text>
-            <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
             <CustomDatePicker
               selected={startDateTime}
               onChange={time => setStartDateTime(time)}
@@ -143,10 +142,10 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
               timeCaption="Time"
               dateFormat="h:mm aa"
             />
+            <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
           </Time>
           <Time container direction="row" justify="center" alignItems="center">
             <Text>End:</Text>
-            <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
             <CustomDatePicker
               selected={endDateTime}
               onChange={time => setEndDateTime(time)}
@@ -156,6 +155,7 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
               timeCaption="Time"
               dateFormat="h:mm aa"
             />
+            <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
           </Time>
           <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guests (e.g. ex1@email.com, ex2@email.com)"
             multiline rows={3} fullWidth margin="normal" variant="outlined" style={{ margin: "16px 0px" }}/>

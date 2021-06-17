@@ -108,7 +108,6 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
       <DialogContent dividers={false}>
         <Grid container direction="column" justify="center" alignItems="center">
           <Text>Start:</Text>
-          <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
           <CustomDatePicker
             selected={startDateTime}
             onChange={time => setStartDateTime(time)}
@@ -118,8 +117,8 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
             timeCaption="Time"
             dateFormat="h:mm aa"
           />
+          <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
           <Text style={{ marginTop: "20px" }}>End:</Text>
-          <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
           <CustomDatePicker
             selected={endDateTime}
             onChange={time => setEndDateTime(time)}
@@ -129,6 +128,7 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
             timeCaption="Time"
             dateFormat="h:mm aa"
           />
+          <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
         </Grid>
       </DialogContent>
       <DialogActions>
