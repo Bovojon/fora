@@ -65,6 +65,11 @@ const startBeforeEnd = (start, end) => {
   return moment(end).diff(moment(start)) > 0;
 }
 
+const isValidEmail = (email) => {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
 const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addError, calendarUniqueId, navigateTo }) => {
   const [summary, setSummary] = useState("");
   const [startDateTime, setStartDateTime] = useState(new Date(eventObj.details.start));
@@ -110,7 +115,8 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
     setAttendeesStr(emails);
     const attendeesList = [];
     emails.split(",").forEach(emailAddresss => {
-      attendeesList.push({ email: emailAddresss.trim() })
+      const emailTrimmed = emailAddresss.trim()
+      if (isValidEmail(emailTrimmed)) attendeesList.push({ email: emailTrimmed })
     });
     setAttendeesList(attendeesList);
   }
