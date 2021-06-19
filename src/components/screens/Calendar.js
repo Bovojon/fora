@@ -10,8 +10,9 @@ import tw from "twin.macro";
 import { Calendar as BigCalendar, momentLocalizer, Views } from "react-big-calendar";
 import { useTheme } from '@material-ui/core/styles';
 import { Alert } from '@material-ui/lab';
-import { addError } from '../../actions/errorActionCreators';
-import { addSuccess } from '../../actions/successActionCreators';
+import TimeGrid from 'react-big-calendar/lib/TimeGrid';
+import * as dates from 'date-arithmetic';
+import { Navigate } from 'react-big-calendar';
 import {
 	Grid,
 	Box as MuiBox,
@@ -22,7 +23,8 @@ import {
 	MenuItem,
 	Divider,
 	useMediaQuery,
-	Snackbar
+	Snackbar,
+	withWidth
 } from '@material-ui/core';
 import {
 	ArrowRight as ArrowRightIcon,
@@ -44,6 +46,8 @@ import { addTimePending, removeTimePending } from '../../actions/timeActionCreat
 import { fetchCalendarPending } from '../../actions/calendarActionCreators';
 import { addEventPending } from '../../actions/eventActionCreators';
 import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
+import { addError } from '../../actions/errorActionCreators';
+import { addSuccess } from '../../actions/successActionCreators';
 import '../animations/styles/loading.scss';
 
 const browserTimezone = momentTimezone.tz.guess();
@@ -173,7 +177,8 @@ const Loading = () => {
 	);
 }
 
-const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent, removeAuthCode, addError, addSuccess }) => {
+const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent,
+	removeAuthCode, addError, addSuccess, width }) => {
 	const [calendarView, setCalendarView] = useState('week');
 	const [userFormOpen, setUserFormOpen] = useState(false);
 	const [userLoginOpen, setUserLoginOpen] = useState(typeof currentUser.id === "undefined");
@@ -400,6 +405,38 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 			</Grid>
 		);
 	}
+	class MobileWeek extends React.Component {
+		render() {
+			let { date } = this.props
+			let range = MobileWeek.range(date)
+			return <TimeGrid {...this.props} range={range} eventOffset={15} />
+		}
+	}
+	MobileWeek.range = date => {
+		let start = date
+		let end = dates.add(start, 2, 'day')
+		let current = start
+		let range = []
+		while (dates.lte(current, end, 'day')) {
+			range.push(current)
+			current = dates.add(current, 1, 'day')
+		}
+		return range
+	}
+	MobileWeek.navigate = (date, action) => {
+		switch (action) {
+			case Navigate.PREVIOUS:
+				return dates.add(date, -3, 'day')
+			case Navigate.NEXT:
+				return dates.add(date, 3, 'day')
+			default:
+				return date
+		}
+	}
+	MobileWeek.title = date => {
+		return `My awesome week: ${date.toLocaleDateString()}`
+	}
+	const CustomWeek = width === "lg" ? true : MobileWeek;
 	const CustomEvent = ({ event }) => {
 		const eventStart = momentTimezone.tz(event.start, calTimezone);
 		const eventEnd = momentTimezone.tz(event.end, calTimezone);
@@ -550,7 +587,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 								selectable
 								style={{height: "85vh"}}
 								defaultView={Views.WEEK}
-								views={{ month: true, week: true, day: true }}
+								views={{ month: true, week: CustomWeek, day: true }}
 								date={startDate}
 								onNavigate={date => { setStartDate(date) }}
 								scrollToTime={startDate}
@@ -662,4 +699,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
+export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(Calendar));
