@@ -198,7 +198,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	const [calTimezone, setCalTimezone] = useState(browserTimezone);
 	const [isDifferentTimezone, setIsDifferentTimezone] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
-	const [initialRender, setInitialRender] = useState(true);
 	const [showTimes, setShowTimes] = useState(false);
 	const [availabilityDialogOpen, setAvailabilityDialogOpen] = useState(false);
 	const [showCommonTimes, setShowCommonTimes] = useState(false);
@@ -230,10 +229,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 		const initialTimesCopy = [...newTimes];
 		initialTimesCopy.sort(timeSorter);
 		setSortedTimes(initialTimesCopy);
-		if (initialTimesCopy.length > 0 && initialRender) {
-			setStartDate(initialTimesCopy[0]?.start)
-			setInitialRender(false);
-		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [initialTimes]);
 
