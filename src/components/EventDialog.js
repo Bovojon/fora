@@ -22,7 +22,7 @@ const LightText = styled.span`
 `
 
 const GridItem = styled(Grid)`
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `
 
 const IconButton = styled(MuiIconButton)`
@@ -113,13 +113,16 @@ const EventDetails = ({ dialogIsOpen, handleDialogClose, isOwner, handleSchedule
         <IconButton onClick={handleDialogClose}><CloseIcon /></IconButton>
         <Grid container direction="column" justify="center" alignItems="center">
           <GridItem container direction="row" justify="center" alignItems="center">
-            <LightText>{moment(eventStart).format('h:mma, ddd, MMM D YYYY (Z)')}</LightText>
+            <LightText>{moment(eventStart).format('h:mma, ddd, MMM D YYYY')}</LightText>
           </GridItem>
           <GridItem container direction="row" justify="center" alignItems="center">
             <LightText>to</LightText>
           </GridItem>
           <GridItem container direction="row" justify="center" alignItems="center">
-            <LightText>{moment(eventEnd).format('h:mma, ddd, MMM D YYYY (Z)')}</LightText>
+            <LightText>{moment(eventEnd).format('h:mma, ddd, MMM D YYYY')}</LightText>
+          </GridItem>
+          <GridItem container direction="row" justify="center" alignItems="center">
+            <LightText>(GMT {moment(eventEnd).format('Z')})</LightText>
           </GridItem>
         </Grid>
       </DialogContent>
