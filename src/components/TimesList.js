@@ -111,9 +111,7 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
       <ListArea>
         <HeaderGrid container direction="row" justify="center" alignItems="center">
           <Header>Availability</Header>
-          <AddIconButton onClick={() => setAvailabilityDialogOpen(true)} disableFocusRipple disableRipple>
-            <AddIcon />
-          </AddIconButton>
+          <AddIcon onClick={() => setAvailabilityDialogOpen(true)} />
         </HeaderGrid>
         <Fragment>
           {times.map(time => {
