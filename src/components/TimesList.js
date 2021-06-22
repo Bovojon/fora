@@ -78,17 +78,6 @@ const NameArea = styled(Grid)`
 	width: 70%;
 `
 
-const AddIconButton = styled(MuiIconButton)`
-  background-color: #fddede;
-  margin: 0px 0px 5px 7px;
-  padding-bottom: 5px;
-  height: 32px;
-  width: 32px;
-  :focus {
-    outline: none;
-  }
-`
-
 const IconButton = styled(MuiIconButton)`
   :focus {
     outline: none;
@@ -98,6 +87,8 @@ const IconButton = styled(MuiIconButton)`
 const AddIcon = styled(MuiAddIcon)`
   color: #4299e1 !important;
   margin-bottom: 0.5rem;
+  margin-left: 7px;
+  cursor: pointer;
 `
 
 const HeaderGrid = styled(Grid)`
