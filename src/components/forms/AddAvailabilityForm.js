@@ -73,15 +73,19 @@ const startBeforeEnd = (start, end) => {
 
 const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime }) => {
   const [startDateTime, setStartDateTime] = useState(new Date());
+  const [startTime, setStartTime] = useState(moment(new Date()).format('HH:mm'));
+  const [startDate, setStartDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
   const [endDateTime, setEndDateTime] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(true);
+  const [endTime, setEndTime] = useState(moment(new Date()).format('HH:mm'));
+  const [endDate, setEndDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
+  const [addDisabled, setAddDisabled] = useState(true);
   const classes = useStyles();
 
   useEffect(() => {
     if (startBeforeEnd(startDateTime, endDateTime)) {
-      setIsLoading(false);
+      setAddDisabled(false);
     } else {
-      setIsLoading(true);
+      setAddDisabled(true);
     }
   }, [startDateTime, endDateTime]);
 
@@ -93,6 +97,26 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
     handleAddTime(eventObj);
     handleDialogClose();
   }
+  const handleStartTimeChange = (event) => {
+    const time = event.target.value;
+    setStartTime(time);
+    setStartDateTime(new Date(time + " " + startDate));
+  }
+  const handleStartDateChange = (event) => {
+    const date = event.target.value;
+    setStartDate(date);
+    setStartDateTime(new Date(startTime + " " + date));
+  }
+  const handleEndTimeChange = (event) => {
+    const time = event.target.value;
+    setEndTime(time);
+    setEndDateTime(new Date(time + " " + endDate));
+  }
+  const handleEndDateChange = (event) => {
+    const date = event.target.value;
+    setEndDate(date);
+    setEndDateTime(new Date(endTime + " " + date));
+  }
 
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} classes={{ paper: classes.paper}}>
@@ -101,43 +125,20 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
       <DialogContent dividers={false}>
         <Grid container direction="column" justify="center" alignItems="center">
           <Text>Start:</Text>
-          <TextField
-            type="time"
-            onChange={time => setStartDateTime(time)}
-            defaultValue={moment(startDateTime).format('HH:mm')}
-            className={classes.textField}
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ step: 300 }}
-          />
-          <TextField
-            type="date"
-            onChange={date => setStartDateTime(date)}
-            defaultValue={moment(startDateTime).format('YYYY-MM-DD')}
-            className={classes.textField}
-            InputLabelProps={{ shrink: true }}
-          />
+          <TextField type="time" onChange={handleStartTimeChange} value={startTime} className={classes.textField}
+            InputLabelProps={{ shrink: true }} inputProps={{ step: 60 }} />
+          <TextField type="date" onChange={handleStartDateChange} value={startDate} className={classes.textField}
+            InputLabelProps={{ shrink: true }} />
           <Text style={{ marginTop: "20px" }}>End:</Text>
-
-          <TextField
-            type="time"
-            onChange={time => setEndDateTime(time)}
-            defaultValue={moment(endDateTime).format('HH:mm')}
-            className={classes.textField}
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ step: 300 }}
-          />
-          <TextField
-            type="date"
-            onChange={date => setEndDateTime(date)}
-            defaultValue={moment(endDateTime).format('YYYY-MM-DD')}
-            className={classes.textField}
-            InputLabelProps={{ shrink: true }}
-          />
+          <TextField type="time" onChange={handleEndTimeChange} value={endTime} className={classes.textField}
+            InputLabelProps={{ shrink: true }} inputProps={{ step: 60 }} />
+          <TextField type="date" onChange={handleEndDateChange} value={endDate} className={classes.textField}
+            InputLabelProps={{ shrink: true }} />
         </Grid>
       </DialogContent>
       <DialogActions>
         <Grid container direction="column" justify="space-around" alignItems="center">
-          <Button onClick={handleAddClick} variant="contained" disabled={isLoading} disableElevation>Add</Button>
+          <Button onClick={handleAddClick} variant="contained" disabled={addDisabled} disableElevation>Add</Button>
           <Button onClick={handleDialogClose} variant="contained" disableElevation>Cancel</Button>
         </Grid>
       </DialogActions>

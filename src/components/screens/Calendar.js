@@ -650,9 +650,8 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				handleUserFormOpen={setUserFormOpen} 
 			/>
 			<ImportTimesForm handleImportClick={handleImportClick} dialogIsOpen={importDialogOpen} handleDialogClose={handleImportDialogClose}
-				startDate={importStartTime} endDate={importEndTime} setStartDate={setImportStartTime} setEndDate={setImportEndTime} 
-				fullScreen={fullScreen} 
-			/>
+				fullScreen={fullScreen} importStartTime={importStartTime} importEndTime={importEndTime} setImportStartTime={setImportStartTime}
+				setImportEndTime={setImportEndTime} />
 			<EventDetails dialogIsOpen={eventDetailsOpen} handleDialogClose={handleEventDetailsClose} eventObj={importedEventDetails} />
 			<EventDialog dialogIsOpen={eventDialogOpen} handleDialogClose={handleEventDialogClose} isOwner={isOwner} calTimezone={calTimezone}
 				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete}
