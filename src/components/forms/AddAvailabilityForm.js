@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import moment from "moment";
-import DatePicker from "react-datepicker";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Close as CloseIcon } from '@material-ui/icons';
@@ -55,19 +54,6 @@ const IconButton = styled(MuiIconButton)`
 `
 
 const Text = tw.div`md:w-16 sm:w-5/12 my-2 flex justify-center items-center font-semibold`;
-const CustomDatePicker = styled(DatePicker)`
-  padding: 8px;
-  margin-right: 8px;
-  margin-bottom: 10px;
-  color: #3c4043;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  background-color: #f1f3f4;
-  border-radius: 4px;
-  text-align: center;
-  width: 80%
-`
 
 const useStyles = makeStyles((theme) => ({
   paper: {
