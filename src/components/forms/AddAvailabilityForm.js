@@ -126,12 +126,12 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
         <Grid container direction="column" justify="center" alignItems="center">
           <Text>Start:</Text>
           <TextField type="time" onChange={handleStartTimeChange} value={startTime} className={classes.textField}
-            InputLabelProps={{ shrink: true }} inputProps={{ step: 300 }} />
+            InputLabelProps={{ shrink: true }} inputProps={{ step: 60 }} />
           <TextField type="date" onChange={handleStartDateChange} value={startDate} className={classes.textField}
             InputLabelProps={{ shrink: true }} />
           <Text style={{ marginTop: "20px" }}>End:</Text>
           <TextField type="time" onChange={handleEndTimeChange} value={endTime} className={classes.textField}
-            InputLabelProps={{ shrink: true }} inputProps={{ step: 300 }} />
+            InputLabelProps={{ shrink: true }} inputProps={{ step: 60 }} />
           <TextField type="date" onChange={handleEndDateChange} value={endDate} className={classes.textField}
             InputLabelProps={{ shrink: true }} />
         </Grid>

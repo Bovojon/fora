@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import moment from "moment";
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import DatePicker from "react-datepicker";
 import momentTimezone from "moment-timezone";
 import styled from "styled-components";
 import tw from "twin.macro";
@@ -11,7 +10,8 @@ import {
   TextField,
   Grid,
   Button as MuiButton,
-  CircularProgress
+  CircularProgress,
+  makeStyles
 } from '@material-ui/core';
 
 import { addEventPending } from '../../actions/eventActionCreators';
@@ -24,18 +24,6 @@ const Content = styled.div`
 `
 const Time = tw.div`flex flex-col md:flex-row justify-center items-center mt-4`;
 const Text = tw.div`md:w-16 sm:w-5/12 my-2 flex justify-center items-center font-semibold`;
-const CustomDatePicker = styled(DatePicker)`
-  ${tw`mb-1 md:mb-0`};
-  padding: 8px;
-  margin-right: 8px;
-  color: #3c4043;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  background-color: #f1f3f4;
-  border-radius: 4px;
-  text-align: center;
-`
 
 const Header = styled.h2`
   font-size: 1.25em;
@@ -70,13 +58,27 @@ const isValidEmail = (email) => {
   return re.test(String(email).toLowerCase());
 }
 
+const useStyles = makeStyles((theme) => ({
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    marginBottom: '20px',
+    width: 200,
+  }
+}));
+
 const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addError, calendarUniqueId, navigateTo }) => {
   const [summary, setSummary] = useState("");
   const [startDateTime, setStartDateTime] = useState(new Date(eventObj.details.start));
+  const [startTime, setStartTime] = useState(moment(new Date(eventObj.details.start)).format('HH:mm'));
+  const [startDate, setStartDate] = useState(moment(new Date(eventObj.details.start)).format('YYYY-MM-DD'));
   const [endDateTime, setEndDateTime] = useState(new Date(eventObj.details.end));
+  const [endTime, setEndTime] = useState(moment(new Date(eventObj.details.end)).format('HH:mm'));
+  const [endDate, setEndDate] = useState(moment(new Date(eventObj.details.end)).format('YYYY-MM-DD'));
   const [attendeesList, setAttendeesList] = useState([]);
   const [attendeesStr, setAttendeesStr] = useState("");
   const [scheduleEventLoading, setScheduleEventLoading] = useState(false);
+  const classes = useStyles();
 
   useEffect(() => {
     const tizn = momentTimezone.tz.guess();
@@ -130,6 +132,26 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
       addError(errorMessage);
     }
   };
+  const handleStartTimeChange = (event) => {
+    const time = event.target.value;
+    setStartTime(time);
+    setStartDateTime(new Date(time + " " + startDate));
+  }
+  const handleStartDateChange = (event) => {
+    const date = event.target.value;
+    setStartDate(date);
+    setStartDateTime(new Date(startTime + " " + date));
+  }
+  const handleEndTimeChange = (event) => {
+    const time = event.target.value;
+    setEndTime(time);
+    setEndDateTime(new Date(time + " " + endDate));
+  }
+  const handleEndDateChange = (event) => {
+    const date = event.target.value;
+    setEndDate(date);
+    setEndDateTime(new Date(endTime + " " + date));
+  }
 
   return (
     <Container>
@@ -139,29 +161,17 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
           <TextField value={summary} onChange={handleSummaryChange} placeholder="Add title" type="text" fullWidth margin="normal" autoFocus />
           <Time>
             <Text>Start:</Text>
-            <CustomDatePicker
-              selected={startDateTime}
-              onChange={time => setStartDateTime(time)}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-            />
-            <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
+            <TextField type="time" onChange={handleStartTimeChange} value={startTime} className={classes.textField}
+              InputLabelProps={{ shrink: true }} inputProps={{ step: 60 }} />
+            <TextField type="date" onChange={handleStartDateChange} value={startDate} className={classes.textField}
+              InputLabelProps={{ shrink: true }} />
           </Time>
-          <Time container direction="row" justify="center" alignItems="center">
+          <Time>
             <Text>End:</Text>
-            <CustomDatePicker
-              selected={endDateTime}
-              onChange={time => setEndDateTime(time)}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={15}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-            />
-            <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
+            <TextField type="time" onChange={handleEndTimeChange} value={endTime} className={classes.textField}
+              InputLabelProps={{ shrink: true }} inputProps={{ step: 60 }} />
+            <TextField type="date" onChange={handleEndDateChange} value={endDate} className={classes.textField}
+              InputLabelProps={{ shrink: true }} />
           </Time>
           <TextField value={attendeesStr} onChange={handleAttendeesChange} placeholder="Add guests (e.g. ex1@email.com, ex2@email.com)"
             multiline rows={3} fullWidth margin="normal" variant="outlined" style={{ margin: "16px 0px" }}/>
