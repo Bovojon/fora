@@ -12,7 +12,8 @@ import {
   DialogContent as MuiDialogContent,
   DialogActions as MuiDialogActions,
   IconButton as MuiIconButton,
-  makeStyles
+  makeStyles,
+  TextField
 } from '@material-ui/core';
 
 const DialogTitle = styled(MuiDialogTitle)`
@@ -71,6 +72,12 @@ const CustomDatePicker = styled(DatePicker)`
 const useStyles = makeStyles((theme) => ({
   paper: {
     overflow: "visible !important"
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    marginBottom: '20px',
+    width: 200,
   }
 }));
 
@@ -108,27 +115,38 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
       <DialogContent dividers={false}>
         <Grid container direction="column" justify="center" alignItems="center">
           <Text>Start:</Text>
-          <CustomDatePicker
-            selected={startDateTime}
+          <TextField
+            type="time"
             onChange={time => setStartDateTime(time)}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat="h:mm aa"
+            defaultValue={moment(startDateTime).format('HH:mm')}
+            className={classes.textField}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ step: 300 }}
           />
-          <CustomDatePicker selected={startDateTime} onChange={date => setStartDateTime(date)} />
+          <TextField
+            type="date"
+            onChange={date => setStartDateTime(date)}
+            defaultValue={moment(startDateTime).format('YYYY-MM-DD')}
+            className={classes.textField}
+            InputLabelProps={{ shrink: true }}
+          />
           <Text style={{ marginTop: "20px" }}>End:</Text>
-          <CustomDatePicker
-            selected={endDateTime}
+
+          <TextField
+            type="time"
             onChange={time => setEndDateTime(time)}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat="h:mm aa"
+            defaultValue={moment(endDateTime).format('HH:mm')}
+            className={classes.textField}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ step: 300 }}
           />
-          <CustomDatePicker selected={endDateTime} onChange={date => setEndDateTime(date)} />
+          <TextField
+            type="date"
+            onChange={date => setEndDateTime(date)}
+            defaultValue={moment(endDateTime).format('YYYY-MM-DD')}
+            className={classes.textField}
+            InputLabelProps={{ shrink: true }}
+          />
         </Grid>
       </DialogContent>
       <DialogActions>
