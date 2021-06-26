@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import moment from "moment";
 import styled from "styled-components";
-import DatePicker from "react-datepicker";
 import tw from "twin.macro";
 import { Close as CloseIcon } from '@material-ui/icons';
 import {
@@ -11,7 +11,8 @@ import {
   DialogTitle as MuiDialogTitle,
   DialogContent as MuiDialogContent,
   IconButton as MuiIconButton,
-  makeStyles
+  makeStyles,
+  TextField
 } from '@material-ui/core';
 
 const DialogTitle = styled(MuiDialogTitle)`
@@ -25,19 +26,6 @@ const DialogActions = styled(MuiDialogActions)`
 const DialogContent = styled(MuiDialogContent)`
   min-width: 320px;
   padding: 8px 30px;
-`
-
-const CustomDatePicker = styled(DatePicker)`
-  padding: 8px;
-  margin-right: 8px;
-  color: #3c4043;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  background-color: #f1f3f4;
-  border-radius: 4px;
-  text-align: center;
-  width: 80%
 `
 
 const IconButton = styled(MuiIconButton)`
@@ -71,12 +59,44 @@ const useStyles = makeStyles((theme) => ({
     overflow: "visible !important"
   },
   container: {
-    marginBottom: "10px"
+    marginBottom: "25px"
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
   }
 }));
 
-const ImportTimesForm = ({ dialogIsOpen, handleDialogClose, handleImportClick, startDate, endDate, setStartDate, setEndDate, fullScreen }) => {
+const startBeforeEnd = (start, end) => {
+  return moment(end).diff(moment(start)) > 0;
+}
+
+const ImportTimesForm = ({ dialogIsOpen, handleDialogClose, handleImportClick, importStartTime, importEndTime, setImportStartTime,
+  setImportEndTime, fullScreen }) => {
+  const [startDate, setStartDate] = useState(moment(new Date(importStartTime)).format('YYYY-MM-DD'));
+  const [endDate, setEndDate] = useState(moment(new Date(importEndTime)).format('YYYY-MM-DD'));
+  const [submitDisabled, setSubmitDisabled] = useState(startBeforeEnd(startDate, endDate));
   const classes = useStyles();
+
+  useEffect(() => {
+    if (startBeforeEnd(startDate, endDate)) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
+  }, [startDate, endDate]);
+
+  const handleStartDateChange = (event) => {
+    const date = event.target.value;
+    setStartDate(date);
+    setImportStartTime(new Date(date));
+  }
+  const handleEndDateChange = (event) => {
+    const date = event.target.value;
+    setEndDate(date);
+    setImportEndTime(new Date(date))
+  }
 
   return (
     <Dialog open={dialogIsOpen} onClose={handleDialogClose} fullWidth={fullScreen} maxWidth="sm" classes={{ paper: classes.paper}}>
@@ -88,16 +108,18 @@ const ImportTimesForm = ({ dialogIsOpen, handleDialogClose, handleImportClick, s
         <Grid container direction="column" justify="space-between" alignItems="center">
           <Grid container direction="row" justify="center" alignItems="center" classes={{ container: classes.container}}>
             <Text>Start:</Text>
-            <CustomDatePicker selected={startDate} onChange={date => setStartDate(date)} />
+            <TextField type="date" onChange={handleStartDateChange} value={startDate} className={classes.textField}
+              InputLabelProps={{ shrink: true }} />
           </Grid>
           <Grid container direction="row" justify="center" alignItems="center">
             <Text>End:</Text>
-            <CustomDatePicker selected={endDate} onChange={date => setEndDate(date)} />
+            <TextField type="date" onChange={handleEndDateChange} value={endDate} className={classes.textField}
+              InputLabelProps={{ shrink: true }} />
           </Grid>
           </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleImportClick} variant="contained" disableElevation>Submit</Button>
+        <Button onClick={handleImportClick} variant="contained" disabled={submitDisabled} disableElevation>Submit</Button>
       </DialogActions>
     </Dialog>
   );
