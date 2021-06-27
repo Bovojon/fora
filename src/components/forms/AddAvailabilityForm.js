@@ -72,13 +72,15 @@ const startBeforeEnd = (start, end) => {
 }
 
 const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime }) => {
+  const now = moment(new Date());
+  const oneHourFromNow = moment().add(1, 'hours');
   const [startDateTime, setStartDateTime] = useState(new Date());
-  const [startTime, setStartTime] = useState(moment(new Date()).format('HH:mm'));
-  const [startDate, setStartDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
-  const [endDateTime, setEndDateTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(moment(new Date()).format('HH:mm'));
-  const [endDate, setEndDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
-  const [addDisabled, setAddDisabled] = useState(true);
+  const [startTime, setStartTime] = useState(now.format('HH:mm'));
+  const [startDate, setStartDate] = useState(now.format('YYYY-MM-DD'));
+  const [endDateTime, setEndDateTime] = useState(new Date(oneHourFromNow));
+  const [endTime, setEndTime] = useState(oneHourFromNow.format('HH:mm'));
+  const [endDate, setEndDate] = useState(oneHourFromNow.format('YYYY-MM-DD'));
+  const [addDisabled, setAddDisabled] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
