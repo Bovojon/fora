@@ -56,7 +56,7 @@ const Text = tw.div`md:w-16 sm:w-5/12 flex justify-center items-center font-semi
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    overflow: "visible !important"
+    overflow: "auto !important"
   },
   container: {
     marginBottom: "25px"
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
+    width: 150,
   }
 }));
 
