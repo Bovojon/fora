@@ -657,7 +657,9 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				handleScheduleEventClick={handleScheduleEventClick} handleAddTime={handleAddTime} handleDelete={handleDelete}
 				selectedEvent={selectedEvent} eventObj={eventObj}
 			/>
-			<AddAvailabilityForm dialogIsOpen={availabilityDialogOpen} handleDialogClose={handleAvailabilityDialogClose} handleAddTime={handleAddTime} />
+			<AddAvailabilityForm dialogIsOpen={availabilityDialogOpen} handleDialogClose={handleAvailabilityDialogClose}
+				handleAddTime={handleAddTime} addError={addError}
+			/>
 			<Box display={{ xs: 'block', md: 'none' }} m={1}>
 				<Snackbar open={scrollToBottomOpen} autoHideDuration={3000} onClose={handleScrollToBottom}>
 					<Alert onClose={handleScrollToBottom} severity="info" elevation={6} variant="filled">
