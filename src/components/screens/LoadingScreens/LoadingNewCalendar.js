@@ -16,10 +16,10 @@ const sentences = [
   "You look great today!",
   "Tip: Click on an availability slot to schedule an event.",
   "One moment please...",
-  "Polishing the edges.",
+  "Polishing the edges...",
   "Tip: You can invite others to this calendar.",
   "Have feedback? Email them to letsfora@gmail.com!",
-  "Almost there.",
+  "Almost there...",
   "Hope you're having a wonderful day!",
   "Tip: Click and drag on the calendar to add your availability."
 ]
