@@ -84,10 +84,10 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime, a
 
   const handleAddClick = () => {
     if (startBeforeEnd(startDateTime, endDateTime)) {
-      addError("Please select a start time that is before the end time.")
-    } else {
       handleAddTime({start: startDateTime, end: endDateTime});
       handleDialogClose();
+    } else {
+      addError("Please select a start time that is before the end time.")
     }
   }
   const handleStartTimeChange = (event) => {
