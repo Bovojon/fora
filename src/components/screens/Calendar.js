@@ -48,6 +48,7 @@ import { addEventPending } from '../../actions/eventActionCreators';
 import { removeAuthCodeSuccess } from '../../actions/authActionCreators';
 import { addError } from '../../actions/errorActionCreators';
 import { addSuccess } from '../../actions/successActionCreators';
+import Loading from './LoadingScreens/LoadingNewCalendar';
 import '../animations/styles/loading.scss';
 
 const browserTimezone = momentTimezone.tz.guess();
@@ -156,25 +157,6 @@ const breakDaysIntoHours = (timeObj, showCommonTimes, checked) => {
 		newTimes.push({...timeObj, id, start, end});
 	}
 	return newTimes;
-}
-
-const Loading = () => {
-	return (
-		<div className="loader-wrapper">
-			<div className="loader">
-				<div className="roller"></div>
-				<div className="roller"></div>
-			</div>
-			<div id="loader2" className="loader">
-				<div className="roller"></div>
-				<div className="roller"></div>
-			</div>
-			<div id="loader3" className="loader">
-				<div className="roller"></div>
-				<div className="roller"></div>
-			</div>
-		</div>
-	);
 }
 
 const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigateTo, addTime, removeTime, fetchCalendarPending, addEvent,
