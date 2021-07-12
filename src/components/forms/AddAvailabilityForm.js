@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from "moment";
 import styled from "styled-components";
 import tw from "twin.macro";
@@ -71,7 +71,7 @@ const startBeforeEnd = (start, end) => {
   return moment(end).diff(moment(start)) > 0;
 }
 
-const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime }) => {
+const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime, addError }) => {
   const now = moment(new Date());
   const oneHourFromNow = moment().add(1, 'hours');
   const [startDateTime, setStartDateTime] = useState(new Date());
@@ -80,24 +80,15 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
   const [endDateTime, setEndDateTime] = useState(new Date(oneHourFromNow));
   const [endTime, setEndTime] = useState(oneHourFromNow.format('HH:mm'));
   const [endDate, setEndDate] = useState(oneHourFromNow.format('YYYY-MM-DD'));
-  const [addDisabled, setAddDisabled] = useState(false);
   const classes = useStyles();
 
-  useEffect(() => {
-    if (startBeforeEnd(startDateTime, endDateTime)) {
-      setAddDisabled(false);
-    } else {
-      setAddDisabled(true);
-    }
-  }, [startDateTime, endDateTime]);
-
   const handleAddClick = () => {
-    const eventObj = {
-      start: startDateTime,
-      end: endDateTime
+    if (startBeforeEnd(startDateTime, endDateTime)) {
+      addError("Please select a start time that is before the end time.")
+    } else {
+      handleAddTime({start: startDateTime, end: endDateTime});
+      handleDialogClose();
     }
-    handleAddTime(eventObj);
-    handleDialogClose();
   }
   const handleStartTimeChange = (event) => {
     const time = event.target.value;
@@ -140,7 +131,7 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime })
       </DialogContent>
       <DialogActions>
         <Grid container direction="column" justify="space-around" alignItems="center">
-          <Button onClick={handleAddClick} variant="contained" disabled={addDisabled} disableElevation>Add</Button>
+          <Button onClick={handleAddClick} variant="contained" disableElevation>Add</Button>
           <Button onClick={handleDialogClose} variant="contained" disableElevation>Cancel</Button>
         </Grid>
       </DialogActions>
