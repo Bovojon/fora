@@ -93,22 +93,26 @@ const AddAvailabilityForm = ({ dialogIsOpen, handleDialogClose, handleAddTime, a
   const handleStartTimeChange = (event) => {
     const time = event.target.value;
     setStartTime(time);
-    setStartDateTime(new Date(time + " " + startDate));
+    const newTime = time + " " + startDate;
+    setStartDateTime(new Date(moment(newTime, 'YYYY-MM-DD HH:mm').toDate()));
   }
   const handleStartDateChange = (event) => {
     const date = event.target.value;
     setStartDate(date);
-    setStartDateTime(new Date(startTime + " " + date));
+    const newTime = startTime + " " + date;
+    setStartDateTime(new Date(moment(newTime, 'YYYY-MM-DD HH:mm').toDate()));
   }
   const handleEndTimeChange = (event) => {
     const time = event.target.value;
     setEndTime(time);
-    setEndDateTime(new Date(time + " " + endDate));
+    const newTime = time + " " + endDate;
+    setEndDateTime(new Date(moment(newTime, 'YYYY-MM-DD HH:mm').toDate()));
   }
   const handleEndDateChange = (event) => {
     const date = event.target.value;
     setEndDate(date);
-    setEndDateTime(new Date(endTime + " " + date));
+    const newTime = endTime + " " + date;
+    setEndDateTime(new Date(moment(newTime, 'YYYY-MM-DD HH:mm').toDate()));
   }
 
   return (
