@@ -123,9 +123,9 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
     setAttendeesList(attendeesList);
   }
   const handleScheduleClick = () => {
-    setScheduleEventLoading(true);
     const event = eventObj.details;
     if (startBeforeEnd(event.start.dateTime, event.end.dateTime)) {
+      setScheduleEventLoading(true);
       submitEvent({ event, code });
     } else {
       const errorMessage = "Please select a start time that is before the end time."
@@ -135,22 +135,26 @@ const EventForm = ({ eventObj, participants, addEvent, code, submitEvent, addErr
   const handleStartTimeChange = (event) => {
     const time = event.target.value;
     setStartTime(time);
-    setStartDateTime(new Date(time + " " + startDate));
+    const newTime = startDate+" "+time;
+    setStartDateTime(new Date(moment(newTime).format()));
   }
   const handleStartDateChange = (event) => {
     const date = event.target.value;
     setStartDate(date);
-    setStartDateTime(new Date(startTime + " " + date));
+    const newTime = date+" "+startTime;
+    setStartDateTime(new Date(moment(newTime).format()));
   }
   const handleEndTimeChange = (event) => {
     const time = event.target.value;
     setEndTime(time);
-    setEndDateTime(new Date(time + " " + endDate));
+    const newTime = endDate+" "+time;
+    setEndDateTime(new Date(moment(newTime).format()));
   }
   const handleEndDateChange = (event) => {
     const date = event.target.value;
     setEndDate(date);
-    setEndDateTime(new Date(endTime + " " + date));
+    const newTime = date+" "+endTime;
+    setEndDateTime(new Date(moment(newTime).format()));
   }
 
   return (
