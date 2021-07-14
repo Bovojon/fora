@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { Clear, FilterNoneOutlined as CopyIcon } from '@material-ui/icons';
 import copy from 'copy-to-clipboard';
 import {
-  Navbar,
+  Navbar as BootNavbar,
   NavbarBrand as BootNavbarBrand,
   NavbarToggler as BootNavbarToggler,
   Collapse,
@@ -26,6 +26,11 @@ import {
 
 import AboutDialog from './AboutDialog';
 import { createCalendarPending } from '../actions/calendarActionCreators';
+
+const Navbar = styled(BootNavbar)`
+  padding-top: 0px;
+  padding-bottom: 0px;
+`
 
 const NavbarBrand = styled(BootNavbarBrand)`
   ${tw`text-2xl! text-4xl font-black`};

@@ -55,15 +55,14 @@ const browserTimezone = momentTimezone.tz.guess();
 
 const Paper = styled(MuiPaper)`
 	height: 100%;
-	margin-top: 5vh;
 	width: 95%;
 `
 
 const Box = styled(MuiBox)`
-	margin-top: 25px;
+	margin-top: 10px;
 `
 
-const ToolbarBox = tw.div`flex flex-row mb-3`;
+const ToolbarBox = tw.div`flex flex-row mb-3 px-2`;
 const ToolbarItemLeft = tw.div`flex flex-auto justify-start`;
 const ToolbarItemRight = tw.div`flex flex-auto justify-end`;
 const CalNavigation = tw.div`flex flex-auto justify-start items-center`;
@@ -554,35 +553,7 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 				{calendar.status.isLoading ?
 					<Loading />
 					:
-					<Grid container spacing={3} direction="row" alignItems="flex-start" justify="center">
-						<Grid item md={8} xs={12} ref={calRef}>
-							<BigCalendar
-								localizer={localizer}
-								events={events}
-								startAccessor="start"
-								endAccessor="end"
-								selectable
-								style={{height: "85vh"}}
-								defaultView={Views.WEEK}
-								views={{ month: true, week: CustomWeek, day: true }}
-								date={startDate}
-								onNavigate={date => { setStartDate(date) }}
-								scrollToTime={startDate}
-								onSelectSlot={handleSelectSlot}
-								onSelectEvent={handleSelectEvent}
-								components = {{
-									toolbar : CustomToolbar,
-									event: CustomEvent,
-									timeSlotWrapper: CustomTimeSlotWrapper,
-									week: { header: CustomWeekHeader }
-								}}
-								formats={{
-									dayFormat: 'ddd D',
-									timeGutterFormat: 'h A'
-								}}
-								eventPropGetter={getEventStyle}
-							/>
-						</Grid>
+					<Grid container spacing={3} direction="row" alignItems="flex-start" justify="space-evenly">
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
@@ -623,6 +594,34 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 									/>
 								</Paper>
 							</Grid>
+						</Grid>
+						<Grid item md={9} xs={12} ref={calRef}>
+							<BigCalendar
+								localizer={localizer}
+								events={events}
+								startAccessor="start"
+								endAccessor="end"
+								selectable
+								style={{height: "85vh"}}
+								defaultView={Views.WEEK}
+								views={{ month: true, week: CustomWeek, day: true }}
+								date={startDate}
+								onNavigate={date => { setStartDate(date) }}
+								scrollToTime={startDate}
+								onSelectSlot={handleSelectSlot}
+								onSelectEvent={handleSelectEvent}
+								components = {{
+									toolbar : CustomToolbar,
+									event: CustomEvent,
+									timeSlotWrapper: CustomTimeSlotWrapper,
+									week: { header: CustomWeekHeader }
+								}}
+								formats={{
+									dayFormat: 'ddd D',
+									timeGutterFormat: 'h A'
+								}}
+								eventPropGetter={getEventStyle}
+							/>
 						</Grid>
 					</Grid>
 				}
