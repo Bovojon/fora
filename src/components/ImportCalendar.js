@@ -1,18 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  Grid as MuiGrid,
-  Button as MuiButton
+  Grid,
+  Button as MuiButton,
+  Box,
 } from '@material-ui/core';
-
-const Grid = styled(MuiGrid)`
-  margin-bottom: 25px;
-`
 
 const Button = styled(MuiButton)`
   margin-bottom: 1rem;
   text-transform: none;
-  font: 600 16px / 20px Roboto, sans-serif;
+  font: 600 14px / 20px Roboto, sans-serif;
   :hover {
     background-color: #fddede;
   }
@@ -25,18 +22,13 @@ const Button = styled(MuiButton)`
   color: #4299e1 !important;
 `
 
-const LightText = styled.span`
-  color: #5f6368;
-  font: 400 15px / 20px Roboto, sans-serif;
-  text-align: center
-`
-
 const ImportCalendar = ({ handleImportCalendarClick }) => {
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import calendar</Button>
-      <LightText>Check your availability. Details about your personal calendar will not be visible to others.</LightText>
-    </Grid>
+    <Box m={1}>
+      <Grid container direction="column" justify="center" alignItems="center">
+        <Button onClick={handleImportCalendarClick} variant="contained" color="primary" disableElevation>Import calendar</Button>
+      </Grid>
+  </Box>
   );
 }
 

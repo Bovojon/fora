@@ -21,12 +21,12 @@ const DialogTitle = styled(MuiDialogTitle)`
 `
 
 const SmallTitle = styled.span`
-  font: 500 16px / 20px Roboto, sans-serif;
+  font: 500 14px / 20px Roboto, sans-serif;
 `
 
 const LightText = styled.span`
   color: #5f6368;
-  font: 400 16px / 20px Roboto, sans-serif;
+  font: 400 14px / 20px Roboto, sans-serif;
 `
 
 const IconButton = styled(MuiIconButton)`

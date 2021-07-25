@@ -21,7 +21,7 @@ const SmallTitle = styled.span`
 
 const LightText = styled.span`
   color: #5f6368;
-  font: 400 15px / 20px Roboto, sans-serif;
+  font: 400 14px / 20px Roboto, sans-serif;
   margin-bottom: 15px;
 `
 

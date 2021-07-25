@@ -557,17 +557,6 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 						<Grid item md={3} xs={12}>
 							<Grid container direction="column" justify="center" alignItems="center">
 								<Paper elevation={0}>
-									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} />
-									<Divider />
-									<Timezone
-										handleTimezoneChange={handleTimezoneChange}
-										calTimezone={calTimezone}
-										browserTimezone={browserTimezone}
-										setCalTimezone={setCalTimezone}
-										handleShowTimeChange={handleShowTimeChange}
-										showTimes={showTimes}
-									/>
-									<Divider />
 									<ParticipantsList
 										participants={calendar.participants}
 										calendarUniqueId={calendar.unique_id}
@@ -580,6 +569,16 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 										checked={checked}
 										setChecked={setChecked}
 									/>
+									<Divider />
+									<Timezone
+										handleTimezoneChange={handleTimezoneChange}
+										calTimezone={calTimezone}
+										browserTimezone={browserTimezone}
+										setCalTimezone={setCalTimezone}
+										handleShowTimeChange={handleShowTimeChange}
+										showTimes={showTimes}
+									/>
+									<ImportCalendar handleImportCalendarClick={handleImportCalendarClick} />
 									<Divider />
 									<TimesList
 										times={sortedTimes}

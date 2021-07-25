@@ -56,7 +56,7 @@ const TextField = withStyles({
 
 const LightText = styled.p`
   color: #5f6368;
-  font: 400 15px / 20px Roboto, sans-serif;
+  font: 400 14px / 20px Roboto, sans-serif;
   text-align: center;
   margin-bottom: 0px;
 `
@@ -676,7 +676,7 @@ const Timezone = ({ calTimezone, handleTimezoneChange, setCalTimezone, browserTi
   }, [calTimezone])
 
   return (
-    <Box m={2}>
+    <Box m={1}>
       <Grid container direction="column" justify="center" alignItems="center">
         <Header>Timezone</Header>
         <Autocomplete
