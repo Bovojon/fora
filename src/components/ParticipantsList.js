@@ -34,7 +34,6 @@ const Header = styled.h5`
 const List = styled(MuiList)`
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0px 13px;
 `
 
 const ListItem = styled(MuiListItem)`
@@ -58,18 +57,18 @@ const Avatar = styled(MuiAvatar)`
 
 const Name = styled.span`
   margin-right: 7px;
+  font-size: 14px;
 `
 
 const LightText = styled.p`
   color: #5f6368;
-  font: 400 15px / 20px Roboto, sans-serif;
+  font: 400 14px / 20px Roboto, sans-serif;
   text-align: center;
   margin-bottom: 0px;
 `
 
 const CheckAll = styled(Checkbox)`
-  margin-right: 18px;
-  margin-left: 7px;
+  margin-right: 5px;
 `
 
 const Switch = withStyles({
@@ -176,15 +175,17 @@ const ParticipantsList = ({ participants, calendarUniqueId, currentUser, handleE
   }, [showCommonTimes])
   
   return (
-    <Box m={2}>
+    <Box m={1}>
       <Header>Members</Header>
-      <Grid container direction="row" justify="center" alignItems="center">
-        <LightText>Common availabilities</LightText>
-        <Switch onChange={() => setShowCommonTimes(!showCommonTimes)} checked={showCommonTimes} />
-      </Grid>
-      <Grid container direction="row" justify="flex-end" alignItems="center">
-        <LightText>Select all</LightText>
-        <CheckAll onChange={handleSelectAll} checked={selectAll} color="default" />
+      <Grid container direction="row" justify="space-between" alignItems="center">
+        <Grid item>
+          <LightText>
+            Common <Switch onChange={() => setShowCommonTimes(!showCommonTimes)} checked={showCommonTimes} />
+          </LightText>
+        </Grid>
+        <Grid item>
+          <CheckAll onChange={handleSelectAll} checked={selectAll} color="default" />
+        </Grid>
       </Grid>
       {isLoading ?
         <LoadingListSkeleton />

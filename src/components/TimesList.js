@@ -57,7 +57,7 @@ const Box = styled(MuiBox)`
 `
 
 const ListArea = styled(Grid)`
-  height: 45vh;
+  height: 50vh;
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 15px;
@@ -98,7 +98,7 @@ const HeaderGrid = styled(Grid)`
 const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, initialTimes, handleNavigate,
   isDifferentTimezone, calTimezone, setAvailabilityDialogOpen }) => {
   return (
-    <Box mt={2}>
+    <Box m={1}>
       <ListArea>
         <HeaderGrid container direction="row" justify="center" alignItems="center">
           <Header>Availability</Header>
