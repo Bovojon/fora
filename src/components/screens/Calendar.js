@@ -514,11 +514,13 @@ const Calendar = ({ initialTimes, calendar, currentUser, auth, eventObj, navigat
 	}
 	const getEventStyle = (event) => {
 		let background = event.creator?.color;
+		let opacity = 0.8
 		if (typeof background === "undefined") background = currentUser.color;
+		if (moment(event.end).isBefore(new Date())) opacity = 0.4
 		const selectedStyle = {
 			backgroundColor: background,
 			borderRadius: '3px',
-			opacity: 0.8,
+			opacity: `${opacity}`,
 			border: '0px',
 			display: 'block',
 			overflow: 'auto'
