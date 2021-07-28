@@ -23,6 +23,7 @@ const Card = styled(ReactCard)`
   cursor: pointer;
   width: ${props => props.width};
   margin-left: ${props => props.ml};
+  opacity: ${props => props.opacity};
 
   &:hover {
     transition: all 0.2s ease-out;
@@ -116,10 +117,16 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
               currentUser.name
               :
               time.creator.name;
+            let opacity = 0.8;
+            if (moment(time.end).isBefore(new Date())) opacity = 0.4
             if (typeof time.id === "string" && (time.id.charAt(0) === "C" || time.id.charAt(0) === "U")) {
+              /**
+               * COMMON AVAILABILITIES
+               */
               if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')) {
                 return (
-                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background="white"
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body
+                    background="white" opacity={1}
                     style={{
                       background: "repeating-linear-gradient(45deg, white, #fddede 5px, white 5px, #fddede 10px)",
                       border: "1px solid #265985",
@@ -152,7 +159,8 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
                 );
               } else {
                 return (
-                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background="white" width={width} ml={ml}
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body
+                    background="white" opacity={1} width={width} ml={ml}
                     style={{
                       background: "repeating-linear-gradient(45deg, white, #fddede 5px, white 5px, #fddede 10px)",
                       border: "1px solid #265985",
@@ -183,9 +191,13 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
                 );
               }
             } else {
+              /**
+               * OTHER AVAILABILITIES
+               */
               if (moment(eventStart).format('YYYY-MM-DD') !== moment(eventEnd).format('YYYY-MM-DD')) {
                 return (
-                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background}>
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body
+                    background={background} opacity={opacity}>
                     <CardBody>
                       <TopRightArea>
                         {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
@@ -210,7 +222,8 @@ const TimesList = ({ times, handleSelectEvent, handleEditUserName, currentUser, 
                 );
               } else {
                 return (
-                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body background={background} width={width} ml={ml}>
+                  <Card key={time.id} onClick={(event) => handleNavigate(event, time)} body
+                    background={background} opacity={opacity} width={width} ml={ml}>
                     <CardBody>
                       <TopRightArea>
                         {time.id < 1000000 && <IconButton onClick={() => handleSelectEvent(time)} disableFocusRipple disableRipple><MoreIcon /></IconButton>}
